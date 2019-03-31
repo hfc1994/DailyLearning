@@ -8,48 +8,34 @@ import java.util.concurrent.*;
  *
  * @author user-hfc.
  */
-public class ThreadTest
-{
+public class ThreadSubmit {
     private static ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    public static void main(String[] args)
-    {
-        Arrays.sort(new Object[]{});
-
-        ThreadTest t = new ThreadTest();
-
+    public static void main(String[] args) {
         Future f = executor.submit(() -> {
             boolean flag = true;
             int iFlag = 0;
-            while (flag)
-            {
+            while (flag) {
                 System.out.println("--thread--");
                 iFlag ++;
                 if (iFlag == 10)
                     flag = false;
-                try
-                {
+                try {
                     TimeUnit.SECONDS.sleep(1);
-                }
-                catch (Exception e) {}
+                } catch (Exception e) {}
             }
         });
 
-        try
-        {
+        try {
             System.out.println("--start--");
             //阻塞，等待线程返回值
             f.get();
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        } catch (ExecutionException e)
-        {
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
         System.out.println("---over---");
-
     }
 }
