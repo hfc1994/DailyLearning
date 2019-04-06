@@ -2,6 +2,7 @@ package SourceCodeReading;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -10,6 +11,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TargetClass {
 
     private ReentrantLock lock;
+    private LockSupport lockSupport;
+    private CountDownLatch countDownLatch;
 
     private Collections collections;
     //-------
