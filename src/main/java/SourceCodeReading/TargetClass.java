@@ -13,6 +13,8 @@ public class TargetClass {
     private ReentrantLock lock;
     private LockSupport lockSupport;
     private CountDownLatch countDownLatch;
+    private TimeUnit timeUnit;
+    private Thread thread;
 
     private Collections collections;
     //-------
