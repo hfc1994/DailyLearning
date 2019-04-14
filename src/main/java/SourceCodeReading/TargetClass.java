@@ -4,17 +4,21 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 
 /**
  * Created by hfc on 2019/4/1.
  */
 public class TargetClass {
 
-    private ReentrantLock lock;
+    private ReentrantLock reentrantLock;    // 大致看完了一遍
+    private ReentrantReadWriteLock reentrantReadWriteLock;
     private LockSupport lockSupport;
     private CountDownLatch countDownLatch;
     private TimeUnit timeUnit;
     private Thread thread;
+    private ThreadLocal threadLocal;
 
     private Collections collections;
     //-------
