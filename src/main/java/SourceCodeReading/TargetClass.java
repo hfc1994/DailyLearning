@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class TargetClass {
 
     private ReentrantLock reentrantLock;    // 大致看完了一遍
-    private ReentrantReadWriteLock reentrantReadWriteLock;
+    private ReentrantReadWriteLock reentrantReadWriteLock;  // 大致看完了一遍
     private LockSupport lockSupport;
     private CountDownLatch countDownLatch;
     private TimeUnit timeUnit;
