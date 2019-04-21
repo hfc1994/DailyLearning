@@ -15,10 +15,16 @@ public class TargetClass {
     private ReentrantLock reentrantLock;    // 大致看完了一遍
     private ReentrantReadWriteLock reentrantReadWriteLock;  // 大致看完了一遍
     private LockSupport lockSupport;
+    private Semaphore semaphore;
     private CountDownLatch countDownLatch;
     private TimeUnit timeUnit;
     private Thread thread;
     private ThreadLocal threadLocal;
+
+    //-------
+    private Executor executor;
+    private Executors executors;
+    private ThreadPoolExecutor threadPoolExecutor;
 
     private Collections collections;
     //-------
