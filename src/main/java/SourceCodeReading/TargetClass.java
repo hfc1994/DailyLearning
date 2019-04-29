@@ -16,7 +16,7 @@ public class TargetClass {
     private ReentrantReadWriteLock reentrantReadWriteLock;  // 大致看了一遍
     private LockSupport lockSupport;    // 大致看了一遍
     private Semaphore semaphore;    // 简单看了下注释，其它信息见SemaphoreDemo
-    private CountDownLatch countDownLatch;
+    private CountDownLatch countDownLatch;  // 简单看了一下，和Semaphore的思想类似
     private TimeUnit timeUnit;
     private Thread thread;
     private ThreadLocal threadLocal;
