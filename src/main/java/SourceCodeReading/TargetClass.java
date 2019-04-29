@@ -12,10 +12,10 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class TargetClass {
 
-    private ReentrantLock reentrantLock;    // 大致看完了一遍
-    private ReentrantReadWriteLock reentrantReadWriteLock;  // 大致看完了一遍
-    private LockSupport lockSupport;
-    private Semaphore semaphore;
+    private ReentrantLock reentrantLock;    // 大致看了一遍
+    private ReentrantReadWriteLock reentrantReadWriteLock;  // 大致看了一遍
+    private LockSupport lockSupport;    // 大致看了一遍
+    private Semaphore semaphore;    // 简单看了下注释，其它信息见SemaphoreDemo
     private CountDownLatch countDownLatch;
     private TimeUnit timeUnit;
     private Thread thread;

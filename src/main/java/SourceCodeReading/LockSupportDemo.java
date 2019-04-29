@@ -33,10 +33,10 @@ import java.util.concurrent.locks.LockSupport;
  * 常是其本身（this）。
  *
  */
-public class LockSupportTest {
+public class LockSupportDemo {
     public static void main(String[] args) {
-        LockSupportTest lst = new LockSupportTest();
-        lst.basicDemo();
+        LockSupportDemo lsd = new LockSupportDemo();
+        lsd.basicDemo();
     }
 
     public void basicDemo() {
