@@ -37,10 +37,10 @@ public class TargetClass {
     private Map map;
     private HashMap hashMap;
     private Hashtable hashtable;
-    private TreeMap treeMap;
-    private ConcurrentHashMap concurrentHashMap;
     private LinkedHashMap linkedHashMap;
+    private ConcurrentHashMap concurrentHashMap;
     private WeakHashMap weakHashMap;
+    private TreeMap treeMap;
     private SortedMap sortedMap;
     //-------
     private List list;
