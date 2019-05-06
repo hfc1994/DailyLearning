@@ -9,9 +9,9 @@ import java.util.concurrent.TimeUnit;
  * TimeUnit.SECONDS.sleep(n)会使当前线程进入休眠状态，
  *      但并不会放弃锁的持有，效果和Thread.sleep(n)一致
  * TimeUnit.SECONDS.timedWait(Object, n)会使线程进入超时等待状态，
- *      会放弃锁的持有，同时也只能在同步块中调用，效果和Object.wait(n)一致
+ *      会放弃Object上面锁的持有，同时也只能在同步块中调用，效果和Object.wait(n)一致
  * TimeUnit.SECONDS.timedJoin(Thread, n)会使当前线程进入超时等待状态，
- *      等待指定线程的运行结束，会放弃锁的持有(@todo 待确认)，效果和Thread.join(n)一致
+ *      等待指定线程的运行结束，效果和Thread.join(n)一致
  */
 public class TimeUnitDemo {
 
