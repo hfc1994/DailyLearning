@@ -17,6 +17,8 @@ public class TargetClass {
     private LockSupport lockSupport;    // 大致看了一遍
     private Semaphore semaphore;    // 简单看了下注释，其它信息见SemaphoreDemo
     private CountDownLatch countDownLatch;  // 简单看了一下，和Semaphore的思想类似
+    private CyclicBarrier cyclicBarrier;    // 大致看了一遍
+    private Exchanger exchanger;    // 简单的使用了下，实现未细看
     private TimeUnit timeUnit;  // 看过一遍
     private Thread thread;  // 简单过了遍公用方法
     private ThreadLocal threadLocal;
@@ -26,7 +28,7 @@ public class TargetClass {
     private Executors executors;
     private ThreadPoolExecutor threadPoolExecutor;
 
-    private Collections collections;
+    private Collections collections;    // 简单看了部分方法
     //-------
     private Queue queue;
     private BlockingQueue blockingQueue;
@@ -34,9 +36,9 @@ public class TargetClass {
     private LinkedBlockingQueue linkedBlockingQueue;
     private ConcurrentLinkedQueue concurrentLinkedQueue;
     //-------
-    private Map map;
-    private HashMap hashMap;
-    private Hashtable hashtable;
+    private Map map;    // 简单看了下
+    private HashMap hashMap;    // 红黑树相关的还没细看
+    private Hashtable hashtable;    // 简单看了下，没有理由会被用到的类
     private LinkedHashMap linkedHashMap;
     private ConcurrentHashMap concurrentHashMap;
     private WeakHashMap weakHashMap;

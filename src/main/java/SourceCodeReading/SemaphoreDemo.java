@@ -10,6 +10,7 @@ import java.util.concurrent.locks.LockSupport;
 /**
  * Created by hfc on 2019/4/29.
  *
+ * Semaphore整体实现类似ReentrantLock
  * Semaphore就是一个可重入的锁，重入不仅限于当前线程
  * 可重入的次数受限于初始设置的值
  *
