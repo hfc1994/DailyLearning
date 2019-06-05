@@ -21,12 +21,15 @@ public class TargetClass {
     private Exchanger exchanger;    // 简单的使用了下，实现未细看
     private TimeUnit timeUnit;  // 看过一遍
     private Thread thread;  // 简单过了遍公用方法
-    private ThreadLocal threadLocal;
+    private ThreadLocal threadLocal;    // 简单看了使用方法和源码实现
 
     //-------
-    private Executor executor;
-    private Executors executors;
+    private Executor executor;  // 接口
+    private Executors executors;    // 类似工具类
+    private ExecutorService executorService;    // 接口
+    private ScheduledExecutorService scheduledExecutorService;  // 接口
     private ThreadPoolExecutor threadPoolExecutor;
+    private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
 
     private Collections collections;    // 简单看了部分方法
     //-------
