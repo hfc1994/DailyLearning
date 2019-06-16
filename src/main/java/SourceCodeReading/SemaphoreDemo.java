@@ -80,7 +80,7 @@ class ThreadNo1 implements Runnable {
     }
 }
 
-// 用于多次实例，多次重入Semaphore
+// 用于多个线程实例，多次重入Semaphore
 class ThreadNo2 implements Runnable {
 
     private Semaphore semaphore;

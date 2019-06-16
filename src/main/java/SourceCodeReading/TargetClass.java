@@ -28,8 +28,8 @@ public class TargetClass {
     private Executors executors;    // 类似工具类
     private ExecutorService executorService;    // 接口
     private ScheduledExecutorService scheduledExecutorService;  // 接口
-    private ThreadPoolExecutor threadPoolExecutor;
-    private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
+    private ThreadPoolExecutor threadPoolExecutor;  // 大致看了一遍实现逻辑
+    private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;    // 大致看了一遍实现逻辑
 
     private Collections collections;    // 简单看了部分方法
     //-------
