@@ -31,12 +31,17 @@ public class TargetClass {
     private ThreadPoolExecutor threadPoolExecutor;  // 大致看了一遍实现逻辑
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;    // 大致看了一遍实现逻辑
 
+    private ForkJoinPool forkJoinPool;
+    private FutureTask futureTask;
+
     private Collections collections;    // 简单看了部分方法
     //-------
-    private Queue queue;
-    private BlockingQueue blockingQueue;
-    private ArrayBlockingQueue arrayBlockingQueue;
-    private LinkedBlockingQueue linkedBlockingQueue;
+    private Queue queue;    // 接口
+    private BlockingQueue blockingQueue;    // 接口
+    private ArrayBlockingQueue arrayBlockingQueue;  // 看了实现逻辑，Itr、Itrs和Spliterator没有看
+    private LinkedBlockingQueue linkedBlockingQueue;    // 看了实现逻辑，Itr和Spliterator没有看
+    private PriorityQueue priorityQueue;    // 非线程安全，逻辑类似ScheduledThreadPoolExecutor -> DelayedWorkQueue
+    private PriorityBlockingQueue priorityBlockingQueue;    // 线程安全，逻辑类似PriorityQueue
     private ConcurrentLinkedQueue concurrentLinkedQueue;
     //-------
     private Map map;    // 简单看了下
@@ -57,8 +62,9 @@ public class TargetClass {
     private LinkedHashSet linkedHashSet;
     private SortedSet sortedSet;
     private TreeSet treeSet;
+    //-------
+    Class clazz;
 
     public static void main(String[] args) {
-
     }
 }
