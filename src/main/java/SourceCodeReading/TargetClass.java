@@ -1,5 +1,6 @@
 package SourceCodeReading;
 
+import java.lang.ref.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.LockSupport;
@@ -31,9 +32,14 @@ public class TargetClass {
     private ThreadPoolExecutor threadPoolExecutor;  // 大致看了一遍实现逻辑
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;    // 大致看了一遍实现逻辑
 
+    //-------
     private ForkJoinPool forkJoinPool;
+    private Future future;
     private FutureTask futureTask;
+    private CompletableFuture completableFuture;
+    private ScheduledFuture scheduledFuture;
 
+    //-------
     private Arrays arrays;  // 工具类，简单浏览了
     private Collections collections;    // 简单看了部分方法
     //-------
@@ -50,7 +56,7 @@ public class TargetClass {
     private Hashtable hashtable;    // 简单看了下，没有理由会被用到的类
     private LinkedHashMap linkedHashMap;    // 简单看了下，继承自HashMap
     private ConcurrentHashMap concurrentHashMap;
-    private WeakHashMap weakHashMap;
+    private WeakHashMap weakHashMap;    // 简单看了下实现
     private TreeMap treeMap;    // 基于红黑树算法的map
     private SortedMap sortedMap;    // 加锁版的TreeMap
     //-------
@@ -64,6 +70,12 @@ public class TargetClass {
     // ------
     private String string;
     private Integer integer;
+    // ------
+    private Reference reference;    // 引用，简单看了下
+    private SoftReference softReference;    // 软引用，简单看了下
+    private WeakReference weakReference;    // 弱引用，简单看了下
+    private PhantomReference phantomReference;  // 虚引用，简单看了下
+    private ReferenceQueue referenceQueue;  // 引用队列，简单看了下
 
     public static void main(String[] args) {
     }
