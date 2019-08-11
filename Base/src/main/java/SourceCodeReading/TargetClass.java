@@ -71,8 +71,9 @@ public class TargetClass {
     private HashSet hashSet;    // 基于HashMap的key实现，value用一个Object
     private LinkedHashSet linkedHashSet;    // 继承自HashSet，但是基于LinkedHashMap，详见其构造函数
     // ------
-    private String string;
-    private Integer integer;
+    private String string;  // 简单看了下方法，.trim()是把字符串前后的不可见字符（ASCII<=32）全部给去除
+    private Integer integer;    // 简单看了下方法
+
     // ------
     private Reference reference;    // 引用，简单看了下
     private SoftReference softReference;    // 软引用，简单看了下

@@ -8,7 +8,7 @@ import java.util.concurrent.locks.LockSupport;
  *
  * @author user-hfc.
  *
- * LockSupport是用来创建锁和其他同步类的基本线程阻塞原语。
+ * LockSupport是用来创建锁和其他同步类的基本线程阻塞原语，wait和notify/notifyAll就是使用jvm的这两个原语。
  * LockSupport 提供park()和unpark()方法实现阻塞线程和解除线程阻塞，LockSupport和每个使用它的线程都与一个许可(permit)关联。
  * 此处的permit使用的是信号量（Semaphore）的概念
  * permit相当于1，0的开关，默认是0，调用一次unpark就加1变成1，调用一次park会消费permit, 也就是将1变成0，同时park立即返回。
@@ -23,6 +23,7 @@ import java.util.concurrent.locks.LockSupport;
  * 个人这么理解：
  * 每个线程都有一个permit，其取值范围在[-1,1]，初始为0，当permit>=0时，线程不会被阻塞。
  * 每调用一次LockSupport.park()就减1，每调用一次LockSupport.unpark()就加1
+ * 即采用的是信号量模式来实现的
  *
  *
  * 关于blocker的解释（可以参见LockSupport.java第66-73行）：
