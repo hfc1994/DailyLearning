@@ -40,74 +40,74 @@ public class TimeUnitDemo {
         t3.start();
         System.out.println("---main over---");
     }
-}
 
-class Thread1 implements Runnable {
+    static class Thread1 implements Runnable {
 
-    private final Object lock;
-    private final CountDownLatch latch;
+        private final Object lock;
+        private final CountDownLatch latch;
 
-    public Thread1 (Object lock, CountDownLatch latch) {
-        this.lock = lock;
-        this.latch = latch;
-    }
-
-    @Override
-    public void run() {
-        System.out.println("---Thread1 try get lock---");
-        synchronized (lock) {
-            System.out.println("---Thread1 got lock---");
-            try {
-                System.out.println("---Thread1 start to wait 3 seconds---");
-                latch.countDown();
-                TimeUnit.SECONDS.timedWait(lock, 3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("---Thread1 wake from wait---");
+        public Thread1 (Object lock, CountDownLatch latch) {
+            this.lock = lock;
+            this.latch = latch;
         }
-    }
-}
 
-class Thread2 implements Runnable {
-
-    private final Object lock;
-
-    public Thread2 (Object lock) {
-        this.lock = lock;
-    }
-
-    @Override
-    public void run() {
-        System.out.println("---Thread2 try get lock---");
-        synchronized (lock) {
-            System.out.println("---Thread2 got lock---");
-            try {
-                System.out.println("---Thread2 start to sleep 5 seconds---");
-                TimeUnit.SECONDS.sleep(5);
-                System.out.println("---Thread2 wake from sleep---");
-                System.out.println("---Thread2 over---");
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        @Override
+        public void run() {
+            System.out.println("---Thread1 try get lock---");
+            synchronized (lock) {
+                System.out.println("---Thread1 got lock---");
+                try {
+                    System.out.println("---Thread1 start to wait 3 seconds---");
+                    latch.countDown();
+                    TimeUnit.SECONDS.timedWait(lock, 3);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("---Thread1 wake from wait---");
             }
         }
     }
-}
 
-class Thread3 implements Runnable {
+    static class Thread2 implements Runnable {
 
-    @Override
-    public void run() {
-        System.out.println("---Thread3 running---");
-        System.out.println("---Thread3 print number every 1 second for 5 second");
-        for (int i=0; i<5; i++) {
-            System.out.println(i);
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        private final Object lock;
+
+        public Thread2 (Object lock) {
+            this.lock = lock;
+        }
+
+        @Override
+        public void run() {
+            System.out.println("---Thread2 try get lock---");
+            synchronized (lock) {
+                System.out.println("---Thread2 got lock---");
+                try {
+                    System.out.println("---Thread2 start to sleep 5 seconds---");
+                    TimeUnit.SECONDS.sleep(5);
+                    System.out.println("---Thread2 wake from sleep---");
+                    System.out.println("---Thread2 over---");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
-        System.out.println("---Thread3 over---");
+    }
+
+    static class Thread3 implements Runnable {
+
+        @Override
+        public void run() {
+            System.out.println("---Thread3 running---");
+            System.out.println("---Thread3 print number every 1 second for 5 second");
+            for (int i=0; i<5; i++) {
+                System.out.println(i);
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println("---Thread3 over---");
+        }
     }
 }

@@ -1,7 +1,5 @@
 package SourceCodeReading;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 import java.lang.ref.*;
 import java.util.*;
@@ -36,11 +34,15 @@ public class TargetClass {
     private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;    // 大致看了一遍实现逻辑
 
     //-------
-    private ForkJoinPool forkJoinPool;
-    private Future future;
-    private FutureTask futureTask;
-    private CompletableFuture completableFuture;
-    private ScheduledFuture scheduledFuture;
+    private ForkJoinTask forkJoinTask;          // 抽象类
+    private RecursiveAction recursiveAction;    // 无返回值的任务，通常用于只fork不join的情形
+    private RecursiveTask recursiveTask;        // 有返回值的任务，通常用于fork+join的情形
+    private ForkJoinPool forkJoinPool;          // 简单看了源代码
+    private ForkJoinWorkerThread forkJoinWorkerThread;  // 简单看了源代码
+    private Future future;  // 接口
+    private FutureTask futureTask;  // 简单看了源代码和实现
+    private CompletableFuture completableFuture;    // 简单看了下实现
+    private ScheduledFuture scheduledFuture;    // 接口，周期性异步任务接口
 
     //-------
     private Arrays arrays;  // 工具类，简单浏览了
@@ -82,42 +84,7 @@ public class TargetClass {
     private ReferenceQueue referenceQueue;  // 引用队列，简单看了下
 
     public static void main(String[] args) {
-        People p = new People();
-        p.setName("aaa");
-        p.setAge(19);
-        p.setContent("jjljljljljljljl");
-
-        JSONObject obj = (JSONObject) JSON.toJSON(p);
-        System.out.println(obj.toJSONString());
+        ConcurrentHashMap<String, String> oMap = new ConcurrentHashMap<>();
     }
 
-    static class People {
-        private String name;
-        private int age;
-        private transient String content;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getAge() {
-            return age;
-        }
-
-        public void setAge(int age) {
-            this.age = age;
-        }
-
-        public String getContent() {
-            return content;
-        }
-
-        public void setContent(String content) {
-            this.content = content;
-        }
-    }
 }

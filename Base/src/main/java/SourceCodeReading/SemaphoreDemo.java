@@ -44,64 +44,64 @@ public class SemaphoreDemo {
         System.out.println("---main ThreadNo2 test over---");
     }
 
-}
+    // 用于单个线程多次重入Semaphore
+    static class ThreadNo1 implements Runnable {
 
-// 用于单个线程多次重入Semaphore
-class ThreadNo1 implements Runnable {
+        private Semaphore semaphore;
+        private int reenterNum;
+        private Thread mainThread;
 
-    private Semaphore semaphore;
-    private int reenterNum;
-    private Thread mainThread;
+        public ThreadNo1(Semaphore semaphore, int lockNum, Thread thread) {
+            this.semaphore = semaphore;
+            this.reenterNum = lockNum;
+            this.mainThread = thread;
+        }
 
-    public ThreadNo1(Semaphore semaphore, int lockNum, Thread thread) {
-        this.semaphore = semaphore;
-        this.reenterNum = lockNum;
-        this.mainThread = thread;
+        @Override
+        public void run() {
+            try {
+                for (int i=0; i<reenterNum; i++) {
+                    semaphore.acquire();
+                    System.out.println(Thread.currentThread().getName() + " get Semaphore in " + i + " times");
+                }
+
+                TimeUnit.SECONDS.sleep(5);
+
+                for (int i=0; i<reenterNum; i++) {
+                    semaphore.release();
+                }
+                System.out.println("---ThreadNo1 is over---");
+                LockSupport.unpark(mainThread);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    @Override
-    public void run() {
-        try {
-            for (int i=0; i<reenterNum; i++) {
+    // 用于多个线程实例，多次重入Semaphore
+    static class ThreadNo2 implements Runnable {
+
+        private Semaphore semaphore;
+        private CountDownLatch latch;
+
+        public ThreadNo2(Semaphore semaphore, CountDownLatch latch) {
+            this.semaphore = semaphore;
+            this.latch = latch;
+        }
+
+        @Override
+        public void run() {
+            try {
                 semaphore.acquire();
-                System.out.println(Thread.currentThread().getName() + " get Semaphore in " + i + " times");
-            }
+                System.out.println(Thread.currentThread().getName() + " get Semaphore");
 
-            TimeUnit.SECONDS.sleep(5);
-
-            for (int i=0; i<reenterNum; i++) {
+                TimeUnit.SECONDS.sleep(5);
                 semaphore.release();
+                latch.countDown();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            System.out.println("---ThreadNo1 is over---");
-            LockSupport.unpark(mainThread);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
-}
 
-// 用于多个线程实例，多次重入Semaphore
-class ThreadNo2 implements Runnable {
-
-    private Semaphore semaphore;
-    private CountDownLatch latch;
-
-    public ThreadNo2(Semaphore semaphore, CountDownLatch latch) {
-        this.semaphore = semaphore;
-        this.latch = latch;
-    }
-
-    @Override
-    public void run() {
-        try {
-            semaphore.acquire();
-            System.out.println(Thread.currentThread().getName() + " get Semaphore");
-
-            TimeUnit.SECONDS.sleep(5);
-            semaphore.release();
-            latch.countDown();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 }
