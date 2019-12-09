@@ -29,7 +29,7 @@ public class Practise {
      */
     private static void parentheses(Scanner input, String defaultValue) {
         String value;
-        while ((value = defaultValue) != null || (value = input.next()) != null) {
+        while ((value = defaultValue) != null || (value = input.nextLine()) != null) {
             if ("end".equals(value)) {
                 break;
             }
@@ -66,16 +66,20 @@ public class Practise {
      * 你的程序应该输出：
      * ( ( 1 + 2 ) * ( ( 3 - 4 ) * ( 5 - 6 ) ) )
      *
+     * 注意：输入的式子有格式限制，比如2 - 3 + 4 )就没有正确的结果
+     *
      * 思路：不完整的表达式一个一个入栈，数字入数字栈，符号入符号栈
      * 当遇到“)”时，先pop出符号栈的一个符号
      * 1、当前符号不是“)”，则先向符号栈push入一个“(”,再把pop出的符号push回来
      * 2、当前符号是“)”，先pop一个符号f1，在pop一个符号f2
      * ---- 2.1 如果f2不是“(”，则push回去，然后push一个“(”
      * ---- 2.2 如果f2是“(”，则表明当前pop出的符号组成了一个符号的右半数值部分（把括号内的表达式计算之后）
+     *
+     * @fixme 不完美，只能部分正确
      */
     private static void completeExpression(Scanner input, String defaultValue) {
         String value;
-        while ((value = defaultValue) != null || (value = input.next()) != null) {
+        while ((value = defaultValue) != null || (value = input.nextLine()) != null) {
             if ("end".equals(value)) {
                 break;
             }
@@ -84,24 +88,41 @@ public class Practise {
             Stack<String> symbols = new Stack<>();
             Stack<String> symbolsTMP = new Stack<>();
 
-            String[] array = defaultValue.split(" ");
+            String[] array = value.split(" ");
             for (String str : array) {
                 if (")".equals(str)) {
                     boolean isOk = false;
+                    // right表示“)”出现的个数，出现一个“(”能使right - 1
+                    // couple表示“()”配对成功的个数
+                    int right = 0, couple = 0;
                     while (!isOk) {
-                        // @fixme
-                        while (")".equals(symbols.peek()))
+                        while (")".equals(symbols.peek())) {
                             symbolsTMP.push(symbols.pop());
+                            right++;
+                        }
 
                         symbolsTMP.push(symbols.pop());
                         if (!"(".equals(symbols.peek())) {
                             symbols.push("(");
-                            for (String symbol : symbolsTMP)
-                                symbols.push(symbol);
+                            while (null != symbolsTMP.peek())
+                                symbols.push(symbolsTMP.pop());
 
                             isOk = true;
                         } else {
                             symbolsTMP.push(symbols.pop());
+                            right--;
+                            couple++;
+                            if (null != symbols.peek()
+                                    && (right == 0 || couple % 2 == 1))
+                                symbolsTMP.push(symbols.pop());
+                            else {
+                                symbols.push("(");
+                                couple++;
+                                while (null != symbolsTMP.peek())
+                                    symbols.push(symbolsTMP.pop());
+
+                                isOk = true;
+                            }
                         }
                     }
                     symbols.push(str);
@@ -119,23 +140,27 @@ public class Practise {
                 }
             }
 
-            String tmp;
+            String symbol;
             StringBuilder sb = new StringBuilder();
-            while ((tmp = symbols.peek()) != null) {
-                if (!"(".equals(tmp) && !")".equals(tmp)) {
-                    sb.append(numbers.pop())
-                            .append(" ")
-                            .append(symbols.pop())
-                            .append(" ")
+            while ((symbol = symbols.pop()) != null) {
+                StringBuilder sb2 = new StringBuilder();
+                if (!"(".equals(symbol) && !")".equals(symbol)
+                        && !")".equals(symbols.peek())) {
+                    String firstNumber = numbers.pop();
+                    sb = sb2.append(" ")
                             .append(numbers.pop())
-                            .append(" ");
-                } else {
-                    sb.append(symbols.pop())
-                            .append(" ");
+                            .append(" ")
+                            .append(symbol)
+                            .append(" ")
+                            .append(firstNumber)
+                            .append(sb);
+                    continue;
                 }
+                sb = sb2.append(" ")
+                        .append(symbol)
+                        .append(sb);
             }
-            System.out.println(sb.reverse().toString());
-            System.out.println("---stop----");
+            System.out.println(sb.toString());
             defaultValue = null;
         }
     }
