@@ -17,9 +17,12 @@ public class Practise {
 //        parentheses(input, defaultValue);
 
         // 1.3.9
-        defaultValue = "1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) )";
-        completeExpression(input, defaultValue);
+//        defaultValue = "1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) )";
+//        completeExpression(input, defaultValue);
 
+        // 1.3.10
+        defaultValue = "5 + 60 * ( 3 - 1 ) / ( 6 - 4 ) + 3";
+        InfixToPostfix(input, defaultValue);
     }
 
     /**
@@ -161,6 +164,90 @@ public class Practise {
                         .append(sb);
             }
             System.out.println(sb.toString());
+            defaultValue = null;
+        }
+    }
+
+    /**
+     * 1.3.10 编写一个过滤器InfixToPostfix，将算术表达式由中序表达式转为后序表达式。
+     * 后序表达式从前往后，遇到op( + - * / )就对该符号之前的两个数值进行相应计算
+     * 直到最后一个op( + - * / )的计算执行完毕。
+     * 运算符优先级：先 * / 后 + -
+     *              中序表达式                     |     后序表达式
+     * 例子1：     2 * ( 5 - 1 )                   |   2 5 1 - *
+     * 例子2： 5 + 60 * ( 3 - 1 ) / (6 - 4) + 3    |   5 60 3 1 - * 6 4 - / 3 + +
+     */
+    private static void InfixToPostfix(Scanner input, String defaultValue) {
+        String value;
+        while ((value = defaultValue) != null || (value = input.nextLine()) != null) {
+            if ("end".equals(value)) {
+                break;
+            }
+
+            String[] array = value.split(" ");
+
+            Stack<String> exp = new Stack<>();  // 表达式栈
+            Stack<String> op = new Stack<>();   // 运算符栈
+            int right = 0;  // 右括号出现的个数
+            StringBuilder chain;
+            int nextIndex = 0;
+            for (String str : array) {
+                nextIndex++;
+                switch (str) {
+                    case "+":
+                    case "-":
+                    case "*":
+                    case "/":
+                    case "(":
+                        op.push(str);
+                        break;
+                    case ")":
+                        right++;
+                        do {
+                            String firstPop = exp.pop();
+                            chain = new StringBuilder();
+                            chain.append(exp.pop())
+                                    .append(" ")
+                                    .append(firstPop)
+                                    .append(" ")
+                                    .append(op.pop())
+                                    .append(" ");
+                            exp.push(chain.toString());
+                            if ("(".equals(op.peek())) {
+                                if (right > 0) {
+                                    right--;
+                                    op.pop();
+                                } else {
+                                    break;
+                                }
+                            }
+                        } while (("*".equals(op.peek()) || "/".equals(op.peek()))
+                                    || (nextIndex < array.length && exp.size() >= 2
+                                            && ("+".equals(array[nextIndex]) || "-".equals(array[nextIndex]))));
+                        break;
+                    default:
+                        exp.push(str);
+                        // @fixme  当数字是最后一个字符时，还应该再触发一个后续表达式拼接
+                }
+            }
+
+            System.out.println("postfix = " + exp.pop());
+            System.out.println("exp.isEmpty = " + exp.isEmpty() + ", op.isEmpty = " + op.isEmpty());
+            defaultValue = null;
+        }
+    }
+
+    /**
+     * 读取输入值的模板方法
+     * 该方法仅为了方便复制，别无它用
+     */
+    private void template(Scanner input, String defaultValue) {
+        String value;
+        while ((value = defaultValue) != null || (value = input.nextLine()) != null) {
+            if ("end".equals(value)) {
+                break;
+            }
+
             defaultValue = null;
         }
     }
