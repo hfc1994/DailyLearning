@@ -10,6 +10,13 @@
     <name>Base</name>
 
     <dependencies>
+        <!-- 算法第4版部分内容源代码 -->
+        <dependency>
+            <groupId>edu.princeton.cs</groupId>
+            <artifactId>algs4</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
         <dependency>
             <groupId>io.netty</groupId>

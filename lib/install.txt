@@ -1,0 +1,2 @@
+# algs4
+install:install-file -Dfile=algs4.jar -DgroupId=edu.princeton.cs -DartifactId=algs4 -Dversion=1.0.4 -Dpackaging=jar
