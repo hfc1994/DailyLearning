@@ -14,11 +14,11 @@ public class Practise {
         Scanner input = new Scanner(System.in);
         // 1.3.4
 //        defaultValue = "[()]{}{[()()]()}";
-//        parentheses(input, defaultValue);
+//        Parentheses(input, defaultValue);
 
         // 1.3.9
 //        defaultValue = "1 + 2 ) * 3 - 4 ) * 5 - 6 ) ) )";
-//        completeExpression(input, defaultValue);
+//        CompleteExpression(input, defaultValue);
 
         // 1.3.10
         defaultValue = "5 + 60 * ( 3 - 1 ) / ( 6 - 4 ) + 3";
@@ -30,7 +30,7 @@ public class Practise {
      * 并使用栈判定其中的括号是否配对完整且正确。
      * 例如，对于[()]{}{[()()]()}程序应该打印true，对于[(])则打印false
      */
-    private static void parentheses(Scanner input, String defaultValue) {
+    private static void Parentheses(Scanner input, String defaultValue) {
         String value;
         while ((value = defaultValue) != null || (value = input.nextLine()) != null) {
             if ("end".equals(value)) {
@@ -80,7 +80,7 @@ public class Practise {
      *
      * @fixme 不完美，只能部分正确
      */
-    private static void completeExpression(Scanner input, String defaultValue) {
+    private static void CompleteExpression(Scanner input, String defaultValue) {
         String value;
         while ((value = defaultValue) != null || (value = input.nextLine()) != null) {
             if ("end".equals(value)) {
@@ -191,6 +191,7 @@ public class Practise {
             int right = 0;  // 右括号出现的个数
             StringBuilder chain;
             int nextIndex = 0;
+            boolean doBuild = false;
             for (String str : array) {
                 nextIndex++;
                 switch (str) {
@@ -203,35 +204,41 @@ public class Practise {
                         break;
                     case ")":
                         right++;
-                        do {
-                            String firstPop = exp.pop();
-                            chain = new StringBuilder();
-                            chain.append(exp.pop())
-                                    .append(" ")
-                                    .append(firstPop)
-                                    .append(" ")
-                                    .append(op.pop())
-                                    .append(" ");
-                            exp.push(chain.toString());
-                            if ("(".equals(op.peek())) {
-                                if (right > 0) {
-                                    right--;
-                                    op.pop();
-                                } else {
-                                    break;
-                                }
-                            }
-                        } while (("*".equals(op.peek()) || "/".equals(op.peek()))
-                                    || (nextIndex < array.length && exp.size() >= 2
-                                            && ("+".equals(array[nextIndex]) || "-".equals(array[nextIndex]))));
+                        doBuild = true;
                         break;
                     default:
                         exp.push(str);
-                        // @fixme  当数字是最后一个字符时，还应该再触发一个后续表达式拼接
+                        if ("*".equals(op.peek()) || "/".equals(op.peek()))
+                            doBuild = true;
+                }
+
+                if (doBuild || nextIndex == array.length) {
+                    doBuild = false;
+                    do {
+                        String firstPop = exp.pop();
+                        chain = new StringBuilder();
+                        chain.append(exp.pop())
+                                .append(" ")
+                                .append(firstPop)
+                                .append(" ")
+                                .append(op.pop());
+                        exp.push(chain.toString());
+                        if ("(".equals(op.peek())) {
+                            if (right > 0) {
+                                right--;
+                                op.pop();
+                            } else {
+                                break;
+                            }
+                        }
+                    } while (("*".equals(op.peek()) || "/".equals(op.peek()))
+                            || (nextIndex < array.length && exp.size() >= 2
+                            && ("+".equals(array[nextIndex]) || "-".equals(array[nextIndex]))));
                 }
             }
 
-            System.out.println("postfix = " + exp.pop());
+            System.out.println("Infix = " + value);
+            System.out.println("Postfix = " + exp.pop());
             System.out.println("exp.isEmpty = " + exp.isEmpty() + ", op.isEmpty = " + op.isEmpty());
             defaultValue = null;
         }
