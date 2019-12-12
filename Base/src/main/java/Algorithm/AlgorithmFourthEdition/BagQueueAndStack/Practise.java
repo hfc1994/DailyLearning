@@ -21,8 +21,12 @@ public class Practise {
 //        CompleteExpression(input, defaultValue);
 
         // 1.3.10
-        defaultValue = "5 + 60 * ( 3 - 1 ) / ( 6 - 4 ) + 3";
-        InfixToPostfix(input, defaultValue);
+//        defaultValue = "5 + 60 * ( 3 - 1 ) / ( 6 - 4 ) + 3";
+//        InfixToPostfix(input, defaultValue);
+
+        // 1.3.11
+        defaultValue = "5 60 3 1 - * 6 4 - / + 3 +";
+        EvaluatePostfix(input, defaultValue);
     }
 
     /**
@@ -175,7 +179,7 @@ public class Practise {
      * 运算符优先级：先 * / 后 + -
      *              中序表达式                     |     后序表达式
      * 例子1：     2 * ( 5 - 1 )                   |   2 5 1 - *
-     * 例子2： 5 + 60 * ( 3 - 1 ) / (6 - 4) + 3    |   5 60 3 1 - * 6 4 - / 3 + +
+     * 例子2： 5 + 60 * ( 3 - 1 ) / ( 6 - 4 ) + 3  |   5 60 3 1 - * 6 4 - / 3 + +
      */
     private static void InfixToPostfix(Scanner input, String defaultValue) {
         String value;
@@ -253,6 +257,59 @@ public class Practise {
     }
 
     /**
+     * 1.3.11 编写一段程序EvaluatePostfix，从标准输入中得到一个后序表达式，求值并打印结果。
+     * 例子：
+     *  后序表达式：5 60 3 1 - * 6 4 - / + 3 +        结果：68
+     *  后序表达式：2 5 1 - *                         结果：8
+     *  后序表达式：6 5 7 2 - * 3 / + 6 +             结果：20
+     */
+    private static void EvaluatePostfix(Scanner input, String defaultValue) {
+        String value;
+        while ((value = defaultValue) != null || (value = input.nextLine()) != null) {
+            if ("end".equals(value)) {
+                break;
+            }
+
+            String[] array = value.split(" ");
+            Stack<String> numbers = new Stack<>();
+
+            String firstPop;
+            int ret;
+            for (String str : array) {
+                switch (str) {
+                    case "+":
+                        firstPop = numbers.pop();
+                        ret = Integer.parseInt(numbers.pop()) + Integer.parseInt(firstPop);
+                        numbers.push(String.valueOf(ret));
+                        break;
+                    case "-":
+                        firstPop = numbers.pop();
+                        ret = Integer.parseInt(numbers.pop()) - Integer.parseInt(firstPop);
+                        numbers.push(String.valueOf(ret));
+                        break;
+                    case "*":
+                        firstPop = numbers.pop();
+                        ret = Integer.parseInt(numbers.pop()) * Integer.parseInt(firstPop);
+                        numbers.push(String.valueOf(ret));
+                        break;
+                    case "/":
+                        firstPop = numbers.pop();
+                        ret = Integer.parseInt(numbers.pop()) / Integer.parseInt(firstPop);
+                        numbers.push(String.valueOf(ret));
+                        break;
+                    default:
+                        numbers.push(str);
+                }
+            }
+
+            System.out.println("Postfix = " + value);
+            System.out.println("Result = " + numbers.pop());
+            System.out.println("numbers is empty = " + numbers.isEmpty());
+            defaultValue = null;
+        }
+    }
+
+    /**
      * 读取输入值的模板方法
      * 该方法仅为了方便复制，别无它用
      */
@@ -262,6 +319,8 @@ public class Practise {
             if ("end".equals(value)) {
                 break;
             }
+
+            String[] array = value.split(" ");
 
             defaultValue = null;
         }
