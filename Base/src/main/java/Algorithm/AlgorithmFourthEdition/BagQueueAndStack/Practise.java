@@ -191,7 +191,7 @@ public class Practise {
             int right = 0;  // 右括号出现的个数
             StringBuilder chain;
             int nextIndex = 0;
-            boolean doBuild = false;
+            boolean doBuild = false, doJudge = false;
             for (String str : array) {
                 nextIndex++;
                 switch (str) {
@@ -203,18 +203,35 @@ public class Practise {
                         op.push(str);
                         break;
                     case ")":
-                        right++;
-                        doBuild = true;
+                        // pop掉(
+                        op.pop();
+                        doJudge = true;
                         break;
-                    default:
+                    default:    // 数字
                         exp.push(str);
-                        if ("*".equals(op.peek()) || "/".equals(op.peek()))
-                            doBuild = true;
+                        doJudge = true;
                 }
 
-                if (doBuild || nextIndex == array.length) {
-                    doBuild = false;
-                    do {
+                do {
+                    if (doJudge && null != op.peek()) {
+                        if ("*".equals(op.peek()) || "/".equals(op.peek())) {
+                            // 前面是*或/
+                            doBuild = true;
+                        } else if (!"(".equals(op.peek())) {
+                            if (nextIndex == array.length) {
+                                // 最后一个运算符了
+                                doBuild = true;
+                            } else if (!"*".equals(array[nextIndex]) && !"/".equals(array[nextIndex])) {
+                                // 前面和后面都是+或-
+                                doBuild = true;
+                            }
+                        }
+                    }
+                    doJudge = false;
+
+                    if (doBuild) {
+                        doBuild = false;
+                        doJudge = true;
                         String firstPop = exp.pop();
                         chain = new StringBuilder();
                         chain.append(exp.pop())
@@ -223,18 +240,9 @@ public class Practise {
                                 .append(" ")
                                 .append(op.pop());
                         exp.push(chain.toString());
-                        if ("(".equals(op.peek())) {
-                            if (right > 0) {
-                                right--;
-                                op.pop();
-                            } else {
-                                break;
-                            }
-                        }
-                    } while (("*".equals(op.peek()) || "/".equals(op.peek()))
-                            || (nextIndex < array.length && exp.size() >= 2
-                            && ("+".equals(array[nextIndex]) || "-".equals(array[nextIndex]))));
-                }
+                    }
+                } while (doJudge);
+
             }
 
             System.out.println("Infix = " + value);
