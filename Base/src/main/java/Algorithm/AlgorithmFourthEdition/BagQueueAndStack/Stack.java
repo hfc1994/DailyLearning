@@ -45,6 +45,25 @@ public class Stack<K> implements Iterable<K> {
             return null;
     }
 
+    /**
+     * 1.3.12 编写一个可迭代的Stack用例，它包含一个静态的copy()方法，接受一个
+     * 字符串的栈作为参数并返回该栈的一个副本。
+     * @param source
+     * @return
+     */
+    public static Stack<String> copy(Stack<String> source) {
+        Iterator<String> iterator = source.iterator();
+        Stack<String> transfer = new Stack<>();
+        while (iterator.hasNext())
+            transfer.push(iterator.next());
+
+        Stack<String> target = new Stack<>();
+        while (transfer.size() != 0)
+            target.push(transfer.pop());
+
+        return target;
+    }
+
     @Override
     public Iterator<K> iterator() {
         return new StackIterator();
@@ -91,5 +110,13 @@ public class Stack<K> implements Iterable<K> {
         while (iterator.hasNext())
             System.out.print(iterator.next() + " ");
         System.out.println();
+
+        System.out.println("-------------------------------------");
+
+        Stack<String> copy = Stack.copy(s);
+        System.out.println("The copy Stack: ");
+        Iterator<String> iterator2 = copy.iterator();
+        while (iterator2.hasNext())
+            System.out.print(iterator2.next() + " ");
     }
 }
