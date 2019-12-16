@@ -8,8 +8,8 @@ import java.util.Iterator;
  */
 public class Stack<K> implements Iterable<K> {
 
-    private Node first;
-    private int size;
+    protected Node first;
+    protected int size;
 
     public boolean isEmpty() {
         return size == 0;
@@ -86,7 +86,7 @@ public class Stack<K> implements Iterable<K> {
         }
     }
 
-    private class Node {
+    protected class Node {
         K item;
         Node next;
     }
