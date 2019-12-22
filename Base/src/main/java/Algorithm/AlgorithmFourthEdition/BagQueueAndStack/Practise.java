@@ -1,5 +1,6 @@
 package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
@@ -25,8 +26,12 @@ public class Practise {
 //        InfixToPostfix(input, defaultValue);
 
         // 1.3.11
-        defaultValue = "5 60 3 1 - * 6 4 - / + 3 +";
-        EvaluatePostfix(input, defaultValue);
+//        defaultValue = "5 60 3 1 - * 6 4 - / + 3 +";
+//        EvaluatePostfix(input, defaultValue);
+
+        // 1.3.40
+        defaultValue = "qeswrzdwsaeqzxsaq";
+        MoveToFront(input, defaultValue);
     }
 
     /**
@@ -305,6 +310,34 @@ public class Practise {
             System.out.println("Postfix = " + value);
             System.out.println("Result = " + numbers.pop());
             System.out.println("numbers is empty = " + numbers.isEmpty());
+            defaultValue = null;
+        }
+    }
+
+    /**
+     * 1.3.40 前移编码。从标准输入读取一串字符，使用链表保存这些字符并清除重复字符。
+     * 当你读取了一个从未见过的字符时，将它插入表头。当你读取一个重复的字符时，将它
+     * 从链表中删去并再次插入表头。将你的程序命名为MoveToFront：它实现了著名的前移
+     * 编码策略，这种策略假设最近访问过的元素很可能会再次访问，因此可以用于缓存、数
+     * 据压缩等许多场景。
+     */
+    private static void MoveToFront(Scanner input, String defaultValue) {
+        String value;
+        while ((value = defaultValue) != null || (value = input.nextLine()) != null) {
+            if ("end".equals(value)) {
+                break;
+            }
+
+            String[] array = value.split("");
+            LinkedList<String>  frontChar = new LinkedList<>();
+            for (String str : array) {
+                frontChar.remove(str);
+                frontChar.addFirst(str);
+            }
+
+            System.out.println("the front char: ");
+            frontChar.forEach(c -> System.out.print(c + " "));
+            System.out.println();
             defaultValue = null;
         }
     }
