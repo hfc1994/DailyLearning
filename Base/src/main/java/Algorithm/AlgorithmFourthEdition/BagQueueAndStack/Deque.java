@@ -5,6 +5,18 @@ import java.util.Iterator;
 /**
  * Created by user-hfc on 2019/12/16.
  *
+ * -----------------------------------------------------
+ * public class Deque<Item> implements Iterable<Item>
+ * -----------------------------------------------------
+ *          Deque()                 创建空双向队列
+ * boolean  isEmpty()               双向队列是否为空
+ * int      size()                  双向队列中的元素数量
+ * void     pushLeft(Item item)     向左端添加一个新元素
+ * void     pushRight(Item item)    向右端添加一个新元素
+ * Item     popLeft()               从左端删除一个元素
+ * Item     popRight()              从右端删除一个元素
+ * -----------------------------------------------------
+ *
  * 1.3.33 Deque，一个双向队列（或者称为deque）和栈或队列相似，
  * 但它同时支持在两端添加或删除元素。编写一个使用双向链表实现这份
  * API的Dequq类
