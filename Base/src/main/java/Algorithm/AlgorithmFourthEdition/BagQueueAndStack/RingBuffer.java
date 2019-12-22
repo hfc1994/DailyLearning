@@ -1,5 +1,6 @@
 package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -44,7 +45,9 @@ public class RingBuffer<K> {
             while (size == values.length) {
                 // .await()会使线程放弃锁
                 // 当被唤醒后，只有线程获取了锁才能继续下去
+                System.out.println("notFull await start");
                 notFull.await();
+                System.out.println("notFull await over");
             }
 
             values[head] = element;
@@ -56,7 +59,7 @@ public class RingBuffer<K> {
                 head++;
 
             size++;
-            notEmpty.notify();
+            notEmpty.signal();  // notify()是Object的方法，需要事先获得到对应的锁
         } finally {
             lock.unlock();
         }
@@ -66,8 +69,13 @@ public class RingBuffer<K> {
         try {
             lock.lock();
 
-            while (size == 0)
+            while (size == 0) {
+                // .await()会使线程放弃锁
+                // 当被唤醒后，只有线程获取了锁才能继续下去
+                System.out.println("notEmpty await");
                 notEmpty.await();
+                System.out.println("notEmpty over");
+            }
 
             K ret = values[tail];
             values[tail] = null;
@@ -78,7 +86,7 @@ public class RingBuffer<K> {
                 tail++;
 
             size--;
-            notFull.notify();
+            notFull.signal();   // notify()是Object的方法，需要事先获得到对应的锁
 
             return ret;
         } finally {
@@ -87,6 +95,43 @@ public class RingBuffer<K> {
     }
 
     public static void main(String[] args) {
-        // TODO: 2019/12/22 检查和测试代码
+        RingBuffer<String> ringBuffer = new RingBuffer<>(4);
+        Thread t1 = new Thread(() -> {
+            while (true) {
+                try {
+                    System.out.println("---put invoke---");
+                    ringBuffer.put("now is " + System.currentTimeMillis());
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t1.start();
+
+        try {
+            TimeUnit.SECONDS.sleep(30);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Thread t2 = new Thread(() -> {
+           while (true) {
+               try {
+                   System.out.println("---take invoke---");
+                   System.out.println(ringBuffer.take());
+                   TimeUnit.SECONDS.sleep(1);
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+           }
+        });
+        t2.start();
+
+        try {
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
