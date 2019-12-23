@@ -57,7 +57,7 @@ public class ListPractise {
     public static void printTool(Node<String> first) {
         Node<String> current = first;
         while (current != null) {
-            System.out.println(current.item);
+            System.out.println(current.value);
             current = current.next;
         }
         System.out.println("---over---");
@@ -110,7 +110,7 @@ public class ListPractise {
     public static boolean find(Node<String> first, String key) {
         Node<String> current = first;
         while (current != null) {
-            if (key.equals(current.item))
+            if (key.equals(current.value))
                 return true;
             current = current.next;
         }
@@ -127,7 +127,7 @@ public class ListPractise {
 
         Node<String> current = first;
         while (current != null) {
-            if (current.item.equals(target.item)) {
+            if (current.value.equals(target.value)) {
                 if (current == first)
                     return;
                 current.prev.next = null;
@@ -148,7 +148,7 @@ public class ListPractise {
 
         Node<String> current = first;
         while (current != null) {
-            if (current.item.equals(key)) {
+            if (current.value.equals(key)) {
                 if (current == first)
                     return;
                 else {
@@ -172,12 +172,12 @@ public class ListPractise {
         Node<String> maxNode = first;
         Node<String> current = first;
         while (current != null) {
-            if (current.item.length() > maxNode.item.length()) {
+            if (current.value.length() > maxNode.value.length()) {
                 maxNode = current;
             }
             current = current.next;
         }
-        return maxNode.item;
+        return maxNode.value;
     }
 
     /**
@@ -187,15 +187,15 @@ public class ListPractise {
         if (first == null)
             return null;
 
-        String ret = first.item;
+        String ret = first.value;
         return compareMax(first.next, ret);
     }
 
     private static String compareMax(Node<String> target, String key) {
         if (target == null)
             return key;
-        else if (target.item.length() > key.length())
-            key = target.item;
+        else if (target.value.length() > key.length())
+            key = target.value;
 
         return compareMax(target.next, key);
     }

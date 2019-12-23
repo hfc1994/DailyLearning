@@ -8,7 +8,7 @@ import java.util.Iterator;
  */
 public class Stack<K> implements Iterable<K> {
 
-    protected Node first;
+    protected Node<K> first;
     protected int size;
 
     public boolean isEmpty() {
@@ -19,10 +19,10 @@ public class Stack<K> implements Iterable<K> {
         return size;
     }
 
-    public void push(K item) {
-        Node oldFirst = first;
-        first = new Node();
-        first.item = item;
+    public void push(K value) {
+        Node<K> oldFirst = first;
+        first = new Node<>();
+        first.value = value;
         first.next = oldFirst;
         size++;
     }
@@ -31,16 +31,16 @@ public class Stack<K> implements Iterable<K> {
         if (size == 0)
             return null;
 
-        K item = first.item;
+        K value = first.value;
         first = first.next;
         size--;
-        return item;
+        return value;
     }
 
     // 返回最近添加的元素
     public K peek() {
         if (null != first)
-            return first.item;
+            return first.value;
         else
             return null;
     }
@@ -48,8 +48,6 @@ public class Stack<K> implements Iterable<K> {
     /**
      * 1.3.12 编写一个可迭代的Stack用例，它包含一个静态的copy()方法，接受一个
      * 字符串的栈作为参数并返回该栈的一个副本。
-     * @param source
-     * @return
      */
     public static Stack<String> copy(Stack<String> source) {
         Iterator<String> iterator = source.iterator();
@@ -71,7 +69,7 @@ public class Stack<K> implements Iterable<K> {
 
     private class StackIterator implements Iterator<K> {
 
-        private Node current = first;
+        private Node<K> current = first;
 
         @Override
         public boolean hasNext() {
@@ -80,17 +78,11 @@ public class Stack<K> implements Iterable<K> {
 
         @Override
         public K next() {
-            K item = current.item;
+            K item = current.value;
             current = current.next;
             return item;
         }
     }
-
-    protected class Node {
-        K item;
-        Node next;
-    }
-
 
     public static void main(String[] args) {
         String mockInput = "to be or not to - be - - that - - - is a problem";

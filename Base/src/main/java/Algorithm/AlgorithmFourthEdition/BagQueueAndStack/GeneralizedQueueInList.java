@@ -27,8 +27,8 @@ public class GeneralizedQueueInList<K> {
         return size == 0;
     }
 
-    public void insert(K item) {
-        Node<K> newNode = new Node<>(item);
+    public void insert(K value) {
+        Node<K> newNode = new Node<>(value);
         if (head == null) {
             head = newNode;
             current = head;
@@ -60,16 +60,6 @@ public class GeneralizedQueueInList<K> {
 
         size--;
         return ret;
-    }
-
-    private class Node<V> {
-        public V value;
-        public Node<V> next;
-
-        public Node(V v) {
-            this.value = v;
-            this.next = null;
-        }
     }
 
     public static void main(String[] args) {

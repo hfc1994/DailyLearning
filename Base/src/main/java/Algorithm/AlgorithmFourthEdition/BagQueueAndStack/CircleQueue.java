@@ -66,10 +66,10 @@ public class CircleQueue<K> {
     public K remove() {
         K ret;
         if (size == 1) {
-            ret = last.item;
+            ret = last.value;
             last = null;
         } else {
-            ret = last.item;
+            ret = last.value;
             Node<K> discardNode = last;
             last = last.next;
             discardNode.prev.next = last;
@@ -89,7 +89,7 @@ public class CircleQueue<K> {
         Node<K> current = last;
         StringBuilder sb = new StringBuilder("[");
         do {
-            sb.append(current.item)
+            sb.append(current.value)
                     .append(",");
             current = current.next;
         } while (current != last);

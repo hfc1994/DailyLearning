@@ -8,15 +8,15 @@ package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
  */
 public class Steque<K> extends Stack<K> {
 
-    public void enqueue(K item) {
+    public void enqueue(K value) {
 
-        Stack.Node tail = first;
+        Node<K> tail = first;
         while (tail.next != null) {
             tail = tail.next;
         }
 
-        Stack.Node newNode = new Stack.Node();
-        newNode.item = item;
+        Node<K> newNode = new Node<>();
+        newNode.value = value;
         tail.next = newNode;
     }
 

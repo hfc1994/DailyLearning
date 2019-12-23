@@ -41,8 +41,8 @@ public class Deque<K> implements Iterable<K> {
         return size;
     }
 
-    public void pushLeft(K item) {
-        Node<K> newNode = new Node<>(item);
+    public void pushLeft(K value) {
+        Node<K> newNode = new Node<>(value);
         if (tail == null) {
             tail = newNode;
             head = tail;
@@ -54,8 +54,8 @@ public class Deque<K> implements Iterable<K> {
         size++;
     }
 
-    public void pushRight(K item) {
-        Node<K> newNode = new Node<>(item);
+    public void pushRight(K value) {
+        Node<K> newNode = new Node<>(value);
         if (head == null) {
             head = newNode;
             tail = head;
@@ -83,7 +83,7 @@ public class Deque<K> implements Iterable<K> {
             popNode.prev = null;
         }
         size--;
-        return popNode.item;
+        return popNode.value;
     }
 
     public K popRight() {
@@ -102,7 +102,7 @@ public class Deque<K> implements Iterable<K> {
             popNode.next = null;
         }
         size--;
-        return popNode.item;
+        return popNode.value;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class Deque<K> implements Iterable<K> {
 
         @Override
         public K next() {
-            K ret = current.item;
+            K ret = current.value;
             current = current.next;
             return ret;
         }

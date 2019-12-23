@@ -5,7 +5,7 @@ package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
  */
 public class Node<K> {
 
-    public K item;
+    public K value;
 
     public Node<K> prev;
 
@@ -13,12 +13,12 @@ public class Node<K> {
 
     public Node() {}
 
-    public Node(K item) {
-        this.item = item;
+    public Node(K value) {
+        this.value = value;
     }
 
-    public Node(K item, Node<K> next) {
-        this.item = item;
+    public Node(K value, Node<K> next) {
+        this.value = value;
         this.next = next;
         next.prev = this;
     }
