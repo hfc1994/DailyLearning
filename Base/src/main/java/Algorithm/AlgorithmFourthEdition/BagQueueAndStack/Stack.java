@@ -11,6 +11,25 @@ public class Stack<K> implements Iterable<K> {
     protected Node<K> first;
     protected int size;
 
+    public Stack() {}
+
+    /**
+     * 1.3.42 复制栈。为基于链表实现的栈编写一个新的构造函数，使以下代码
+     * Stack<Item> t = new Stack<Item>(s);
+     * 得到的t指向栈s的一个新的独立的副本。
+     */
+    public Stack(Stack<K> s) {
+        Stack<K> exchange = new Stack<>();
+        K temp;
+        while ((temp = s.pop()) != null)
+            exchange.push(temp);
+
+        while ((temp = exchange.pop()) != null) {
+            s.push(temp);
+            this.push(temp);
+        }
+    }
+
     public boolean isEmpty() {
         return size == 0;
     }
@@ -85,30 +104,47 @@ public class Stack<K> implements Iterable<K> {
     }
 
     public static void main(String[] args) {
-        String mockInput = "to be or not to - be - - that - - - is a problem";
-        String[] mockInputArray = mockInput.split(" ");
+//        String mockInput = "to be or not to - be - - that - - - is a problem";
+//        String[] mockInputArray = mockInput.split(" ");
+//
+//        Stack<String> s = new Stack<>();
+//        for (String item : mockInputArray) {
+//            if (!"-".equals(item))
+//                s.push(item);
+//            else if (!s.isEmpty())
+//                System.out.print(s.pop() + " ");
+//        }
+//
+//        System.out.println();
+//        System.out.println("There is " + s.size() + " left on Stack, there is:");
+//        Iterator<String> iterator = s.iterator();
+//        while (iterator.hasNext())
+//            System.out.print(iterator.next() + " ");
+//        System.out.println();
+//
+//        System.out.println("-------------------------------------");
+//
+//        Stack<String> copy = Stack.copy(s);
+//        System.out.println("The copy Stack: ");
+//        Iterator<String> iterator2 = copy.iterator();
+//        while (iterator2.hasNext())
+//            System.out.print(iterator2.next() + " ");
+
 
         Stack<String> s = new Stack<>();
-        for (String item : mockInputArray) {
-            if (!"-".equals(item))
-                s.push(item);
-            else if (!s.isEmpty())
-                System.out.print(s.pop() + " ");
-        }
+        s.push("aaa");
+        s.push("bbb");
+        s.push("ccc");
+        s.push("ddd");
 
-        System.out.println();
-        System.out.println("There is " + s.size() + " left on Stack, there is:");
-        Iterator<String> iterator = s.iterator();
-        while (iterator.hasNext())
-            System.out.print(iterator.next() + " ");
+        Stack<String> t = new Stack<>(s);
+        String temp;
+        while ((temp = s.pop()) != null)
+            System.out.print(temp + " ");
         System.out.println();
 
-        System.out.println("-------------------------------------");
-
-        Stack<String> copy = Stack.copy(s);
-        System.out.println("The copy Stack: ");
-        Iterator<String> iterator2 = copy.iterator();
-        while (iterator2.hasNext())
-            System.out.print(iterator2.next() + " ");
+        while ((temp = t.pop()) != null)
+            System.out.print(temp + " ");
+        System.out.println();
     }
 }

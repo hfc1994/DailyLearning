@@ -8,31 +8,25 @@ package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
  * 得到的r指向队列q的一个新的独立的副本。可以对q或r进行任意入列或出列操作但它们
  * 不会相互影响。提示：从q中取出所有元素再将它们插入q和r
  *
- * fixme 按题意理解的话，应该只能用链表的Queue来实现
- * fixme 队列先进先出，并且还需要能自动扩容
- *
  */
 public class Queue<K> {
 
-    private K[] values;
+    private Node<K> head;
+    private Node<K> tail;
     private int size;
-    private int head;
-    private int tail;
 
-    public Queue() {
-        this(16);
-    }
+    public Queue() {}
 
-    @SuppressWarnings("unchecked")
-    public Queue(int initCapacity) {
-        values = (K[]) new Object[initCapacity];
-        size = 0;
-        head = tail = 0;
-    }
+    public Queue(Queue<K> others) {
+        Queue<K> exchange = new Queue<>();
+        K temp;
+        while ((temp = others.take()) != null)
+            exchange.put(temp);
 
-    @SuppressWarnings("unchecked")
-    public Queue(K[] others) {
-
+        while ((temp = exchange.take()) != null) {
+            others.put(temp);
+            this.put(temp);
+        }
     }
 
     public boolean isEmpty() {
@@ -43,31 +37,61 @@ public class Queue<K> {
         return size;
     }
 
-    @SuppressWarnings("unchecked")
-    public boolean offer(K item) {
-        if (size == values.length)
-            return false;
-
-        values[head] = item;
-        if (head == values.length - 1)
-            head = 0;
-        else
-            head++;
+    public void put(K value) {
+        Node<K> newNode = new Node<>(value);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
         size++;
-        return true;
     }
 
-    @SuppressWarnings("unchecked")
-    public K poll() {
+    public K take() {
         if (size == 0)
             return null;
 
-        K temp = values[tail];
-        if (tail == values.length - 1)
-            tail = 0;
-        else
-            tail++;
+        Node<K> temp = head;
+        if (head == tail) {
+            head = null;
+            tail = head;
+        } else {
+            head = head.next;
+            temp.next.prev = null;
+            temp.next = null;
+        }
+
         size--;
-        return temp;
+        return temp.value;
+    }
+
+    public static void main(String[] args) {
+//        Queue<String> queue = new Queue<>();
+//        queue.put("aaa");
+//        queue.put("bbb");
+//        queue.put("ccc");
+//        System.out.println(queue.take());
+//        System.out.println(queue.take());
+//        System.out.println(queue.take());
+//        System.out.println(queue.take());
+
+        Queue<String> q = new Queue<>();
+        q.put("aaa");
+        q.put("bbb");
+        q.put("ccc");
+        q.put("ddd");
+
+        Queue<String> r = new Queue<>(q);
+        String str;
+        while ((str = q.take()) != null)
+            System.out.print(str + " ");
+        System.out.println();
+
+        while ((str = r.take()) != null)
+            System.out.print(str + " ");
+        System.out.println();
     }
 }
