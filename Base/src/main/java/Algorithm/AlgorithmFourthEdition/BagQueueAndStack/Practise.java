@@ -1,5 +1,6 @@
 package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -30,8 +31,12 @@ public class Practise {
 //        EvaluatePostfix(input, defaultValue);
 
         // 1.3.40
-        defaultValue = "qeswrzdwsaeqzxsaq";
-        MoveToFront(input, defaultValue);
+//        defaultValue = "qeswrzdwsaeqzxsaq";
+//        MoveToFront(input, defaultValue);
+
+        // 1.3.43
+        defaultValue = "D:\\";
+        ToListFile(input, defaultValue);
     }
 
     /**
@@ -340,6 +345,54 @@ public class Practise {
             System.out.println();
             defaultValue = null;
         }
+    }
+
+    /**
+     * 1.3.43 文件列表。文件夹就是一列文件和文件夹的列表。编写一个程序，从命令行接受
+     * 一个文件夹命名作为参数，打印出该文件夹下的所有文件并用递归的方式在所有子文件夹
+     * 的名下（缩进）列出其下的所有文件。提示：使用队列，并参考java.io.File
+     *
+     * 注：没看明白为什么要用队列，甚至感觉使用后进先出的栈都比队列合适
+     */
+    private static void ToListFile(Scanner input, String defaultValue) {
+        String value;
+        while ((value = defaultValue) != null || (value = input.nextLine()) != null) {
+            if ("end".equals(value)) {
+                break;
+            }
+
+            ReadRecursive(value, 0);
+            defaultValue = null;
+        }
+    }
+
+    private static void ReadRecursive(String path, int level) {
+        File root = new File(path);
+        if (root.isDirectory()) {
+            printSplit(level, root.getName(), null);
+            File[] children = root.listFiles();
+            if (children == null)
+                return;
+            for (File child : children) {
+                if (child.isHidden())
+                    continue;
+                if (child.isFile()) {
+                    printSplit(level + 1, child.getName(), "|- ");
+                } else {
+                    ReadRecursive(child.getAbsolutePath(), level+1);
+                }
+            }
+        } else {
+            printSplit(level, root.getName(), "|- ");
+        }
+    }
+
+    private static void printSplit(int count, String name, String append) {
+        for (int i=0; i<count; i++)
+            System.out.print("    ");
+        if (append != null)
+            System.out.print(append);
+        System.out.println(name);
     }
 
     /**
