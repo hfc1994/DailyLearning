@@ -1,5 +1,6 @@
 package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 /**
@@ -10,6 +11,13 @@ public class Stack<K> implements Iterable<K> {
 
     protected Node<K> first;
     protected int size;
+
+    /**
+     * 1.3.50 快速出错的迭代器。修改Stack的迭代器代码，确保一旦用例在迭代器中
+     * （通过push()或pop()操作）修改集合数据就抛出一个
+     * java.util.ConcurrentModificationException异常。
+     */
+    private int modCount;
 
     public Stack() {}
 
@@ -44,6 +52,7 @@ public class Stack<K> implements Iterable<K> {
         first.value = value;
         first.next = oldFirst;
         size++;
+        modCount++;
     }
 
     public K pop() {
@@ -53,6 +62,7 @@ public class Stack<K> implements Iterable<K> {
         K value = first.value;
         first = first.next;
         size--;
+        modCount++;
         return value;
     }
 
@@ -89,14 +99,21 @@ public class Stack<K> implements Iterable<K> {
     private class StackIterator implements Iterator<K> {
 
         private Node<K> current = first;
+        private int exceptModCount = modCount;
 
         @Override
         public boolean hasNext() {
+            if (exceptModCount != modCount)
+                throw new ConcurrentModificationException();
+
             return current != null;
         }
 
         @Override
         public K next() {
+            if (exceptModCount != modCount)
+                throw new ConcurrentModificationException();
+
             K item = current.value;
             current = current.next;
             return item;

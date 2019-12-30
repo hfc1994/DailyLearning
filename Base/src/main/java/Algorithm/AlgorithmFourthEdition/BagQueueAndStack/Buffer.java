@@ -17,4 +17,44 @@ package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
  * 提示：使用两个栈。
  */
 public class Buffer {
+
+    private Stack<Character> leftStack;
+    private Stack<Character> rightStack;
+
+    public Buffer() {
+        leftStack = new Stack<>();
+        rightStack = new Stack<>();
+    }
+
+    public void insert(char c) {
+        leftStack.push(c);
+    }
+
+    public char delete() {
+        return leftStack.pop();
+    }
+
+    public void left(int k) {
+        for (int i=0; i<k; i++) {
+            if (!leftStack.isEmpty()) {
+                rightStack.push(leftStack.pop());
+            }
+        }
+    }
+
+    public void right(int k) {
+        for (int i=0; i<k; i++) {
+            if (!rightStack.isEmpty()) {
+                leftStack.push(rightStack.pop());
+            }
+        }
+    }
+
+    public int size() {
+        return leftStack.size();
+    }
+
+    public static void main(String[] args) {
+
+    }
 }
