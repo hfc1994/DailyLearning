@@ -183,13 +183,38 @@ public class Practise {
     }
 
     /**
+     * 网上的一种处理方法，相比我自己的，ta把符号和值拼成字符串再放入vals栈中，
+     * 而我自己的存储的单个字符，逻辑复杂度高，我的InfixToPostfix有点类似该做法
+     */
+    public static String CompleteExpressionFromNetwork(String str) {
+        java.util.Stack<String> ops = new java.util.Stack<>();
+        java.util.Stack<String> vals = new java.util.Stack<>();
+
+        for(int i=0;i<str.length();i++){
+            if(str.charAt(i)==')'){
+                String v2 = vals.pop();
+                String v1 = vals.pop();
+                String t = "(" + v1 + ops.pop() + v2 + ")";
+                vals.push(t);
+            } else {
+                if("+-*/".contains(String.valueOf(str.charAt(i)))){
+                    ops.push(String.valueOf(str.charAt(i)));
+                }
+                else vals.push(String.valueOf(str.charAt(i)));
+            }
+        }
+        return vals.pop();
+    }
+
+    /**
      * 1.3.10 编写一个过滤器InfixToPostfix，将算术表达式由中序表达式转为后序表达式。
-     * 后序表达式从前往后，遇到op( + - * / )就对该符号之前的两个数值进行相应计算
-     * 直到最后一个op( + - * / )的计算执行完毕。
+     * 思路：后序表达式从前往后，遇到op( + - * / )就对该符号之前的两个数值进行相应
+     * 计算直到最后一个op( + - * / )的计算执行完毕。
      * 运算符优先级：先 * / 后 + -
      *              中序表达式                     |     后序表达式
      * 例子1：     2 * ( 5 - 1 )                   |   2 5 1 - *
-     * 例子2： 5 + 60 * ( 3 - 1 ) / ( 6 - 4 ) + 3  |   5 60 3 1 - * 6 4 - / 3 + +
+     * 例子2： 5 + 60 * ( 3 - 1 ) / ( 6 - 4 ) + 3  |   5 60 3 1 - * 6 4 - / + 3 +
+     * 例子3： 6 + 5 * （ 7 - 2 ） / 3 + 6         |   6 5 7 2 - * 3 / + 6 +
      */
     private static void InfixToPostfix(Scanner input, String defaultValue) {
         String value;
@@ -264,6 +289,35 @@ public class Practise {
             System.out.println("exp.isEmpty = " + exp.isEmpty() + ", op.isEmpty = " + op.isEmpty());
             defaultValue = null;
         }
+    }
+
+    /**
+     * 网上的一种实现方式，这种依赖于“括号”的正确以及足量使用
+     * “括号”的足量并不是我的版本的必要条件
+     */
+    private static void InfixToPostfixFromNetwork() {
+        Scanner input = new Scanner(System.in);
+        String value = input.nextLine();
+
+        java.util.Stack<String> ops = new java.util.Stack<>();
+        java.util.Stack<String> vals = new java.util.Stack<>();
+        for (int i=0; i<value.length(); i++) {
+            String s = String.valueOf(value.charAt(i));
+
+            if(s.equals("(")) {
+            } else if(s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/")) {
+                ops.push(s);
+            } else if(s.equals(")")) {
+                String op = ops.pop();//operator
+                String v = vals.pop();//value
+                //only support +-*/ operator
+                String subexpression = vals.pop() + " "  + v + " " + op;
+                vals.push(subexpression);
+            } else {
+                vals.push(s);
+            }
+        }
+        System.out.println(vals.pop());
     }
 
     /**
