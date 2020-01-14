@@ -13,6 +13,8 @@ public class UFTest {
 
     public static void main(String[] args) throws IOException {
 
+        long lBegin = System.currentTimeMillis();
+
 //        route(0, "qf");
 //        route(1, "qf");
 
@@ -20,9 +22,11 @@ public class UFTest {
 //        route(1, "qu");
 
 //        route(0, "wqu");
-        // FIXME: 2020/1/13 输出的值有问题
-        route(1, "wqu");
 //        route(1, "wqu");
+//        route(2, "wqu");
+
+        long lEnd = System.currentTimeMillis();
+        System.out.printf("--- cost %.2f seconds ---\n", (lEnd - lBegin) / 1000.0d);
     }
 
     private static void route(int fileIndex, String ufType) throws IOException {

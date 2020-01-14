@@ -28,12 +28,12 @@ public class WeightQuickUnion extends AbstractUF {
         if (pId == qId)
             return;
 
-        if (score[p] >= score[q]) {
-            id[q] = p;
-            score[p] += score[q];
+        if (score[pId] >= score[qId]) {
+            id[qId] = pId;
+            score[pId] += score[qId];
         } else {
-            id[p] = q;
-            score[q] += score[p];
+            id[pId] = qId;
+            score[qId] += score[pId];
         }
         count--;
     }
