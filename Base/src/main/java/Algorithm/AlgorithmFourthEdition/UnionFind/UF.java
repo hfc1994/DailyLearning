@@ -16,7 +16,7 @@ public interface UF {
     int find(int p);
 
     /**
-     * 如果p和q存在于同一个分量重则返回true
+     * 如果p和q存在于同一个分量中则返回true
      */
     default boolean connection(int p, int q) {
         return find(p) == find(q);
