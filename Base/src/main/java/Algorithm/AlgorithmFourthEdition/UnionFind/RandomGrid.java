@@ -27,46 +27,119 @@ import java.util.*;
  *
  * 想法：在一个N*N的网格中，随机给定一个点x，那么这个点只会与x-1、x+1、x-N或x+N相连
  */
-public class RandomGrid {
+public class RandomGrid extends AbstractUF {
 
-    public static Connection[] generate(int N) {
-        // 一个点x只会与x-1、x+1、x-N或x+N相连
-        int[] links = new int[]{-1, 1, 0 - N, N};
+    // 网格横向和纵向的点数
+    private int X;
+    private int Y;
+
+    private int UP = 1;
+    private int DOWN = 1 << 1;
+    private int LEFT = 1 << 2;
+    private int RIGHT = 1 << 3;
+
+    public RandomGrid(int X) {
+        this(X, X);
+    }
+
+    public RandomGrid(int X, int Y) {
+        this.X = X;
+        this.Y = Y;
+        int total = X * Y;
+        id = new int[total];
+        // 所有点之间两两互联的边数
+        count = 2 * total - X - Y;
+        // 每个点的分量标识符表示其指向的位置
+        // 0x0000表示没有指向；
+        // 0x0001表示指向上方；0x0010表示指向下方
+        // 0x0100表示指向左方；0x1000表示指向右方
+        for (int i=0; i<total; i++)
+            id[i] = 0;
+    }
+
+    @Override
+    public void union(int p, int q) {
+        // union就是把两个点相连
+        // 判断是否已经相连应该交给connection()
+
+        int diff = p - q;
+        int vector = 0;
+        if (diff == -X) vector = UP;            // p在q的上边
+        else if (diff == X) vector = DOWN;      // p在q的下边
+        else if (diff == -1) vector = LEFT;     // p在q的左边
+        else if (diff == 1) vector = RIGHT;     // p在q的右边
+
+        if (vector != 0) {
+            id[q] = id[q] | vector;
+            count--;
+        }
+    }
+
+    @Override
+    public int find(int p) {
+        return id[p];
+    }
+
+    @Override
+    public boolean connection(int p, int q) {
+        int pV = id[p]; // p点的指向
+        int qV = id[q]; // q点的指向
+
+        // 两个点都没有指向
+        if (pV == 0 && qV == 0)
+            return false;
+
+        int diff = p - q;
+        if (diff == -X) return ((pV & DOWN) != 0) || ((qV & UP) != 0);          // p在q的上边
+        else if (diff == X) return ((pV & UP) != 0) || ((qV & DOWN) != 0);      // p在q的下边
+        else if (diff == -1) return ((pV & RIGHT) != 0) || ((qV & LEFT) != 0);  // p在q的左边
+        else if (diff == 1) return ((pV & LEFT) != 0) || ((qV & RIGHT) != 0);   // p在q的右边
+
+        // 说明是两个不直接相邻的点
+        return false;
+    }
+
+    public static Connection[] generate(int M) {
+        return generate(M, M);
+    }
+
+    public static Connection[] generate(int M, int N) {
+        // 一个点x只会与x-1、x+1、x-M或x+M相连
+        int[] vectors = new int[]{-1, 1, 0 - M, M};
         Random random = new Random();
 
         List<Connection> connList = new LinkedList<>();
-        QuickUnion qu = new QuickUnion(N * N);
+        RandomGrid rg = new RandomGrid(M, N);
 
-        int linkIndex, linkValue;
+        int vIndex, vValue;
         // 第一个随机点的坐标
         int x, y;
         // 两个随机点
         int p, q;
-        while (qu.count() > 1) {
-            linkIndex = random.nextInt(4);
-            linkValue = links[linkIndex];
-            links[linkIndex] = links[1];
-            links[1] = linkValue;
+        while (rg.count() != 0) {
+            vIndex = random.nextInt(vectors.length);
+            vValue = vectors[vIndex];
+            vectors[vIndex] = vectors[1];
+            vectors[1] = vValue;
 
-            x = random.nextInt(N);
+            x = random.nextInt(M);
             y = random.nextInt(N);
 
             // 四种边界情况
-            if (linkValue == 1 && x == N-1)
+            if (vValue == 1 && x == M-1)
                 continue;
-            if (linkValue == -1 && x == 0)
+            if (vValue == -1 && x == 0)
                 continue;
-            if (linkValue == (0-N) && y == 0)
+            if (vValue == (0-M) && y == 0)
                 continue;
-            if (linkValue == N && y == N-1)
+            if (vValue == M && y == N-1)
                 continue;
 
-            p = x + N * y;
-            q = p + linkValue;
+            p = x + M * y;
+            q = p + vValue;
 
-            // FIXME: 2020/2/26 这个只是一个最小的网格连线，即点与邻近点可达但没有直接相连
-            if (!qu.connection(p, q)) {
-                qu.union(p, q);
+            if (!rg.connection(p, q)) {
+                rg.union(p, q);
                 connList.add(new Connection(p, q));
             }
         }
@@ -85,9 +158,10 @@ public class RandomGrid {
     }
 
     public static void main(String[] args) {
-        int N = 3;
+        int N = 4;
 
-        Connection[] conns = generate(N);
+//        Connection[] conns = generate(N);
+        Connection[] conns = generate(3, 4);
 
         RandomBag<Connection> rb = new RandomBag<>(conns.length);
         for (Connection conn : conns)
