@@ -157,6 +157,15 @@ public class RandomGrid extends AbstractUF {
         }
     }
 
+    /**
+     * 1.5.19 动画。编写一个RandomGrid（请见练习1.5.18）的用例，
+     * 和我们的开发用例一样使用UnionFind来检查触点的连通性并在
+     * 处理的同事用StdDraw将它们绘出。
+     */
+    public static void animation() {
+
+    }
+
     public static void main(String[] args) {
         int N = 4;
 

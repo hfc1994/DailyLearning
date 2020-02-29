@@ -18,7 +18,7 @@ public interface UF {
     /**
      * 如果p和q存在于同一个分量中则返回true
      */
-    default boolean connection(int p, int q) {
+    default boolean connected(int p, int q) {
         return find(p) == find(q);
     }
 

@@ -24,7 +24,7 @@ public class ErdosRenyi {
         while (hwqu.count() > 1) {
             int p = r.nextInt(N);
             int q = r.nextInt(N);
-            if (!hwqu.connection(p, q)) {
+            if (!hwqu.connected(p, q)) {
                 hwqu.union(p, q);
                 edges++;
             }

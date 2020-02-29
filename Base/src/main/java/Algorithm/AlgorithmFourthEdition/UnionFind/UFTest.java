@@ -61,7 +61,7 @@ public class UFTest {
             array = line.split(" ");
             int p = Integer.parseInt(array[0]);
             int q = Integer.parseInt(array[1]);
-            if (uf.connection(p, q))
+            if (uf.connected(p, q))
                 continue;
 
             uf.union(p, q);
