@@ -31,7 +31,11 @@ public class UFTest {
 
 //        route(0, "hwqu");
 //        route(1, "hwqu");
-        route(2, "hwqu");
+//        route(2, "hwqu");
+
+        route(0, "dwqu");
+//        route(1, "dwqu");
+//        route(2, "dwqu");
 
         long lEnd = System.currentTimeMillis();
         System.out.printf("--- cost %.2f seconds ---\n", (lEnd - lBegin) / 1000.0d);
@@ -84,6 +88,8 @@ public class UFTest {
                 return new CompressWeightQuickUnion(size);
             case "hwqu":
                 return new HeightWeightQuickUnion(size);
+            case "dwqu":
+                return new DynamicWeightQuickUnion();
             default:
                 throw  new IllegalArgumentException();
         }
