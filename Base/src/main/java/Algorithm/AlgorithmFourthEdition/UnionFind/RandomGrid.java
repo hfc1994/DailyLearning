@@ -81,7 +81,7 @@ public class RandomGrid extends AbstractUF {
     }
 
     @Override
-    public boolean connection(int p, int q) {
+    public boolean connected(int p, int q) {
         int pV = id[p]; // p点的指向
         int qV = id[q]; // q点的指向
 
@@ -138,7 +138,7 @@ public class RandomGrid extends AbstractUF {
             p = x + M * y;
             q = p + vValue;
 
-            if (!rg.connection(p, q)) {
+            if (!rg.connected(p, q)) {
                 rg.union(p, q);
                 connList.add(new Connection(p, q));
             }
@@ -147,7 +147,7 @@ public class RandomGrid extends AbstractUF {
         return connList.toArray(new Connection[0]);
     }
 
-    private static class Connection {
+    public static class Connection {
         int p;
         int q;
 
@@ -160,7 +160,7 @@ public class RandomGrid extends AbstractUF {
     /**
      * 1.5.19 动画。编写一个RandomGrid（请见练习1.5.18）的用例，
      * 和我们的开发用例一样使用UnionFind来检查触点的连通性并在
-     * 处理的同事用StdDraw将它们绘出。
+     * 处理的同时用StdDraw将它们绘出。
      */
     public static void animation() {
 
