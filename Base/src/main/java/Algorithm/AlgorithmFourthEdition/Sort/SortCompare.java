@@ -9,6 +9,7 @@ public class SortCompare {
 
     private Selection<Double> selection = new Selection<>();
     private Insertion<Double> insertion = new Insertion<>();
+    private Shell<Double> shell = new Shell<>();
 
     // 固定的种子，保证每组的随机生成都是固定的
     private Random random = new Random(System.currentTimeMillis());
@@ -21,6 +22,9 @@ public class SortCompare {
                 break;
             case "Insertion":
                 insertion.sort(a);
+                break;
+            case "Shell":
+                shell.sort(a);
                 break;
             default:
         }
@@ -41,20 +45,23 @@ public class SortCompare {
     }
 
     public static void main(String[] args) {
-        String alg1 = "Insertion";
-        String alg2 = "Selection";
+//        String alg1 = "Insertion";
+//        String alg2 = "Selection";
 
 //        String alg1 = "Selection";
-//        String alg2 = "Insertion";
+        String alg1 = "Insertion";
+        String alg2 = "Shell";
 
         int N = 10000;
         int T = 100;
 
         SortCompare sc = new SortCompare();
         double t1 = sc.timeRandomInput(alg1, N, T);
-        double t2 = sc.timeRandomInput(alg2, N, T);
+//        double t2 = sc.timeRandomInput(alg2, N, T);
 
-        System.out.printf("For %d random Doubles\n   %s is", N, alg1);
-        System.out.printf(" %.2f times faster than %s\n", t2/t1, alg2);
+        System.out.println(alg1 + " = " + t1);
+//        System.out.println(alg2 + " = " + t2);
+//        System.out.printf("For %d random Doubles\n   %s is", N, alg1);
+//        System.out.printf(" %.2f times faster than %s\n", t2/t1, alg2);
     }
 }
