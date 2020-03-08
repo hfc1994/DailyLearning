@@ -5,7 +5,7 @@ package Algorithm.AlgorithmFourthEdition.Sort;
  *
  * 希尔排序
  */
-public class Shell<T extends Comparable<? super T>> implements Sort<T> {
+public class Shell<T extends Comparable<T>> implements Sort<T> {
 
     @Override
     public void sort(T[] a) {
@@ -14,9 +14,8 @@ public class Shell<T extends Comparable<? super T>> implements Sort<T> {
         while (h < N/3) h = 3*h + 1;
         while (h >= 1) {
             for (int i=h; i<N; i++) {
-                for (int j=i; j>=h; j-=h) {
-                    if (less(a[j], a[j-h]))
-                        exchange(a, j, j-h);
+                for (int j=i; j>=h && less(a[j], a[j-h]); j-=h) {
+                    exchange(a, j, j-h);
                 }
             }
             h = h/3;

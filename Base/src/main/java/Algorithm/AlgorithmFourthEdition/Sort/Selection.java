@@ -5,12 +5,12 @@ package Algorithm.AlgorithmFourthEdition.Sort;
  *
  * 选择排序
  */
-public class Selection<T extends Comparable<? super T>> implements Sort<T> {
+public class Selection<T extends Comparable<T>> implements Sort<T> {
 
     @Override
     public void sort(T[] a) {
         int N = a.length;
-        for (int i=0; i<N-1; i++) {
+        for (int i=0; i<N; i++) {
             int min = i;
             for (int j=i+1; j<N; j++) {
                 if (less(a[j], a[min]))

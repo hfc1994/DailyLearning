@@ -3,7 +3,7 @@ package Algorithm.AlgorithmFourthEdition.Sort;
 /**
  * Created by hfc on 2020/3/7.
  */
-public interface Sort<T extends Comparable<? super T>> {
+public interface Sort<T extends Comparable<T>> {
 
     void sort(T[] a);
 
