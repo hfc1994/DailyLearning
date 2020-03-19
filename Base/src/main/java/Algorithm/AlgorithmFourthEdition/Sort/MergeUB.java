@@ -14,7 +14,7 @@ public class MergeUB extends Merge {
         sort(a, 0, a.length - 1);
     }
 
-    private void sort(int[] a, int lo, int hi) {
+    protected void sort(int[] a, int lo, int hi) {
         if (lo >= hi)
             return;
 
