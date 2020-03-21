@@ -9,7 +9,7 @@ package Algorithm.AlgorithmFourthEdition.Sort;
  * 元素作为块的主键，用选择排序将块排序；(ii)遍历数组，将第
  * 一块和第二块归并，完成后将第二块和第三块归并，等等。
  */
-public class MergePractise {
+public class MergeWithLessSpace {
     
     private int M = 5;
     
@@ -26,6 +26,8 @@ public class MergePractise {
     }
     
     public void merge(int[] a, int lo, int mid, int hi) {
-        // TODO: 2020/3/19  
+        // TODO: 2020/3/21 还是没想好如何使用M大小的数组aux归并两个大于M的数组
+        // TODO 考虑过先取M个元素到aux，然后先归并前M个元素，然后整理aux并补足M个，
+        // TODO 之后继续归并继续整理补足，但是这样处理过于复杂，不合适
     }
 }
