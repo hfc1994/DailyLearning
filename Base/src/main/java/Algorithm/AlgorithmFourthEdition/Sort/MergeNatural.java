@@ -53,7 +53,7 @@ public class MergeNatural {
         }
     }
 
-    public void merge(int[] src, int lo, int mid, int hi) {
+    private void merge(int[] src, int lo, int mid, int hi) {
         for (int i=0; i<src.length; i++) {
             aux[i] = src[i];
         }
