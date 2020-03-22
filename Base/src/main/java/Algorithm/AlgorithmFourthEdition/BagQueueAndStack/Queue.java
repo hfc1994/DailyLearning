@@ -68,6 +68,12 @@ public class Queue<K> {
         return temp.value;
     }
 
+    public K peek() {
+        if (size == 0)
+            return null;
+        return head.value;
+    }
+
     public static void main(String[] args) {
 //        Queue<String> queue = new Queue<>();
 //        queue.put("aaa");
