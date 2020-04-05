@@ -1,29 +1,32 @@
 package Algorithm.AlgorithmFourthEdition.QuickSort;
 
+import Algorithm.AlgorithmFourthEdition.BagQueueAndStack.Stack;
 import Algorithm.AlgorithmFourthEdition.Utils;
 
 /**
- * Created by user-hfc on 2020/3/29.
+ * Created by user-hfc on 2020/4/5.
  *
- * 2.3.18 三取样切分。为快速排序实现正文所述的三取样切分（参见2.3.3.2节）。
+ * 2.3.20 非递归的快速排序。实现一个非递归的快速排序，使用一个循环来将
+ * 弹出栈的子数组切分并将结果子数组重新压入栈。注意：先将较大的子数组压
+ * 入栈，这样就可以保证栈最多只会有lgN个元素。
+ *
  */
-public class Quick3Samples {
+public class QuickNoRecursion {
 
     public void sort(int[] a) {
-        sort(a, 0, a.length - 1);
+        Stack<Pair> parts = new Stack<>();
+        parts.push(new Pair(0, a.length - 1));
+        sort(a, parts);
     }
 
-    protected void sort(int[] a, int lo, int hi) {
-        if (hi <= lo) return;
-
-        if (hi - lo >= 3) {
-            int mid = findMid(a, lo, lo + 2);
-            Utils.exchange(a, lo, mid);
+    protected void sort(int[] a, Stack<Pair> parts) {
+        Pair p;
+        while (!parts.isEmpty()) {
+            p = parts.pop();
+            int j = partition(a, p.lo, p.hi);
+            if (p.hi > j+1) parts.push(new Pair(j+1, p.hi));
+            if (j-1 > p.lo) parts.push(new Pair(p.lo, j-1));
         }
-
-        int j = partition(a, lo, hi);
-        sort(a, lo, j-1);
-        sort(a, j+1, hi);
     }
 
     // 返回的是切分元素K的位置下标
@@ -48,18 +51,14 @@ public class Quick3Samples {
         return j;
     }
 
-    protected static int findMid(int[] src, int lo, int hi) {
-        int[] samples = new int[hi -lo + 1];
-        for (int i=0; i<samples.length; i++)
-            samples[i] = lo + i;
+    public static class Pair {
+        private int lo;
+        private int hi;
 
-        for (int i=0; i<samples.length-1; i++) {
-            for (int j=i+1; j<samples.length; j++) {
-                if (src[samples[j]] < src[samples[i]])
-                    Utils.exchange(samples, i, j);
-            }
+        public Pair(int begin, int end) {
+            lo = begin;
+            hi = end;
         }
-        return samples[(hi - lo)/2];
     }
 
     public static void main(String[] args) {
@@ -68,7 +67,7 @@ public class Quick3Samples {
 
         Utils.showResult(src);
 
-        Quick3Samples quick = new Quick3Samples();
+        QuickNoRecursion quick = new QuickNoRecursion();
         quick.sort(src);
 
         Utils.showAscResult(src);
