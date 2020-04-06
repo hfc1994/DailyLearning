@@ -57,8 +57,8 @@ public class Utils {
             System.out.print(num + " ");
         System.out.println();
 
-        if ("asc".equals(type)) System.out.println(ascOrder(src));
-        else if ("desc".equals(type)) System.out.println(descOrder(src));
+        if ("asc".equals(type)) System.out.println("asc order: " + ascOrder(src));
+        else if ("desc".equals(type)) System.out.println("desc order: " + descOrder(src));
     }
 
     // 判断给定数组是否是递增的

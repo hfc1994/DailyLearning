@@ -19,7 +19,7 @@ import Algorithm.AlgorithmFourthEdition.Utils;
  * -----------------------------------------------------
  *
  */
-public class MaxPQ<T extends Comparable<T>> implements PQ<T> {
+public class MaxPQ<T extends Comparable> implements PQ<T> {
 
     private T[] pq;     // 基于堆的完全按二叉树
     private int N = 0;  // 存储于pq[1...N]中，pq[0]没有使用
