@@ -23,9 +23,20 @@ public class Utils {
         return src;
     }
 
+    // i号元素是否比j号元素小
+    @SuppressWarnings("unchecked")
+    public static boolean less(Comparable[] pq, int i, int j) {
+        return pq[i].compareTo(pq[j]) < 0;
+    }
+
     // 交换src数组内m和n位置的内容
-    public static void exchange(int src[], int m, int n) {
+    public static void exchange(int[] src, int m, int n) {
         int temp = src[m];
+        src[m] = src[n];
+        src[n] = temp;
+    }
+    public static void exchange(Comparable[] src, int m, int n) {
+        Comparable temp = src[m];
         src[m] = src[n];
         src[n] = temp;
     }

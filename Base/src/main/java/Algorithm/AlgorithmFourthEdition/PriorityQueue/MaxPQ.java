@@ -4,8 +4,22 @@ import Algorithm.AlgorithmFourthEdition.Utils;
 
 /**
  * Created by user-hfc on 2020/4/6.
+ *
+ * -----------------------------------------------------
+ * public class MaxPQ<Key extends Comparable<Key>
+ * -----------------------------------------------------
+ *          MaxPQ()             创建一个优先队列
+ *          MaxPQ(int max)      创建一个初始容量为max的优先队列
+ *          MaxPQ(Key[] a)      用a[]中的元素创建一个优先队列
+ * void     Insert(Key v)       向优先队列中插入一个元素
+ * Key      max()               返回最大元素
+ * Key      delMax()            删除并返回最大元素
+ * boolean  isEmpty()           返回队列是否为空
+ * int      size()              返回优先队列中的元素个数
+ * -----------------------------------------------------
+ *
  */
-public class MaxPQ<T extends Comparable<T>> {
+public class MaxPQ<T extends Comparable<T>> implements PQ<T> {
 
     private T[] pq;     // 基于堆的完全按二叉树
     private int N = 0;  // 存储于pq[1...N]中，pq[0]没有使用
@@ -30,27 +44,16 @@ public class MaxPQ<T extends Comparable<T>> {
 
     public T delMax() {
         T max = pq[1];        // 从根结点得到最大元素
-        exchange(1, N--);   // 将其和最后一个结点交换
+        Utils.exchange(pq, 1, N--);   // 将其和最后一个结点交换
         pq[N+1] = null;       // 防止对象游离
         sink(1);           // 恢复堆的有序性
         return max;
     }
 
-    // i号元素是否比j号元素小
-    private boolean less(int i, int j) {
-        return pq[i].compareTo(pq[j]) < 0;
-    }
-
-    private void exchange(int i, int j) {
-        T temp = pq[i];
-        pq[i] = pq[j];
-        pq[j] = temp;
-    }
-
     // 上浮
     private void swim(int k) {
-        while (k > 1 && less(k/2, k)) {
-            exchange(k/2, k);
+        while (k > 1 && Utils.less(pq, k/2, k)) {
+            Utils.exchange(pq, k/2, k);
             k = k/2;
         }
     }
@@ -60,26 +63,45 @@ public class MaxPQ<T extends Comparable<T>> {
         int j;
         while (2*k <= N) {
             j = 2*k;
-            if (j < N && less(j, j+1)) j++;
+            if (j < N && Utils.less(pq, j, j+1)) j++;
 
-            if (!less(k, j))
+            if (!Utils.less(pq, k, j))
                 break;
 
-            exchange(k, j);
+            Utils.exchange(pq, k, j);
             k = j;
         }
     }
 
     public static void main(String[] args) {
-        int[] src = Utils.numGen(20);
+//        int[] src = Utils.numGen(20);
+//
+//        MaxPQ<Integer> maxIntPQ = new MaxPQ<>(src.length);
+//        for (int data : src)
+//            maxIntPQ.insert(data);
+//
+//        while (!maxIntPQ.isEmpty()) {
+//            System.out.print(maxIntPQ.delMax());
+//            System.out.print(" ");
+//        }
+//        System.out.println();
 
-        MaxPQ<Integer> maxPQ = new MaxPQ<>(src.length);
-        for (int data : src)
-            maxPQ.insert(data);
 
-        while (!maxPQ.isEmpty()) {
-            System.out.print(maxPQ.delMax());
-            System.out.print(" ");
+        /**
+         * 2.4.1 用序列P R I O * R * * I * T * Y * * * Q U E * * * U * E(
+         * 字母表示插入元素，星号表示删除最大元素)操作一个初始为空的优先队列。给
+         * 出每次删除最大元素返回的字符。
+         */
+        String strSrc = "P R I O * R * * I * T * Y * * * Q U E * * * U * E";
+        String[] arraySrc = strSrc.split(" ");
+        MaxPQ<String> maxStrPQ = new MaxPQ<>(arraySrc.length);
+        for (String str : arraySrc) {
+            if ("*".equals(str)) {
+                System.out.print(maxStrPQ.delMax());
+                System.out.print(" ");
+            } else {
+                maxStrPQ.insert(str);
+            }
         }
         System.out.println();
     }
