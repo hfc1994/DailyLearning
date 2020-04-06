@@ -63,8 +63,7 @@ public class QuickWithGuard {
 
     public static void main(String[] args) {
 //        for (int i=0; i<100; i++) {
-            int[] src = new int[20];
-            Utils.numGen(src);
+            int[] src = Utils.numGen(20);
 
             Utils.showResult(src);
 

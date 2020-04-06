@@ -38,8 +38,7 @@ public class Quick2Keys {
 
     public static void main(String[] args) {
         for (int i=0; i<100; i++) {
-            int[] src = new int[50];
-            Utils.numGen(src, 2);
+            int[] src = Utils.numGen(50, 2);
 
             Utils.showResult(src);
 

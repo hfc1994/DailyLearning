@@ -37,8 +37,7 @@ public class Quick5Samples extends Quick3Samples {
     }
 
     public static void main(String[] args) {
-        int[] src = new int[20];
-        Utils.numGen(src);
+        int[] src = Utils.numGen(20);
 
         Utils.showResult(src);
 

@@ -9,18 +9,18 @@ public class Utils {
 
     private static Random random = new Random(System.currentTimeMillis());
 
-    // 往给定的数组里面填充入100以内的随机整数值
-    public static void numGen(int[] src) {
-        for (int i=0; i<src.length; i++) {
-            src[i] = random.nextInt(100);
-        }
+    // 生成给定长度，且全部填充入100范围内随机整数的数组
+    public static int[] numGen(int length) {
+        return numGen(length, 100);
     }
 
-    // 往给定的数组里面填充入指定范围以内的随机整数值
-    public static void numGen(int[] src, int bound) {
-        for (int i=0; i<src.length; i++) {
+    // 生成给定长度，且全部填充入指定范围以内的随机整数值
+    public static int[] numGen(int length, int bound) {
+        int[] src = new int[length];
+        for (int i=0; i<length; i++) {
             src[i] = random.nextInt(bound);
         }
+        return src;
     }
 
     // 交换src数组内m和n位置的内容
