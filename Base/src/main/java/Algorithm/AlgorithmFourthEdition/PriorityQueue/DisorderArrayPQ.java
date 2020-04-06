@@ -50,16 +50,35 @@ public class DisorderArrayPQ<T extends Comparable> implements PQ<T> {
     }
 
     public static void main(String[] args) {
-        int[] src = Utils.numGen(20);
+//        int[] src = Utils.numGen(20);
+//
+//        PQ<Integer> maxIntPQ = new DisorderArrayPQ<>(src.length);
+//        for (int data : src)
+//            maxIntPQ.insert(data);
+//
+//        int[] dst = new int[src.length];
+//        while (!maxIntPQ.isEmpty())
+//            dst[src.length - maxIntPQ.size()] = maxIntPQ.delMax();
+//
+//        Utils.showDescResult(dst);
 
-        PQ<Integer> maxIntPQ = new DisorderArrayPQ<>(src.length);
-        for (int data : src)
-            maxIntPQ.insert(data);
 
-        int[] dst = new int[src.length];
-        while (!maxIntPQ.isEmpty())
-            dst[src.length - maxIntPQ.size()] = maxIntPQ.delMax();
-
-        Utils.showDescResult(dst);
+        /**
+         * 2.4.1 用序列P R I O * R * * I * T * Y * * * Q U E * * * U * E(
+         * 字母表示插入元素，星号表示删除最大元素)操作一个初始为空的优先队列。给
+         * 出每次删除最大元素返回的字符。
+         */
+        String strSrc = "P R I O * R * * I * T * Y * * * Q U E * * * U * E";
+        String[] arraySrc = strSrc.split(" ");
+        PQ<String> doaPQ = new DisorderArrayPQ<>(arraySrc.length);
+        for (String str : arraySrc) {
+            if ("*".equals(str)) {
+                System.out.print(doaPQ.delMax());
+                System.out.print(" ");
+            } else {
+                doaPQ.insert(str);
+            }
+        }
+        System.out.println();
     }
 }

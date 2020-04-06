@@ -18,6 +18,8 @@ import Algorithm.AlgorithmFourthEdition.Utils;
  * int      size()              返回优先队列中的元素个数
  * -----------------------------------------------------
  *
+ * 基于堆的优先队列
+ *
  */
 public class MaxPQ<T extends Comparable> implements PQ<T> {
 
@@ -45,7 +47,11 @@ public class MaxPQ<T extends Comparable> implements PQ<T> {
     public T delMax() {
         T max = pq[1];        // 从根结点得到最大元素
         Utils.exchange(pq, 1, N--);   // 将其和最后一个结点交换
-        pq[N+1] = null;       // 防止对象游离
+
+        // pq[N+1] = null;       // 防止对象游离
+        pq[N+1] = pq[N];       // 2.4.13 想办法在sink()中避免检查j < N
+
+
         sink(1);           // 恢复堆的有序性
         return max;
     }
@@ -63,7 +69,9 @@ public class MaxPQ<T extends Comparable> implements PQ<T> {
         int j;
         while (2*k <= N) {
             j = 2*k;
-            if (j < N && Utils.less(pq, j, j+1)) j++;
+
+            // if (j < N && Utils.less(pq, j, j+1)) j++;
+            if (Utils.less(pq, j, j+1)) j++;    // 2.4.13 想办法在sink()中避免检查j < N
 
             if (!Utils.less(pq, k, j))
                 break;
@@ -73,36 +81,52 @@ public class MaxPQ<T extends Comparable> implements PQ<T> {
         }
     }
 
-    public static void main(String[] args) {
-//        int[] src = Utils.numGen(20);
-//
-//        MaxPQ<Integer> maxIntPQ = new MaxPQ<>(src.length);
-//        for (int data : src)
-//            maxIntPQ.insert(data);
-//
-//        while (!maxIntPQ.isEmpty()) {
-//            System.out.print(maxIntPQ.delMax());
-//            System.out.print(" ");
-//        }
-//        System.out.println();
-
-
-        /**
-         * 2.4.1 用序列P R I O * R * * I * T * Y * * * Q U E * * * U * E(
-         * 字母表示插入元素，星号表示删除最大元素)操作一个初始为空的优先队列。给
-         * 出每次删除最大元素返回的字符。
-         */
-        String strSrc = "P R I O * R * * I * T * Y * * * Q U E * * * U * E";
-        String[] arraySrc = strSrc.split(" ");
-        MaxPQ<String> maxStrPQ = new MaxPQ<>(arraySrc.length);
-        for (String str : arraySrc) {
-            if ("*".equals(str)) {
-                System.out.print(maxStrPQ.delMax());
-                System.out.print(" ");
-            } else {
-                maxStrPQ.insert(str);
-            }
+    private void showContent() {
+        for (int i=1; i<pq.length; i++) {
+            System.out.print(pq[i]);
+            System.out.print(" ");
         }
         System.out.println();
+    }
+
+    public static void main(String[] args) {
+        int[] src = Utils.numGen(20);
+
+        MaxPQ<Integer> maxIntPQ = new MaxPQ<>(src.length);
+        for (int data : src)
+            maxIntPQ.insert(data);
+
+        int[] dst = new int[src.length];
+        while (!maxIntPQ.isEmpty())
+            dst[src.length - maxIntPQ.size()] = maxIntPQ.delMax();
+
+        Utils.showDescResult(dst);
+
+        /**
+         * 2.4.5 将E A S Y Q U E S T I O N顺序插入一个面向最大元素的堆中，给出结果
+         */
+//        String strSrc2 = "E A S Y Q U E S T I O N";
+//        String[] arraySrc2 = strSrc2.split(" ");
+//        MaxPQ<String> maxStrPQ2 = new MaxPQ<>(arraySrc2.length);
+//        for (String str : arraySrc2)
+//            maxStrPQ2.insert(str);
+//        maxStrPQ2.showContent();
+
+        /**
+         * 2.4.6 按照练习2.4.1的规则，用序列P R I O * R * * I * T * Y * * * Q U E * * * U * E
+         * 操作一个初始为空的面向最大元素的堆，给出每次操作后堆的内容。
+         */
+//        String strSrc = "P R I O * R * * I * T * Y * * * Q U E * * * U * E";
+//        String[] arraySrc = strSrc.split(" ");
+//        MaxPQ<String> maxStrPQ = new MaxPQ<>(arraySrc.length);
+//        for (String str : arraySrc) {
+//            if ("*".equals(str)) {
+//                System.out.print(maxStrPQ.delMax());
+//                System.out.print(" ");
+//            } else {
+//                maxStrPQ.insert(str);
+//            }
+//        }
+//        System.out.println();
     }
 }
