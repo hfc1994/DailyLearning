@@ -18,7 +18,7 @@ import Algorithm.AlgorithmFourthEdition.Utils;
  * int      size()              返回优先队列中的元素个数
  * -----------------------------------------------------
  *
- * 基于堆的优先队列
+ * 基于堆面向最大元素的优先队列
  *
  */
 public class MaxPQ<T extends Comparable> implements PQ<T> {
@@ -29,6 +29,21 @@ public class MaxPQ<T extends Comparable> implements PQ<T> {
     @SuppressWarnings("unchecked")
     public MaxPQ(int maxN) {
         pq = (T[]) new Comparable[maxN + 1];
+    }
+
+    /**
+     * 2.4.19 实现MaxPQ的一个构造函数，接受一个数组作为参数。使用正文2.4.5.1节
+     * 中所述的自底向上的方法构造堆
+     */
+    @SuppressWarnings("unchecked")
+    public MaxPQ(T[] src) {
+        pq = (T[]) new Comparable[src.length + 1];
+        for(int i=0; i<src.length; i++) {
+            pq[++N] = src[i];
+            if (N != 1) {
+                swim(N);
+            }
+        }
     }
 
     public boolean isEmpty() {
@@ -45,6 +60,11 @@ public class MaxPQ<T extends Comparable> implements PQ<T> {
     }
 
     public T delMax() {
+        return del();
+    }
+
+    @Override
+    public T del() {
         T max = pq[1];        // 从根结点得到最大元素
         Utils.exchange(pq, 1, N--);   // 将其和最后一个结点交换
 
@@ -90,17 +110,17 @@ public class MaxPQ<T extends Comparable> implements PQ<T> {
     }
 
     public static void main(String[] args) {
-        int[] src = Utils.numGen(20);
-
-        MaxPQ<Integer> maxIntPQ = new MaxPQ<>(src.length);
-        for (int data : src)
-            maxIntPQ.insert(data);
-
-        int[] dst = new int[src.length];
-        while (!maxIntPQ.isEmpty())
-            dst[src.length - maxIntPQ.size()] = maxIntPQ.delMax();
-
-        Utils.showDescResult(dst);
+//        int[] src = Utils.numGen(20);
+//
+//        MaxPQ<Integer> maxIntPQ = new MaxPQ<>(src.length);
+//        for (int data : src)
+//            maxIntPQ.insert(data);
+//
+//        int[] dst = new int[src.length];
+//        while (!maxIntPQ.isEmpty())
+//            dst[src.length - maxIntPQ.size()] = maxIntPQ.delMax();
+//
+//        Utils.showDescResult(dst);
 
         /**
          * 2.4.5 将E A S Y Q U E S T I O N顺序插入一个面向最大元素的堆中，给出结果
@@ -128,5 +148,17 @@ public class MaxPQ<T extends Comparable> implements PQ<T> {
 //            }
 //        }
 //        System.out.println();
+
+        /**
+         * 2.4.19 实现MaxPQ的一个构造函数，接受一个数组作为参数。使用正文2.4.5.1节
+         * 中所述的自底向上的方法构造堆
+         */
+        String strSrc = "E A S Y Q U E S T I O N";
+        String[] arraySrc = strSrc.split(" ");
+        MaxPQ<String> maxStrPQ = new MaxPQ<>(arraySrc);
+        while (!maxStrPQ.isEmpty())
+            System.out.print(maxStrPQ.delMax() + " ");
+
+        System.out.println();
     }
 }

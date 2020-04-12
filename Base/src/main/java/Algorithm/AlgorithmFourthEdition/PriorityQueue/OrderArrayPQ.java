@@ -44,7 +44,7 @@ public class OrderArrayPQ<T extends Comparable> implements PQ<T> {
     }
 
     @Override
-    public T delMax() {
+    public T del() {
         T ret = pq[--N];
         pq[N] = null;
         return ret;
@@ -59,7 +59,7 @@ public class OrderArrayPQ<T extends Comparable> implements PQ<T> {
 
         int[] dst = new int[src.length];
         while (!maxIntPQ.isEmpty())
-            dst[src.length - maxIntPQ.size()] = maxIntPQ.delMax();
+            dst[src.length - maxIntPQ.size()] = maxIntPQ.del();
 
         Utils.showDescResult(dst);
     }

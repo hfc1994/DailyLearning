@@ -11,5 +11,5 @@ public interface PQ<T> {
 
     void insert(T v);
 
-    T delMax();
+    T del();
 }

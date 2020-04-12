@@ -36,8 +36,12 @@ public class DisorderArrayPQ<T extends Comparable> implements PQ<T> {
         pq[N++] = v;
     }
 
-    @Override
     public T delMax() {
+        return del();
+    }
+
+    @Override
+    public T del() {
         int iMax = 0;
         for (int i=0; i<N; i++) {
             if (Utils.less(pq, iMax, i)) iMax = i;
@@ -58,7 +62,7 @@ public class DisorderArrayPQ<T extends Comparable> implements PQ<T> {
 //
 //        int[] dst = new int[src.length];
 //        while (!maxIntPQ.isEmpty())
-//            dst[src.length - maxIntPQ.size()] = maxIntPQ.delMax();
+//            dst[src.length - maxIntPQ.size()] = maxIntPQ.del();
 //
 //        Utils.showDescResult(dst);
 
@@ -73,7 +77,7 @@ public class DisorderArrayPQ<T extends Comparable> implements PQ<T> {
         PQ<String> doaPQ = new DisorderArrayPQ<>(arraySrc.length);
         for (String str : arraySrc) {
             if ("*".equals(str)) {
-                System.out.print(doaPQ.delMax());
+                System.out.print(doaPQ.del());
                 System.out.print(" ");
             } else {
                 doaPQ.insert(str);
