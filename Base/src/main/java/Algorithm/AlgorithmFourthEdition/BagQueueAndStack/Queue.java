@@ -1,5 +1,7 @@
 package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
 
+import java.util.Iterator;
+
 /**
  * Created by hfc on 2019/12/22.
  *
@@ -9,7 +11,7 @@ package Algorithm.AlgorithmFourthEdition.BagQueueAndStack;
  * 不会相互影响。提示：从q中取出所有元素再将它们插入q和r
  *
  */
-public class Queue<K> {
+public class Queue<K> implements Iterable<K> {
 
     private Node<K> head;
     private Node<K> tail;
@@ -72,6 +74,26 @@ public class Queue<K> {
         if (size == 0)
             return null;
         return head.value;
+    }
+
+    @Override
+    public Iterator<K> iterator() {
+        return new Iterator<K>() {
+
+            private Node<K> current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public K next() {
+                K ret = current.value;
+                current = current.next;
+                return ret;
+            }
+        };
     }
 
     public static void main(String[] args) {
