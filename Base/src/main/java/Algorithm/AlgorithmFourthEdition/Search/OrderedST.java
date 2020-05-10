@@ -31,9 +31,9 @@ public interface OrderedST<k extends Comparable<k>, v> extends ST<k, v> {
     int rank(k key);
 
     /**
-     * 排名为k的键
+     * 排名为index的键
      */
-    k select(int k);
+    k select(int index);
 
     /**
      * 删除最小的键

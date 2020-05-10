@@ -63,8 +63,8 @@ public class BinarySearchST<k extends Comparable<k>, v>
     }
 
     @Override
-    public k select(int k) {
-        return keys[k];
+    public k select(int index) {
+        return keys[index];
     }
 
     @Override
