@@ -33,10 +33,18 @@ public class BinarySearchST<k extends Comparable<k>, v>
         return keys[size - 1];
     }
 
+    /**
+     * 3.1.17 为BinarySearchST实现floor()方法
+     */
     @Override
     public k floor(k key) {
-        int i = rank(key);
-        return keys[i];
+        for (int i=0; i<size; i++) {
+            if (key.compareTo(keys[i]) == 0)
+                return key;
+            else if (key.compareTo(keys[i]) < 0)
+                return i == 0 ? null : keys[i-1];
+        }
+        return keys[size-1];
     }
 
     @Override
@@ -121,6 +129,28 @@ public class BinarySearchST<k extends Comparable<k>, v>
             return vals[i];
         else
             return null;
+    }
+
+    /**
+     * 3.1.16 为BinarySearchST实现delete()方法
+     */
+    @Override
+    public void delete(k key) {
+        if (key == null)
+            return;
+
+        for (int i=0; i<size; i++) {
+            if (key.compareTo(select(i)) == 0) {
+                for (int j=i; j<=size-1; j++) {
+                    if (j == size - 1)
+                        keys[j] = null;
+                    else
+                        keys[j] = keys[j+1];
+                }
+                size--;
+                break;
+            }
+        }
     }
 
     @Override
