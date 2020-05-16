@@ -2,6 +2,8 @@ package Algorithm.AlgorithmFourthEdition.Search;
 
 /**
  * Created by user-hfc on 2020/4/28.
+ *
+ * 一种简单的泛型符号表接口
  */
 public interface ST<k, v> {
 

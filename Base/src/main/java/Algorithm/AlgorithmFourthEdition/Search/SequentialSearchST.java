@@ -19,28 +19,12 @@ public class SequentialSearchST<k, v> implements ST<k, v> {
     public void put(k key, v value) {
         // 值为null时，删除键对应的节点
         // 查找给定的键，找到则更新其值，否则在表中新建节点
-        Node prev = null;
         for (Node x = first; x != null; x = x.next) {
             if (key.equals(x.key)) {
-                if (value == null) {
-                    // 删除当前节点
-                    if (prev == null) first = x.next;
-                    else prev.next = x.next;
-
-                    x.next = null;
-                    size--;
-                    return;
-                } else {
-                    // 命中节点，修改其值
-                    x.val = value;
-                    return;
-                }
+                x.val = value;
+                return;
             }
-            prev = x;
         }
-
-        if (value == null)
-            return;
 
         first = new Node(key, value, first);    //  未命中，新建节点
         size++;
@@ -55,6 +39,28 @@ public class SequentialSearchST<k, v> implements ST<k, v> {
         }
         return null;    // 未命中
     }
+
+
+    /**
+     * 3.1.5 实现SequentialSearchST中的size()、delete()和keys()方法。
+     */
+    @Override
+    public void delete(k key) {
+        Node prev = null;
+        for (Node x = first; x != null; x = x.next) {
+            if (key.equals(x.key)) {
+                // 删除当前节点
+                if (prev == null) first = x.next;
+                else prev.next = x.next;
+
+                x.next = null;
+                size--;
+                return;
+            }
+            prev = x;
+        }
+    }
+
 
     @Override
     public int size() {

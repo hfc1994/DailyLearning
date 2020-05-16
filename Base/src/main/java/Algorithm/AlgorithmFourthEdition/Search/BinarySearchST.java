@@ -3,6 +3,7 @@ package Algorithm.AlgorithmFourthEdition.Search;
 import Algorithm.AlgorithmFourthEdition.BagQueueAndStack.Queue;
 
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Created by user-hfc on 2020/4/29.
@@ -13,24 +14,57 @@ import java.util.Iterator;
 public class BinarySearchST<k extends Comparable<k>, v>
         implements OrderedST<k, v> {
 
-    private k[] keys;
-    private v[] vals;
+    /**
+     * 3.1.12 修改BinarySearchST，用一个Item对象的数组而非两个平行
+     * 数组来保存键和值。添加一个构造函数，接受一个Item的数组为参数并
+     * 将其归并排序。
+     */
+    private Item<k, v>[] items;
     private int size;
+
+    public BinarySearchST() {}
 
     @SuppressWarnings("unchecked")
     public BinarySearchST(int capacity) {
-        keys = (k[]) new Comparable[capacity];
-        vals = (v[]) new Object[capacity];
+        items = new Item[capacity];
+    }
+
+    @SuppressWarnings("unchecked")
+    public BinarySearchST(Item[] source) {
+        size = source.length;
+        items = new Item[size];
+        mergeSort(source, 0, size/2, size-1);
+    }
+
+    protected void mergeSort(Item<k, v>[] source, int lo, int mid, int hi) {
+        if (lo >= hi)
+            return;
+
+        mergeSort(source, lo, (lo+mid)/2, mid);
+        mergeSort(source, mid+1, (mid+1+hi)/2, hi);
+
+        int i=lo, j=mid+1;
+        for (int k=lo; k<=hi;) {
+            if (i > mid)
+                items[k++] = source[j++];
+            else if (j > hi)
+                items[k++] = source[i++];
+            else if (source[i].key.compareTo(source[j].key) <= 0)
+                items[k++] = source[i++];
+            else
+                items[k++] = source[j++];
+        }
+        System.arraycopy(items, lo, source, lo, hi-lo+1);
     }
 
     @Override
     public k min() {
-        return keys[0];
+        return items[0].key;
     }
 
     @Override
     public k max() {
-        return keys[size - 1];
+        return items[size - 1].key;
     }
 
     /**
@@ -39,18 +73,18 @@ public class BinarySearchST<k extends Comparable<k>, v>
     @Override
     public k floor(k key) {
         for (int i=0; i<size; i++) {
-            if (key.compareTo(keys[i]) == 0)
+            if (key.compareTo(items[i].key) == 0)
                 return key;
-            else if (key.compareTo(keys[i]) < 0)
-                return i == 0 ? null : keys[i-1];
+            else if (key.compareTo(items[i].key) < 0)
+                return i == 0 ? null : items[i-1].key;
         }
-        return keys[size-1];
+        return items[size-1].key;
     }
 
     @Override
     public k ceiling(k key) {
         int i = rank(key);
-        return keys[i];
+        return items[i].key;
     }
 
     // 找到了就返回相应的数组下标值，未找到就返回0
@@ -59,7 +93,7 @@ public class BinarySearchST<k extends Comparable<k>, v>
         int lo = 0, hi = size - 1;
         while (lo <= hi) {
             int mid = (lo + hi) / 2;
-            int cmp = key.compareTo(keys[mid]);
+            int cmp = key.compareTo(items[mid].key);
             if (cmp < 0)
                 hi = mid - 1;
             else if (cmp > 0)
@@ -72,16 +106,16 @@ public class BinarySearchST<k extends Comparable<k>, v>
 
     @Override
     public k select(int index) {
-        return keys[index];
+        return items[index].key;
     }
 
     @Override
     public Iterable<k> keys(k lo, k hi) {
         Queue<k> q = new Queue<>();
         for (int i=rank(lo); i<rank(hi); i++)
-            q.put(keys[i]);
+            q.put(items[i].key);
         if (contains(hi))
-            q.put(keys[rank(hi)]);
+            q.put(items[rank(hi)].key);
         return q;
     }
 
@@ -95,28 +129,24 @@ public class BinarySearchST<k extends Comparable<k>, v>
         if (value == null) {
             for (; i<size; i++) {
                 if (i == size - 1) {
-                    keys[i] = null;
-                    vals[i] = null;
+                    items[i] = null;
                     size--;
                 } else {
-                    keys[i] = keys[i+1];
-                    vals[i] = vals[i+1];
+                    items[i] = items[i+1];
                 }
             }
             return;
         }
 
-        if (i < size && keys[i].compareTo(key) == 0) {
-            vals[i] = value;
+        if (i < size && items[i].key.compareTo(key) == 0) {
+            items[i].val = value;
             return;
         }
 
         for (int j = size; j > i; j--) {
-            keys[j] = keys[j-1];
-            vals[j] = vals[j-1];
+            items[j] = items[j-1];
         }
-        keys[i] = key;
-        vals[i] = value;
+        items[i] = new Item(key, value);
         size++;
     }
 
@@ -125,8 +155,8 @@ public class BinarySearchST<k extends Comparable<k>, v>
         if (isEmpty())
             return null;
         int i = rank(key);
-        if (i < size && keys[i].compareTo(key) == 0)
-            return vals[i];
+        if (i < size && items[i].key.compareTo(key) == 0)
+            return items[i].val;
         else
             return null;
     }
@@ -143,9 +173,9 @@ public class BinarySearchST<k extends Comparable<k>, v>
             if (key.compareTo(select(i)) == 0) {
                 for (int j=i; j<=size-1; j++) {
                     if (j == size - 1)
-                        keys[j] = null;
+                        items[j] = null;
                     else
-                        keys[j] = keys[j+1];
+                        items[j] = items[j+1];
                 }
                 size--;
                 break;
@@ -180,5 +210,30 @@ public class BinarySearchST<k extends Comparable<k>, v>
             System.out.println("size = " + sss.size());
         }
         System.out.println("isEmpty = " + sss.isEmpty());
+
+        System.out.println();
+        System.out.println("---test 3.1.12---");
+        System.out.println();
+
+        Random random = new Random();
+        Item[] ts = new Item[content.length];
+        for (int i=0; i<content.length; i++) {
+            ts[i] = new Item<>(String.valueOf(random.nextInt(50)), content[i]);
+        }
+        BinarySearchST<String, String> bss = new BinarySearchST<>(ts);
+        for (Item<String, String> item : bss.items) {
+            System.out.println(item.key + " : " + item.val);
+        }
+    }
+
+    static class Item<k, v> {
+
+        protected k key;
+        protected v val;
+
+        public Item(k k, v v) {
+            this.key = k;
+            this.val = v;
+        }
     }
 }
