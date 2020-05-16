@@ -9,7 +9,7 @@ import Algorithm.AlgorithmFourthEdition.BagQueueAndStack.Queue;
  */
 public class BST<k extends Comparable<k>, v> implements OrderedST<k, v> {
 
-    private Node root;  // 二叉查找树的根结点
+    protected Node root;  // 二叉查找树的根结点
 
     /**
      * 查找key，找到则更新它的值，否则为它创建一个新的结点
@@ -25,7 +25,7 @@ public class BST<k extends Comparable<k>, v> implements OrderedST<k, v> {
      */
     private Node put(Node x, k key, v val) {
         if (x == null)
-            return new Node(key, val, 1);
+            return new Node(key, val, 1, 1);
         int cmp = key.compareTo(x.key);
 
         if (cmp < 0)
@@ -35,6 +35,8 @@ public class BST<k extends Comparable<k>, v> implements OrderedST<k, v> {
         else
             x.val = val;
         x.N = size(x.left) + size(x.right) + 1;
+        x.H = height(x.left) > height(x.right)
+                ? height(x.left) + 1 : height(x.right) + 1;
         return x;
     }
 
@@ -85,6 +87,8 @@ public class BST<k extends Comparable<k>, v> implements OrderedST<k, v> {
             x.left = t.left;
         }
         x.N = size(x.left) + size(x.right) + 1;
+        x.H = height(x.left) > height(x.right)
+                ? height(x.left) + 1 : height(x.right) + 1;
         return x;
     }
 
@@ -98,6 +102,8 @@ public class BST<k extends Comparable<k>, v> implements OrderedST<k, v> {
             return x.right;
         x.left = deleteMin(x.left);
         x.N = size(x.left) + size(x.right) + 1;
+        x.H = height(x.left) > height(x.right)
+                ? height(x.left) + 1 : height(x.right) + 1;
         return x;
     }
 
@@ -111,6 +117,8 @@ public class BST<k extends Comparable<k>, v> implements OrderedST<k, v> {
             return x.left;
         x.right = deleteMax(x.right);
         x.N = size(x.left) + size(x.right) + 1;
+        x.H = height(x.left) > height(x.right)
+                ? height(x.left) + 1 : height(x.right) + 1;
         return x;
     }
 
@@ -124,6 +132,17 @@ public class BST<k extends Comparable<k>, v> implements OrderedST<k, v> {
             return 0;
         else
             return x.N;
+    }
+
+    public int height() {
+        return height(root);
+    }
+
+    private int height(Node x) {
+        if (x == null)
+            return 0;
+        else
+            return x.H;
     }
 
     @Override
@@ -256,17 +275,36 @@ public class BST<k extends Comparable<k>, v> implements OrderedST<k, v> {
             keys(x.right, queue, lo, hi);
     }
 
+    public static void main(String[] args) {
+        String[] content = new String[]{"e","a","s","y","q","u","e","s","t","i","o","n"};
 
-    private class Node {
+        BST<String, String> bst = new BST<>();
+        for (int i=0; i<content.length; i++) {
+            bst.put(content[i], String.valueOf(i));
+        }
+
+        System.out.println("height = " + bst.height());
+    }
+
+    /**
+     * 3.2.6 为二叉查找树添加一个方法height()来计算树的高度。实现两种方案：
+     * 一种使用递归（用时为线性级别，所需空间和树高度成正比），一种模仿size()
+     * 在每个结点中添加一个变量（所需空间为线性级别，查询耗时为常数）
+     *
+     * 方案二：增加一个变量
+     */
+    protected class Node {
         private k key;
         private v val;
-        private Node left, right;   // 左右子树
+        protected Node left, right;   // 左右子树
         private int N;  // 以该结点为根的子树中的结点总数（包括当前结点）
+        private int H;  // 以该结点为根的子树的高度
 
-        private Node(k key, v val, int N) {
+        private Node(k key, v val, int N, int H) {
             this.key = key;
             this.val = val;
             this.N = N;
+            this.H = H;
         }
     }
 }
