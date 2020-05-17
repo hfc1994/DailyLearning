@@ -294,13 +294,13 @@ public class BST<k extends Comparable<k>, v> implements OrderedST<k, v> {
      * 方案二：增加一个变量
      */
     protected class Node {
-        private k key;
-        private v val;
+        protected k key;
+        protected v val;
         protected Node left, right;   // 左右子树
-        private int N;  // 以该结点为根的子树中的结点总数（包括当前结点）
-        private int H;  // 以该结点为根的子树的高度
+        protected int N;  // 以该结点为根的子树中的结点总数（包括当前结点）
+        protected int H;  // 以该结点为根的子树的高度
 
-        private Node(k key, v val, int N, int H) {
+        protected Node(k key, v val, int N, int H) {
             this.key = key;
             this.val = val;
             this.N = N;
