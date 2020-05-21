@@ -33,7 +33,7 @@ public class BSTNoRecursive<k extends Comparable<k>, v>
         Node x = root;
 
         if (x == null) {
-            root = new Node(key, val, 1, 1);
+            root = new Node(key, val, 1);
             return;
         }
 
@@ -55,7 +55,7 @@ public class BSTNoRecursive<k extends Comparable<k>, v>
             }
         } while (x != null);
 
-        x = new Node(key, val, 1, 1);
+        x = new Node(key, val, 1);
         if (left)
             prev.left = x;
         else

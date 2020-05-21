@@ -12,7 +12,6 @@ package Algorithm.AlgorithmFourthEdition.Search;
 public class BSTWithHeight<k extends Comparable<k>, v>
         extends BST<k, v> {
 
-    @Override
     public int height() {
         return height(root);
     }
