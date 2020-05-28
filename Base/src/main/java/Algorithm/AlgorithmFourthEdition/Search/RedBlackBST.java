@@ -17,14 +17,14 @@ public class RedBlackBST<k extends Comparable<k>, v>
 
     @Override
     public k min() {
-        if (root == null)
-            return null;
+        return root == null ? null : min(root).key;
+    }
 
-        Node x = root;
-        while (x.left != null)
-            x = x.left;
-
-        return x.key;
+    private Node min(Node x) {
+        if (x.left == null)
+            return x;
+        else
+            return min(x.left);
     }
 
     @Override
@@ -213,21 +213,6 @@ public class RedBlackBST<k extends Comparable<k>, v>
         return h;
     }
 
-    @Override
-    public void delete(k key) {
-//        super.delete(key);
-    }
-
-    @Override
-    public void deleteMin() {
-//        super.deleteMin();
-    }
-
-    @Override
-    public void deleteMax() {
-//        super.deleteMax();
-    }
-
     private boolean isRed(Node x) {
         if (x == null) return false;
         return x.color == RED;
@@ -259,6 +244,118 @@ public class RedBlackBST<k extends Comparable<k>, v>
         h.color = RED;
         h.left.color = BLACK;
         h.right.color = BLACK;
+    }
+
+    /**
+     * 删除操作相关
+     */
+    private Node moveRedLeft(Node h) {
+        // 假设结点h为红色，h.left和h.left.left都是黑色
+        // 将h.left或者h.left的子结点之一变红
+        flipColors(h);
+        if (isRed(h.right.left)) {
+            h.right = rotateRight(h.right);
+            h = rotateLeft(h);
+        }
+        return h;
+    }
+
+    private Node moveRedRight(Node h) {
+        // 假设结点h为红色，h.right和h.right.left都是黑色
+        // 将h.right或者h.right的子结点之一变红
+        flipColors(h);
+        if (!isRed(h.left.left))
+            h = rotateRight(h);
+        return h;
+    }
+
+    private Node balance(Node h) {
+        if (isRed(h.right)) h = rotateLeft(h);
+
+        // 右侧出现红链接
+        if (isRed(h.right) && !isRed(h.left))
+            h = rotateLeft(h);
+
+        // 左侧出现连续的红链接
+        if (isRed(h.left) && isRed(h.left.left))
+            h = rotateRight(h);
+
+        // 左右子树均为红链接
+        if (isRed(h.left) && isRed(h.right))
+            flipColors(h);
+
+        h.N = size(h.left) + size(h.right) + 1;
+        return h;
+    }
+
+    @Override
+    public void delete(k key) {
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
+        root = delete(root, key);
+        if (!isEmpty())
+            root.color = BLACK;
+    }
+
+    private Node delete(Node h, k key) {
+        if (key.compareTo(h.key) < 0) {
+            if (!isRed(h.left) && !isRed(h.left.left))
+                h = moveRedLeft(h);
+            h.left = delete(h.left, key);
+        } else {
+            if (isRed(h.left))
+                h = rotateRight(h);
+            if (key.compareTo(h.key) == 0 && (h.right == null))
+                return null;
+            if (!isRed(h.right) && !isRed(h.right.left))
+                h = moveRedRight(h);
+            if (key.compareTo(h.key) == 0) {
+                h.val = get(h.right, min(h.right).key);
+                h.key = min(h.right).key;
+                h.right = deleteMin(h.right);
+            } else {
+                h.right = delete(h.right, key);
+            }
+        }
+        return balance(h);
+    }
+
+    @Override
+    public void deleteMin() {
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
+        root = deleteMin(root);
+        if (!isEmpty())
+            root.color = BLACK;
+    }
+
+    private Node deleteMin(Node h) {
+        if (h.left == null)
+            return null;
+        if (!isRed(h.left) && !isRed(h.left.left))
+            h = moveRedLeft(h);
+        h.left = deleteMin(h.left);
+        return balance(h);
+    }
+
+    @Override
+    public void deleteMax() {
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
+        root = deleteMax(root);
+        if (!isEmpty())
+            root.color = BLACK;
+    }
+
+    private Node deleteMax(Node h) {
+        if (isRed(h.left))
+            h = rotateRight(h);
+        if (h.right == null)
+            return null;
+        if (!isRed(h.right) && !isRed(h.right.left))
+            h = moveRedRight(h);
+        h.right = deleteMax(h.right);
+        return balance(h);
     }
 
     public static void main(String[] args) {
