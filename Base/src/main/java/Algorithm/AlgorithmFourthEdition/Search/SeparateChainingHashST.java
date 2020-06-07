@@ -45,6 +45,9 @@ public class SeparateChainingHashST<k, v> implements ST<k, v> {
         return null;    // 未命中
     }
 
+    /**
+     * 3.4.9 为SeparateChainingHashST实现一个即时的delete()方法
+     */
     @Override
     public void delete(k key) {
         int index = hash(key);
@@ -53,7 +56,7 @@ public class SeparateChainingHashST<k, v> implements ST<k, v> {
         for (Node<k, v> x = head; x != null;) {
             if (x.key.equals(key)) {
                 if (prev == null)
-                    table[index] = null;
+                    table[index] = x.next;
                 else {
                     prev.next = x.next;
                     x.next = null;
@@ -71,6 +74,9 @@ public class SeparateChainingHashST<k, v> implements ST<k, v> {
         return N;
     }
 
+    /**
+     * 3.4.19 为SeparateChainingHashST和LinearProbingHashST实现keys()方法
+     */
     @Override
     public Iterable<k> keys() {
         return () -> new Iterator<k>() {
@@ -162,29 +168,28 @@ public class SeparateChainingHashST<k, v> implements ST<k, v> {
         for (int i=0; i<20; i++)
             schs.put(r.nextInt(500), "abc");
 
-//        System.out.println(schs.size());
-//        System.out.println(schs.get(1));
-//        System.out.println("------");
-//        Iterable<Integer> keys = schs.keys();
-//        Iterator<Integer> ir = keys.iterator();
-//        Integer key1 = ir.next();
-//        System.out.println(key1);
-//        System.out.println(schs.get(key1));
-//        System.out.println("-------");
-//        while (ir.hasNext()) {
-//            System.out.print(ir.next());
-//            System.out.print(" ");
-//        }
-//        System.out.println();
-//        schs.delete(key1);
-//        System.out.println(schs.size());
-//        System.out.println(schs.get(key1));
+        System.out.println(schs.size());
+        System.out.println(schs.get(1));
+        System.out.println("------");
+        Iterable<Integer> keys = schs.keys();
+        Iterator<Integer> ir = keys.iterator();
+        Integer key1 = ir.next();
+        System.out.println(key1);
+        System.out.println(schs.get(key1));
+        System.out.println("-------");
+        while (ir.hasNext()) {
+            System.out.print(ir.next());
+            System.out.print(" ");
+        }
+        System.out.println();
+        schs.delete(key1);
+        System.out.println(schs.size());
+        System.out.println(schs.get(key1));
 
         // 3.4.3
         System.out.println("--------");
         schs.deleteByTs(15);
-        // TODO: 2020/6/5 为什么时而15时而16
-        // FIXME: 2020/6/5 
+        // 第179行的delete可能删的是ts<=15的，所以下面的输出时而15，时而16
         System.out.println(schs.size());
     }
 }
