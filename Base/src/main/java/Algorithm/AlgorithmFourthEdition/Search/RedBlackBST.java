@@ -288,6 +288,7 @@ public class RedBlackBST<k extends Comparable<k>, v>
         return h;
     }
 
+    // TODO: 2020/6/10 理解删除的逻辑
     @Override
     public void delete(k key) {
         if (!isRed(root.left) && !isRed(root.right))
