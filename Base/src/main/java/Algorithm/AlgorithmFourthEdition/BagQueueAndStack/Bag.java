@@ -33,15 +33,18 @@ public class Bag<k> implements Iterable<k> {
     @Override
     public Iterator<k> iterator() {
         return new Iterator<k>() {
+
+            private Node<k> index = head;
+
             @Override
             public boolean hasNext() {
-                return head != null;
+                return index != null;
             }
 
             @Override
             public k next() {
-                k ret = head.value;
-                head = head.next;
+                k ret = index.value;
+                index = index.next;
                 return ret;
             }
         };

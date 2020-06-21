@@ -12,7 +12,7 @@ public class Graph {
 
     private final int V;    // 顶点数目
     private int E;  // edge边的数组
-    private Bag<Integer>[] adj; // 邻接表
+    protected Bag<Integer>[] adj; // 邻接表
 
     @SuppressWarnings("unchecked")
     public Graph(int V) {
@@ -25,8 +25,8 @@ public class Graph {
 
     public Graph(In in) {
         this(in.readInt());     // 读取V并将图初始化
-        int E = in.readInt();   // 读取E
-        for (int i=0; i<E; i++) {
+        this.E = in.readInt();   // 读取E
+        for (int i=0; i<this.E; i++) {
             int v = in.readInt();   // 读取一个顶点
             int w = in.readInt();   // 读取另一个顶点
             addEdge(v, w);  // 添加一条连接它们的边

@@ -4,17 +4,19 @@ import Algorithm.AlgorithmFourthEdition.Search.SequentialSearchST;
 import edu.princeton.cs.algs4.In;
 
 /**
- * Created by user-hfc on 2020/6/14.
+ * Created by user-hfc on 2020/6/19.
  *
- * 用字符串来替代数字索引的图
+ * 用字符串来替代数字索引的有向图
+ *
+ * 与SymbolGraph的唯一区别在于G的类型被换成了Digraph
  */
-public class SymbolGraph implements Symbol {
+public class SymbolDigraph implements Symbol  {
 
     private SequentialSearchST<String, Integer> st; // 符号名 -> 索引
     private String[] keys;  // 索引 -> 符号名
-    private Graph G;    // 图
+    private Digraph G;    // 有向图
 
-    public SymbolGraph(String stream, String sp) {
+    public SymbolDigraph(String stream, String sp) {
         st = new SequentialSearchST<>();
         In in = new In(stream);
         while (in.hasNextLine()) {  // 构造索引
@@ -30,7 +32,7 @@ public class SymbolGraph implements Symbol {
         for (String name : st.keys())
             keys[st.get(name)] = name;
 
-        G = new Graph(st.size());
+        G = new Digraph(st.size());
         in = new In(stream);
         while (in.hasNextLine()) {  // 构造图
             String[] a = in.readLine().split(sp);   // 将每一行的第一个顶点和该行的其它顶点相连
@@ -56,21 +58,8 @@ public class SymbolGraph implements Symbol {
     }
 
     @Override
-    public Graph G() {
+    public Digraph G() {
         return G;
     }
-
-    public static void main(String[] args) {
-        // 数据量较大，使用的又是单链表，测试速度很慢
-        String path = System.getProperty("user.dir") + "\\resources\\algs4-data\\movies.txt";
-        String separator = "/";
-        String source = "Bacon";
-
-        SymbolGraph sg = new SymbolGraph(path, separator);
-
-        Graph G = sg.G();
-        for (int w : G.adj(sg.index(source)))
-            System.out.printf("%4s\n", sg.name(w));
-
-    }
 }
+
