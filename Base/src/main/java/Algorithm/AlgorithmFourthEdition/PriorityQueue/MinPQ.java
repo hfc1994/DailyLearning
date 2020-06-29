@@ -13,8 +13,14 @@ public class MinPQ<T extends Comparable> implements PQ<T> {
     private int N = 0;  // 存储于pq[1...N]中，pq[0]没有使用
 
     @SuppressWarnings("unchecked")
-    public MinPQ(int maxN) {
-        pq = (T[]) new Comparable[maxN + 1];
+    public MinPQ(int initSize) {
+        pq = (T[]) new Comparable[initSize + 1];
+    }
+
+    @SuppressWarnings("unchecked")
+    public MinPQ() {
+        int defaultSize = 16;
+        pq = (T[]) new Comparable[defaultSize + 1];
     }
 
     public boolean isEmpty() {
@@ -25,7 +31,16 @@ public class MinPQ<T extends Comparable> implements PQ<T> {
         return N;
     }
 
+    @SuppressWarnings("unchecked")
+    public void resize(int initSize) {
+        T[] newPq = (T[]) new Comparable[initSize + 1];
+        System.arraycopy(pq, 0, newPq, 0, N);
+        pq = newPq;
+    }
+
     public void insert(T v) {
+        if (N == pq.length - 1)
+            resize(2 * N);
         pq[++N] = v;
         swim(N);
     }

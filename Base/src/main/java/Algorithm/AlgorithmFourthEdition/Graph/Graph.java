@@ -11,7 +11,7 @@ import edu.princeton.cs.algs4.In;
 public class Graph {
 
     private final int V;    // 顶点数目
-    private int E;  // edge边的数组
+    protected int E;  // edge边的数组
     protected Bag<Integer>[] adj; // 邻接表
 
     @SuppressWarnings("unchecked")
