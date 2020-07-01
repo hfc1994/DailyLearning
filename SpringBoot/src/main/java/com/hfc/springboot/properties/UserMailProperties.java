@@ -5,9 +5,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * Created by hfc on 2019/10/10.
+ *
+ * ConfigurationProperties需要spring-boot-configuration-processor依赖
  */
-//@Component
-//@ConfigurationProperties(prefix = "mail")
+@Component
+@ConfigurationProperties(prefix = "mail")
 public class UserMailProperties {
 
     private String from;

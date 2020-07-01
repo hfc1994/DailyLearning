@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+// TODO: 2020/7/1 怎么写Spring Test
+// TODO: 2020/7/1 RunWith的作用
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ApplicationTests {
+public class TestRedis {
 
     @Autowired
     private RedisServices redisServices;

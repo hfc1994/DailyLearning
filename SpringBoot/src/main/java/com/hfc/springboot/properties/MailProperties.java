@@ -7,9 +7,11 @@ import java.nio.charset.Charset;
 
 /**
  * Created by hfc on 2019/10/10.
+ * todo 看看这个处理器是怎么被加载的
+ * ConfigurationProperties需要spring-boot-configuration-processor依赖
  */
-//@Component
-//@ConfigurationProperties(prefix = "spring.mail")
+@Component
+@ConfigurationProperties(prefix = "spring.mail")
 public class MailProperties {
 
     private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
