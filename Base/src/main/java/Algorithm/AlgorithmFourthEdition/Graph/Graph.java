@@ -25,8 +25,8 @@ public class Graph {
 
     public Graph(In in) {
         this(in.readInt());     // 读取V并将图初始化
-        this.E = in.readInt();   // 读取E
-        for (int i=0; i<this.E; i++) {
+        int E = in.readInt();   // 读取边数，实际的E会在addEdge里更新
+        for (int i=0; i<E; i++) {
             int v = in.readInt();   // 读取一个顶点
             int w = in.readInt();   // 读取另一个顶点
             addEdge(v, w);  // 添加一条连接它们的边

@@ -27,13 +27,13 @@ public class EdgeWeightedGraph {
     @SuppressWarnings("unchecked")
     public EdgeWeightedGraph(In in) {
         this.V = in.readInt();
-        this.E = in.readInt();
+        int E = in.readInt();
         adj = (Bag<Edge>[]) new Bag[V];
         for (int i=0; i<V; i++) {
             adj[i] = new Bag<>();
         }
 
-        for (int i=0; i<this.E; i++) {
+        for (int i=0; i<E; i++) {
             int v = in.readInt();
             int w = in.readInt();
             double weight = in.readDouble();

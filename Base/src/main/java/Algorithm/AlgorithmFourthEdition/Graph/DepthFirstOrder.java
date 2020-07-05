@@ -27,11 +27,36 @@ public class DepthFirstOrder {
         }
     }
 
+    public DepthFirstOrder(EdgeWeightedDigraph G) {
+        pre = new Queue<>();
+        post = new Queue<>();
+        reversePost = new Stack<>();
+        marked = new boolean[G.V()];
+
+        for (int v = 0; v < G.V(); v++) {
+            if (!marked[v])
+                dfs(G, v);
+        }
+    }
+
     private void dfs(Digraph G, int v) {
         pre.put(v);
 
         marked[v] = true;
         for (int w : G.adj(v)) {
+            if (!marked[w])
+                dfs(G, w);
+        }
+        post.put(v);
+        reversePost.push(v);
+    }
+
+    private void dfs(EdgeWeightedDigraph G, int v) {
+        pre.put(v);
+
+        marked[v] = true;
+        for (DirectedEdge e : G.adj(v)) {
+            int w = e.to();     // 微小的差异
             if (!marked[w])
                 dfs(G, w);
         }

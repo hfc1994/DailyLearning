@@ -10,7 +10,14 @@ public class Topological {
     private Iterable<Integer> order;    // 顶点的拓扑排序
 
     public Topological(Digraph G) {
+        DirectedCycle cycleFinder = new DirectedCycle(G);
+        if (!cycleFinder.hasCycle()) {
+            DepthFirstOrder dfs = new DepthFirstOrder(G);
+            order = dfs.reversePost();
+        }
+    }
 
+    public Topological(EdgeWeightedDigraph G) {
         DirectedCycle cycleFinder = new DirectedCycle(G);
         if (!cycleFinder.hasCycle()) {
             DepthFirstOrder dfs = new DepthFirstOrder(G);
