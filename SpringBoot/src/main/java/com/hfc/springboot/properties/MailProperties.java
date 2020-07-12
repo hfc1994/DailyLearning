@@ -7,8 +7,8 @@ import java.nio.charset.Charset;
 
 /**
  * Created by hfc on 2019/10/10.
- * todo 看看这个处理器是怎么被加载的
  * ConfigurationProperties需要spring-boot-configuration-processor依赖
+ * 对应的ConfigurationMetadataAnnotationProcessor是一个编译期处理器，是在编译器进行识别处理的
  */
 @Component
 @ConfigurationProperties(prefix = "spring.mail")

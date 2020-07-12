@@ -1,4 +1,4 @@
-package com.hfc.springboot.services;
+package com.hfc.springboot.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
