@@ -9,6 +9,14 @@ import java.util.Map;
 public class Test {
 
     public static void main(String[] args) {
+        char c = '\uffff';
+        System.out.println((int) c);
+
+        int[] ii = new int[10];
+        ii[3] = 5;
+        ii[3]++;
+        ii[3]++;
+        System.out.println(ii[3]);
     }
 }
 
