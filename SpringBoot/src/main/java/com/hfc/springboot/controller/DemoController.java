@@ -9,6 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /**
  * Created by hfc on 2020/4/29.
  */
@@ -22,6 +28,12 @@ public class DemoController {
     @Autowired
     private EventPublishHolder publisher;
 
+    /**
+     * druid-spring-boot-starter里的DruidDataSourceAutoConfigure做好了初始化
+     */
+    @Autowired
+    private DataSource druidDataSourceWrapper;
+
     @GetMapping("/event")
     public String testEvent() {
         String ret = "--- begin test event ---";
@@ -33,5 +45,14 @@ public class DemoController {
     public void testHolder() {
         ApplicationContext ac = ach.getAc();
         System.out.println(ac);
+    }
+
+    @GetMapping("/ds")
+    public void testDataSource() throws SQLException {
+        Connection conn = druidDataSourceWrapper.getConnection("root", "123456");
+        Statement stat = conn.createStatement();
+        ResultSet rs = stat.executeQuery("select * from item_list");
+        while (rs.next())
+            System.out.println(rs.getString("item"));
     }
 }
