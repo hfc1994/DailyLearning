@@ -29,15 +29,15 @@ import java.util.*;
  */
 public class Problem332 {
 
-    private int edgeCount;
-    private Map<String, Direct> table;
+    private int pointCount;     // 总行程涉及的点数，即比边数多1
+    private Map<String, Direct> table;  // 类似邻接表
 
     public List<String> findItinerary(List<List<String>> tickets) {
         if (tickets.size() == 0)
             return Collections.emptyList();
 
-        table = new HashMap<>();  // 类似邻接表
-        edgeCount = tickets.size();
+        table = new HashMap<>();
+        pointCount = tickets.size() + 1;
         tickets.forEach(tkt -> {
             if (table.get(tkt.get(0)) == null) {
                 table.put(tkt.get(0), new Direct(tkt.get(1)));
@@ -46,7 +46,8 @@ public class Problem332 {
                 String strTo = tkt.get(1);
 
                 Direct prev = null;
-                while ( d != null && doCompare(d.to, strTo) < 0) {
+                // 地点字符串均为3个字母，hashcode值还在整数范围内
+                while ( d != null && d.to.hashCode() < strTo.hashCode()) {
                     prev = d;
                     d = d.next;
                 }
@@ -55,117 +56,110 @@ public class Problem332 {
                 Direct newDirect = new Direct(strTo);
                 if (d == null) {
                     prev.next = newDirect;
-                    newDirect.prev = prev;
-                } else if (d.prev == null) {  // 头节点
+                } else if (prev == null) {  // 头节点
                     table.put(tkt.get(0), newDirect);
                     newDirect.next = d;
-                    d.prev = newDirect;
                 } else {    // 其余节点
-                    d.prev.next = newDirect;
-                    newDirect.prev = d.prev;
-                    d.prev = newDirect;
+                    prev.next = newDirect;
                     newDirect.next = d;
                 }
             }
         });
 
-        String path = findPath("JFK", 0, "");
+        List<String> points = new ArrayList<>(pointCount);
+        findPath("JFK", 0, points);
 
-        return Arrays.asList(path.split(","));
+        return points;
     }
 
     // 按题意，实际上只需要一条最短的（字母顺序），那么在实际构建时
     // 如果一个点有多个邻接点，那么按从小到大访问，完成一条构建就结束
-    private String findPath(String from, int count, String path) {
-        path = path + from + ",";
-        if (count == edgeCount) {
-            return path;
+    private void findPath(String from, int count, List<String> points) {
+        points.add(from);
+        if (points.size() == pointCount) {
+            return;
         }
 
         // 因为提前排序，所以这里的Direct都是从小到大取出的
         Direct d = table.get(from);
-        String tmpPath = null;
         while (d != null) {
             if (!d.used) {
                 d.used = true;
-                tmpPath = findPath(d.to, count+1, path);
+                findPath(d.to, count+1, points);
+
+                // 本题只要最佳的组合，又因为Direct是从小到大取出的
+                // 所以一旦有符合条件的组和，那么就是最佳的组合
+                if (points.size() == pointCount)
+                    return;
+                else
+                    points.remove(points.size() - 1);
                 d.used = false;
             }
-
-            // 本题只要最佳的组合，又因为Direct是从小到大取出的
-            // 所以一旦有符合条件的组和，那么就是最佳的组合
-            if (tmpPath != null)
-                return tmpPath;
-
             d = d.next;
         }
-
-        return null;
     }
 
     /**
      * 找出一组字符串中的最佳字符串
      * 即按照字典顺序的最小字符串
      */
-    private String findBestString(List<String> paths) {
-        // w1和w2是在对应字符串里的字符索引，前4个字符是固定的（JFK,）
-        int wIndex1 = 4, wIndex2 = 4;
-        // t和s是在paths对应字符串的索引，t表示目标索引
-        int tIndex = 0, sIndex = 1;
-        boolean hit = false;
-        String str1 = paths.get(tIndex);
-        String str2 = paths.get(sIndex);
-        int ret;
-        while (!hit) {
-            ret = str1.charAt(wIndex1) - str2.charAt(wIndex2);
-            if (ret == 0) {
-                // 前面过滤过，所以不存在完全相同的行程组合，即从头到尾ret都等于0
-                wIndex1++;
-                wIndex2++;
-            } else if (ret < 0) {
-                // 比较到paths末尾了
-                if (sIndex == paths.size() - 1) {
-                    hit = true;
-                    continue;
-                }
-                str2 = paths.get(++sIndex);
-                wIndex1 = wIndex2 = 4;
-            } else {
-                str1 = str2;
-                if (sIndex == paths.size() - 1) {
-                    hit = true;
-                    continue;
-                }
-                str2 = paths.get(++sIndex);
-                wIndex1 = wIndex2 = 4;
-            }
-        }
-        return str1;
-    }
-
-    private int doCompare(String str1, String str2) {
-        int ret;
-        // 当前题目里sr1和str2是等长的
-        for (int i=0; i<str1.length(); i++) {
-            ret = str1.charAt(i) - str2.charAt(i);
-            if (ret != 0)
-                return ret;
-        }
-
-        // 当前题目不会走到这里
-        return 0;
-    }
+//    private String findBestString(List<String> paths) {
+//        // w1和w2是在对应字符串里的字符索引，前4个字符是固定的（JFK,）
+//        int wIndex1 = 4, wIndex2 = 4;
+//        // t和s是在paths对应字符串的索引，t表示目标索引
+//        int tIndex = 0, sIndex = 1;
+//        boolean hit = false;
+//        String str1 = paths.get(tIndex);
+//        String str2 = paths.get(sIndex);
+//        int ret;
+//        while (!hit) {
+//            ret = str1.charAt(wIndex1) - str2.charAt(wIndex2);
+//            if (ret == 0) {
+//                // 前面过滤过，所以不存在完全相同的行程组合，即从头到尾ret都等于0
+//                wIndex1++;
+//                wIndex2++;
+//            } else if (ret < 0) {
+//                // 比较到paths末尾了
+//                if (sIndex == paths.size() - 1) {
+//                    hit = true;
+//                    continue;
+//                }
+//                str2 = paths.get(++sIndex);
+//                wIndex1 = wIndex2 = 4;
+//            } else {
+//                str1 = str2;
+//                if (sIndex == paths.size() - 1) {
+//                    hit = true;
+//                    continue;
+//                }
+//                str2 = paths.get(++sIndex);
+//                wIndex1 = wIndex2 = 4;
+//            }
+//        }
+//        return str1;
+//    }
+//
+//    private int doCompare(String str1, String str2) {
+//        int ret;
+//        // 当前题目里sr1和str2是等长的
+//        for (int i=0; i<str1.length(); i++) {
+//            ret = str1.charAt(i) - str2.charAt(i);
+//            if (ret != 0)
+//                return ret;
+//        }
+//
+//        // 当前题目不会走到这里
+//        return 0;
+//    }
 
     class Direct {
         String to;   // 指向的点
         boolean used;   // 该箭头是否已经被用
         Direct next;
-        Direct prev;
 
         public Direct(String to) {
             this.to = to;
             used = false;
-            prev = null;
             next = null;
         }
     }
@@ -173,10 +167,10 @@ public class Problem332 {
     public static void main(String[] args) {
         Problem332 p = new Problem332();
 
-//        List<List<String>> tickets = buildDataSet0();
+        List<List<String>> tickets = buildDataSet0();
 //        List<List<String>> tickets = buildDataSet1();
 //        List<List<String>> tickets = buildDataSet2();
-        List<List<String>> tickets = buildDataSet3();
+//        List<List<String>> tickets = buildDataSet3();
 //        List<List<String>> tickets = buildDataSet4();
 
         List<String> ret = p.findItinerary(tickets);
