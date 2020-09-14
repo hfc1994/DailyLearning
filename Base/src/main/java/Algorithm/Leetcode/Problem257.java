@@ -49,16 +49,13 @@ public class Problem257 {
         buildTreePaths(node.right, prefix, paths);
     }
 
-    class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-        TreeNode(int x) {
-            val = x;
-        }
-    }
-
     public static void main(String[] args) {
         Problem257 p = new Problem257();
+
+        Integer[] nums = {1, 2, 3, null, 5};
+        TreeNode root = TreeNode.buildTree(nums);
+        System.out.print("[");
+        p.binaryTreePaths(root).forEach(val -> System.out.print(val + ","));
+        System.out.println("]");
     }
 }

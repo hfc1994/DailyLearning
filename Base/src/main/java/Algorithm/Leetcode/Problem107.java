@@ -67,27 +67,11 @@ public class Problem107 {
         return ret;
     }
 
-    class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {}
-
-        TreeNode(int x) {
-            val = x;
-        }
-    }
-
     public static void main(String[] args) {
         Problem107 p = new Problem107();
 
-        TreeNode root = p.new TreeNode(3);
-        root.left = p.new TreeNode(9);
-        TreeNode right = p.new TreeNode(20);
-        root.right = right;
-        right.left = p.new TreeNode(15);
-        right.right = p.new TreeNode(7);
+        Integer[] nums = {3, 9, 20, null, null, 15, 7};
+        TreeNode root = TreeNode.buildTree(nums);
 
         p.levelOrderBottom(root).forEach(childList -> {
             System.out.print("[");
@@ -98,7 +82,8 @@ public class Problem107 {
 
         System.out.println("--------");
 
-        root = p.new TreeNode(3);
+        nums = new Integer[]{ 3 };
+        root = TreeNode.buildTree(nums);
 
         p.levelOrderBottom(root).forEach(childList -> {
             System.out.print("[");
@@ -109,15 +94,8 @@ public class Problem107 {
 
         System.out.println("--------");
 
-        root = p.new TreeNode(3);
-        TreeNode left = p.new TreeNode(9);
-        root.left = left;
-        left.left = p.new TreeNode(4);
-        left.right = p.new TreeNode(12);
-        right = p.new TreeNode(20);
-        root.right = right;
-        right.left = p.new TreeNode(15);
-        right.right = p.new TreeNode(7);
+        nums = new Integer[]{3, 9, 20, 4, 12, 15, 7};
+        root = TreeNode.buildTree(nums);
 
         p.levelOrderBottom(root).forEach(childList -> {
             System.out.print("[");
@@ -128,7 +106,8 @@ public class Problem107 {
 
         System.out.println("--------");
 
-        root = p.new TreeNode();
+        nums = new Integer[]{};
+        root = TreeNode.buildTree(nums);
 
         p.levelOrderBottom(root).forEach(childList -> {
             System.out.print("[");

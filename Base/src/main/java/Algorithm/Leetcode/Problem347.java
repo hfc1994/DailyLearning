@@ -28,8 +28,8 @@ import java.util.Map;
 public class Problem347 {
 
     public int[] topKFrequent(int[] nums, int k) {
-        // TODO: 2020/9/7 使用索引优先队列来优化方案
-        return solution1(nums, k);
+//        return solution1(nums, k);
+        return solution2(nums, k);
     }
 
     private int[] solution1(int[] nums, int k) {
@@ -37,8 +37,7 @@ public class Problem347 {
         Integer key;
         for (int i=0; i<nums.length; i++) {
             key = nums[i];
-            if (oMap.containsKey(key)) oMap.put(key, oMap.get(key) + 1);
-            else oMap.put(key, 1);
+            oMap.put(key, oMap.getOrDefault(key, 0) + 1);
         }
 
         Node head = null;
@@ -55,6 +54,108 @@ public class Problem347 {
         }
 
         return ret;
+    }
+
+    // 索引优先队列
+    private int[] solution2(int[] nums, int k) {
+        // 有很多重复值，来一个激进点的初始值
+        MaxPQ maxPQ = new MaxPQ(nums.length);
+        for (int i=0; i<nums.length; i++)
+            maxPQ.insertByVal(nums[i]);
+
+        int[] ret = new int[k];
+        for (int i=0; i<k; i++)
+            ret[i] = maxPQ.delMax().val;
+        return ret;
+    }
+
+    class MaxPQ {
+
+        Node[] pq;
+        int size;
+
+        public MaxPQ (int initSize) {
+            pq = new Node[initSize + 1];
+            size = 0;
+        }
+
+        public void insert(Node node) {
+            // 数组首位空置的
+//            if (size + 1 >= pq.length) {
+//                Node[] tmp = pq;
+//                pq = new Node[2 * (pq.length - 1)];
+//                System.arraycopy(tmp, 1, pq, 1, size);
+//            }
+            pq[++size] = node;
+            swim(size);
+        }
+
+        public void insertByVal(int val) {
+            if (size == 0) {
+                insert(new Node(1, val));
+                return;
+            }
+
+            boolean inserted = false;
+            for (int i=1; i<=size; i++) {
+                if (pq[i].val == val) {
+                    pq[i].cnt = pq[i].cnt + 1;
+                    inserted = true;
+                    swim(i);
+                    break;
+                }
+            }
+
+            if (!inserted)
+                insert(new Node(1, val));
+        }
+
+        public Node delMax() {
+            if (size > 0) {
+                Node max = pq[1];
+                pq[1] = pq[size--];
+                sink(1);
+                return max;
+            }
+            return null;
+        }
+
+        // 上浮
+        private void swim(int index) {
+            int tIndex;
+            while (index > 1) {
+                tIndex = index / 2;
+                if (pq[tIndex].cnt < pq[index].cnt) {
+                    exchangeNode(index, tIndex);
+                    index = tIndex;
+                    continue;
+                }
+                break;
+            }
+        }
+
+        // 下沉
+        private void sink(int index) {
+            int tIndex;
+            while (index <= size/2) {
+                tIndex = 2 * index;
+                if (tIndex+1 <= size && pq[tIndex+1].cnt > pq[tIndex].cnt)
+                    tIndex++;
+
+                if (pq[index].cnt < pq[tIndex].cnt) {
+                    exchangeNode(tIndex, index);
+                    index = tIndex;
+                    continue;
+                }
+                break;
+            }
+        }
+
+        private void exchangeNode(int from, int to) {
+            Node tmp = pq[from];
+            pq[from] = pq[to];
+            pq[to] = tmp;
+        }
     }
 
     private Node buildQueue(Node head, int count, int value) {
@@ -98,6 +199,15 @@ public class Problem347 {
     public static void main(String[] args) {
         Problem347 p = new Problem347();
 
+//        int[] nums = new int[] {1, 3, 6, 5, 7, 2, 8, 4};
+//        MaxPQ maxPq = p. new MaxPQ(8);
+//        for (int i : nums) {
+//            maxPq.insert(p. new Node(i, i));
+//        }
+//
+//        while (maxPq.size != 0)
+//            System.out.println(maxPq.delMax().val);
+
         int[] nums = new int[]{1, 1, 1, 2, 2, 3};
         int k = 2;
         System.out.print("[");
@@ -125,8 +235,8 @@ public class Problem347 {
 
         System.out.println("---------------");
 
-        nums = new int[]{1, 1, 2, 3, 3, 3, 4, 4, 5, 5, 6};
-        k = 5;
+        nums = new int[]{1, 1, 2, 3, 3, 3, 4, 4, 5, 5, 6, 7, 8, 9, 10};
+        k = 6;
         System.out.print("[");
         for (int i : p.topKFrequent(nums, k))
             System.out.print(i + ",");
