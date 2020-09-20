@@ -1,6 +1,6 @@
 package com.hfc.springboot;
 
-import com.hfc.springboot.services.RedisServices;
+import com.hfc.springboot.services.AspectsRedisServices;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class TestRedis {
 
     @Autowired
-    private RedisServices redisServices;
+    private AspectsRedisServices aspectsRedisServices;
 
     @Test
     public void contextLoads() {
@@ -30,17 +30,17 @@ public class TestRedis {
         List<String> keys = new ArrayList<>();
         for (int i=0; i<10; i++) {
             String key = "aaa" + i;
-            redisServices.insertStr(key, "how time fly" + i);
-            System.out.println(redisServices.getStr(key));
+            aspectsRedisServices.insertStr(key, "how time fly" + i);
+            System.out.println(aspectsRedisServices.getStr(key));
             keys.add(key);
         }
-        System.out.println(redisServices.getCountOfStr(keys));
+        System.out.println(aspectsRedisServices.getCountOfStr(keys));
         keys.remove(keys.size() - 1);
-        System.out.println(redisServices.getCountOfStr(keys));
+        System.out.println(aspectsRedisServices.getCountOfStr(keys));
 
-        redisServices.insertList("list", keys);
-        System.out.println(redisServices.getOneFromList("list"));
-        System.out.println(redisServices.getAllFromList("list"));
+        aspectsRedisServices.insertList("list", keys);
+        System.out.println(aspectsRedisServices.getOneFromList("list"));
+        System.out.println(aspectsRedisServices.getAllFromList("list"));
     }
 
     @Test

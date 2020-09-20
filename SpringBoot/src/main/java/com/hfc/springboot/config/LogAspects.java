@@ -11,7 +11,8 @@ import org.aspectj.lang.annotation.*;
 @Aspect
 public class LogAspects {
 
-    @Pointcut("execution(public String com.hfc.springboot.services.RedisServices.*(..))")
+    // 返回值需要是String的方法
+    @Pointcut("execution(public String com.hfc.springboot.services.AspectsRedisServices.*(..))")
     public void pointCut() {}
 
     @Before("pointCut()")
