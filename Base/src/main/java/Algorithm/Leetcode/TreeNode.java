@@ -1,7 +1,8 @@
 package Algorithm.Leetcode;
 
-import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * Created by user-hfc on 2020/9/14.
@@ -18,7 +19,9 @@ public class TreeNode {
 
     /**
      * 根据源数据构建树
-     * 源数据形如: [1,null,2,3]
+     * 输入： [1,null,2,3]
+     *
+     * 输出：
      *     1
      *      \
      *       2
@@ -30,7 +33,7 @@ public class TreeNode {
             return null;
 
         TreeNode root = new TreeNode(src[0]);
-        Deque<TreeNode> queue = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
 
         int count = 1, index = 1;
@@ -57,4 +60,32 @@ public class TreeNode {
         return root;
     }
 
+    /**
+     * 根据树输出其源数据
+     * 输入：
+     *     1
+     *      \
+     *       2
+     *      /
+     *     3
+     *
+     * 输出： [1,null,2,3]
+     */
+    public static Integer[] toArray(TreeNode root) {
+        List<Integer> ret = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        TreeNode cur;
+        while (!queue.isEmpty()) {
+            cur = queue.remove();
+            ret.add(cur == null ? null : cur.val);
+            if (cur != null && (cur.left != null || cur.right != null)) {
+                queue.add(cur.left);
+                queue.add(cur.right);
+            }
+        }
+
+        return ret.toArray(new Integer[0]);
+    }
 }
