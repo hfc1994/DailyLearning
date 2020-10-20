@@ -54,5 +54,7 @@ public class DemoController {
         ResultSet rs = stat.executeQuery("select * from item_list");
         while (rs.next())
             System.out.println(rs.getString("item"));
+        // 手动归还连接
+        conn.close();
     }
 }
