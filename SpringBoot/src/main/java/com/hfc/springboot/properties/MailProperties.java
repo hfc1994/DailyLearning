@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 
 /**
  * Created by hfc on 2019/10/10.
- * ConfigurationProperties需要spring-boot-configuration-processor依赖
+ * ConfigurationProperties需要spring-boot-configuration-processor依赖，同时对应的属性需要set方法才能被设置值
  * 对应的ConfigurationMetadataAnnotationProcessor是一个编译期处理器，是在编译器进行识别处理的
  */
 @Component
