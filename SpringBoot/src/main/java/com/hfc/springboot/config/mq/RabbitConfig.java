@@ -12,12 +12,14 @@ import org.springframework.amqp.rabbit.connection.ConnectionListener;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * Created by hfc on 2020/11/2.
  */
+@ConditionalOnProperty(value = "${mq.feature.open}")
 @Configuration
 public class RabbitConfig {
 

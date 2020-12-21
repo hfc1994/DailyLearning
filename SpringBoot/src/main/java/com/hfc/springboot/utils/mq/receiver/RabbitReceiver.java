@@ -2,11 +2,13 @@ package com.hfc.springboot.utils.mq.receiver;
 
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by hfc on 2020/11/2.
  */
+@ConditionalOnProperty(value = "${mq.feature.open}")
 @Component
 public class RabbitReceiver {
 

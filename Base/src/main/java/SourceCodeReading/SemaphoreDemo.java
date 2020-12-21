@@ -13,6 +13,7 @@ import java.util.concurrent.locks.LockSupport;
  * Semaphore整体实现类似ReentrantLock
  * Semaphore就是一个可重入的锁，重入不仅限于当前线程
  * 可重入的次数受限于初始设置的值
+ * 可以作为限流器，只接受指定个数线程的并发访问
  *
  * demo里面测试了以下几种情况
  * 1、单个线程多次获取Semaphore

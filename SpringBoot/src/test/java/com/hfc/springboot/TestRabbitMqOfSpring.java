@@ -67,7 +67,7 @@ public class TestRabbitMqOfSpring {
         connFactory.setUsername(USERNAME);
         connFactory.setPassword(PASSWORD);
         connFactory.setVirtualHost(VIRTUALHOST);
-        // 发送后需要确认
+        // 生产者发送后需要MQ确认收到，以此来确保消息成功发送到交换器
         connFactory.setPublisherConfirms(true);
 
         // 用于监听通道的创建和销毁

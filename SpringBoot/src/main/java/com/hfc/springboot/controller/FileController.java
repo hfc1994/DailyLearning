@@ -14,7 +14,7 @@ import java.io.OutputStream;
  * Created by hfc on 2020/5/13.
  */
 @RestController
-public class FIleController {
+public class FileController {
 
     @GetMapping(value = "/file/download")
     public boolean downloadFIle(HttpServletRequest request, HttpServletResponse response) throws IOException {
