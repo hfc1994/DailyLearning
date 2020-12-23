@@ -57,4 +57,12 @@ public class DemoController {
         // 手动归还连接
         conn.close();
     }
+
+    @GetMapping("exception")
+    public String testException() {
+        // 测试全局异常捕捉器
+        int ret = 2/0;
+        return "TestException";
+    }
+
 }
