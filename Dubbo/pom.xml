@@ -51,6 +51,7 @@
                 <version>${dubbo.starter.version}</version>
             </dependency>
 
+            <!-- zookeeper的客户端 -->
             <dependency>
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-recipes</artifactId>
