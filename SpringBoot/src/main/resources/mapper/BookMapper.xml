@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hfc.springboot.mapper.BookMapper">
+
+    <resultMap id="BaseResultMap" type="com.hfc.springboot.entity.Book">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="oid" jdbcType="INTEGER" property="oid" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="scores" jdbcType="FLOAT" property="scores" />
+        <result column="prices" jdbcType="VARCHAR" property="prices" />
+        <result column="publishing" jdbcType="VARCHAR" property="publishing" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+    </resultMap>
+
+    <sql id="Base_Column">
+        id, oid, title, scores, prices, publishing, url
+    </sql>
+
+    <select id="queryById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select <include refid="Base_Column" />
+        from book
+        where id = ${id}
+    </select>
+
+</mapper>

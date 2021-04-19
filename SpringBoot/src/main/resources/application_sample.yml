@@ -1,0 +1,95 @@
+server:
+  port: 10086
+
+mail:
+  from: hfc@fake.com
+  to: hfc@fake.com
+
+# 是否要开启MQ功能模块
+mq:
+  feature:
+    open: false
+  queue:
+    simpleModeName: test_simple_mode
+    workModeName: test_work_mode
+  exchange:
+    pubSubName: test_logs_pubsub_exchange
+    routingName: test_logs_routing_exchange
+    topicName: test_logs_topic_exchange
+
+spring:
+  profiles:
+    active: dev
+  mail:
+    host: smtp.qiye.fake.com
+    port: 25
+    username: hfc@fake.com
+    password: fake-password
+  ################# 数据库连接配置 ###############
+  # https://github.com/alibaba/druid/wiki/DruidDataSource配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/douban?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
+      username: root
+      password: 123456
+      # 开启哪些过滤器，可选过滤器别名见druid.jar:/META_INF/druid-filter.properties
+      # DruidDataSource.java里面有根据druid.filters获取参数的入口
+      filters: stat,wall,slf4j
+      # druid支持两种方式新增连接，一种是通过开启不同的守护线程按需增加，另一种是通过线程池异步新增，这个方式通过设置async-init=true
+      async-init: false
+      # 连接池中min-idle数量以内的连接，空闲时间超过min-evictable-idle-time-millis，则会执行keep-alive操作，默认为true
+      keep-alive: true
+      initial-size: 3
+      min-idle: 3
+      max-active: 18
+      max-wait: 60000
+      # -1表示不开启；开启后，当等待连接的线程数大于该值时，druid会直接抛出异常，而非阻塞等待去新建连接
+      max-wait-thread-count: -1
+      # 超过min-idle部分的连接如果距离上次使用超过min-evictable-idle-time-millis，那么回收该连接；
+      # 没有超过min-idle的连接在keepAlive为true且距离上次使用超过keep-alive-between-time-millis的情况下取出进行可用性检查。
+      # 超过max-evictable-idle-time-millis（缺省默认7小时）的连接，即使keepAlive为true，
+      # 同时连接数小于等于min-idle也会被回收，这时连接池里连接数可能为0。
+      min-evictable-idle-time-millis: 30000
+      # 表示在从池中获取连接时要不要检测是否有效
+      # test-on-borrow：表示在借用连接时是否要去检查连接可用性，每次都检查比较耗性能，mysql服务端长连接保活时间默认8h，
+      #                 每次使用连接均会更新该时间
+      # test-while-idle：表示会在借用连接时判断当前时间距离上次使用时间是否超过阈值（通过time-between-eviction-runs-millis来控制，默认为60s），
+      #                  当超过阈值时会在使用前进行连接可用性检查，相比test-on-borrow更节省性能，默认时开启状态
+      # test-on-return：表示在归还连接时进行可用性检查，比较耗性能，默认是false
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      # 如果一个连接从池中取出使用的时间超出了remove-abandoned-timeout-millis，并且remove-abandoned设置为true，
+      # 那么该连接会被直接回收。这个操作主要是为了防止连接被使用后没有及时调用close归还导致无法被再次使用而引起内存泄露。
+      # 不过默认情况下这个功能是被关闭的，因为常见的orm框架一般会在用完连接时调用close。
+      remove-abandoned: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      max-pool-prepared-statement-per-connection-size: 20
+      # 在有数据库不支持Ping方法验证连接的情况下才会使用这个语句
+      validation-query: SELECT 1 FROM DUAL
+      validation-query-timeout: 3
+      # 大于0时表示启用druid监控记录持久化，每隔time-between-log-stats-millis的时间就日志输出记录druid的状态数据
+      time-between-log-stats-millis: 0
+      # 启动监控页面，当前项目是http://127.0.0.1:10086/druid/index.html
+      stat-view-servlet:
+        enabled: true
+  ################# MQ连接配置 ###############
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: /
+    # 生产者发送后需要MQ确认收到，以此来确保消息成功发送到交换器
+    publisher-confirms: true
+    # 可以在消息没有被路由到指定的queue时将消息返回，而不是丢弃
+    publisher-returns: false
+    listener:
+      simple:
+        concurrency: 3
+        max-concurrency: 5
+        prefetch: 5

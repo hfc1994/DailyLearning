@@ -4,16 +4,14 @@ import com.hfc.springboot.event.MockInvokeEvent;
 import com.hfc.springboot.utils.ApplicationContextHolder;
 import com.hfc.springboot.utils.EventPublishHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Created by hfc on 2020/4/29.
@@ -27,6 +25,15 @@ public class DemoController {
 
     @Autowired
     private EventPublishHolder publisher;
+
+    @Value("${spring.datasource.druid.url}")
+    private String dbUrl;
+
+    @Value("${spring.datasource.druid.username}")
+    private String dbUser;
+
+    @Value("${spring.datasource.druid.password}")
+    private String dbPasswd;
 
     /**
      * druid-spring-boot-starter里的DruidDataSourceAutoConfigure做好了初始化
@@ -49,12 +56,27 @@ public class DemoController {
 
     @GetMapping("/ds")
     public void testDataSource() throws SQLException {
-        Connection conn = druidDataSourceWrapper.getConnection("root", "123456");
+        Connection conn = druidDataSourceWrapper.getConnection();
         Statement stat = conn.createStatement();
         ResultSet rs = stat.executeQuery("select * from item_list");
         while (rs.next())
             System.out.println(rs.getString("item"));
+        rs.close();
+        stat.close();
         // 手动归还连接
+        conn.close();
+    }
+
+    @GetMapping("/jdbc")
+    public void testJdbcType() throws SQLException {
+        // 这种方式是传统jdbc的方式，而且首先匹配上mysql自己的driver，因而也没经过druid
+        Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPasswd);
+        Statement stat = conn.createStatement();
+        ResultSet rs = stat.executeQuery("select * from item_list");
+        while (rs.next())
+            System.out.println(rs.getString("item"));
+        rs.close();
+        stat.close();
         conn.close();
     }
 
