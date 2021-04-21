@@ -1,13 +1,12 @@
 package com.hfc.dubbo.provider.service;
 
-import com.alibaba.dubbo.config.annotation.Service;
+import org.apache.dubbo.config.annotation.DubboService;
 import com.hfc.dubbo.provider.service.ifc.InfoService;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by hfc on 2021/3/6.
  */
-@Component
 // dubbo的Service注解，用于暴露服务。
 // version版本号，可以给服务设置不同的版本号来实现服务的多版本灰度发布。
 //
@@ -29,7 +28,8 @@ import org.springframework.stereotype.Component;
 //  - 服务端比消费端更清除服务性能参数等
 //  - 服务端配置是可控的，Consumer不配置则会使用Provider的配置值，即Provider的配置是Consumer的缺省值。
 // 配置优先级：方法级优先，接口级次之，全局配置最后；如果级别一样，则消费端优先，提供端次之。
-@Service(version = "1.0.0", loadbalance = "roundrobin", cluster = "failfast")
+@DubboService(version = "1.0.0", loadbalance = "roundrobin", cluster = "failfast")
+@Component
 public class InfoServiceImpl implements InfoService {
 
     @Override

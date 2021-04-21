@@ -24,8 +24,7 @@
     <properties>
         <dubbo.project>1.0.0-SNAPSHOT</dubbo.project>
         <java.version>1.8</java.version>
-        <dubbo.version>2.6.7</dubbo.version>
-        <dubbo.starter.version>0.2.1.RELEASE</dubbo.starter.version>
+        <apache.dubbo.starter.version>2.7.8</apache.dubbo.starter.version>
         <zookeeper.version>3.5.6</zookeeper.version>
         <zkclient.version>0.8</zkclient.version>
         <curator.version>4.2.0</curator.version>
@@ -40,15 +39,9 @@
             </dependency>
 
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>dubbo</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba.boot</groupId>
+                <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
-                <version>${dubbo.starter.version}</version>
+                <version>${apache.dubbo.starter.version}</version>
             </dependency>
 
             <!-- zookeeper的客户端 -->
