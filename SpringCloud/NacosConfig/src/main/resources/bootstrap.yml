@@ -1,0 +1,22 @@
+# bootstrap.yml是定义应用级别的配置，加载优先于application.yml，默认也不能被本地相同配置给覆盖
+# 使用Spring Cloud Config Server时，在bootstrap配置文件中添加连接到配置中心的配置属性来加载外部配置中心的配置信息
+
+# 在Nacos Spring Cloud中，dataId的完整格式是：${prefix}-${spring.profiles.active}.${file-extension}
+# prefix默认是spring.application.name的值，也可以用spring.cloud.nacos.config.prefix来配置
+# spring.profiles.active即为当前环境对应的profile，为空时，对应的连接符 - 也将不存在
+
+spring:
+  application:
+    name: SpringCloud
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        group: hfc
+        # dataId是SpringCloud或SpringCloud.properties的配置都会被读取，两者都存在时以SpringCloud.properties为准（测试是如此）
+        file-extension: json
+        refresh-enabled: true
+        extension-configs:
+        # 额外的配置监听
+        - { data-id: person.json, group: hfc, refresh: true }
+        - { data-id: location.properties, group: hfc, refresh: true }
