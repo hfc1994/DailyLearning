@@ -1,5 +1,6 @@
 package com.hfc.springboot;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -9,7 +10,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
  *
  * 可用@MapperScan来取代具体类上面的@Mapper
  */
-//@MapperScan(basePackages = "com.hfc.springboot.mapper")
+@MapperScan(basePackages = "com.hfc.springboot.mapper")
 @ServletComponentScan(basePackages = "com.hfc.springboot.filters")
 @SpringBootApplication
 public class Application {

@@ -12,6 +12,8 @@
         <result column="url" jdbcType="VARCHAR" property="url" />
     </resultMap>
 
+    <cache eviction="LRU" flushInterval="60000" size="512" readOnly="true"/>
+
     <sql id="Base_Column">
         id, oid, title, scores, prices, publishing, url
     </sql>
