@@ -1,4 +1,6 @@
-package Algorithm.Leetcode.within1400;
+package Algorithm.Leetcode.within1600;
+
+import Algorithm.Leetcode.LeetcodeUtil;
 
 /**
  * Created by user-hfc on 2021/8/28.
@@ -41,26 +43,12 @@ public class Problem1480 {
         return nums;
     }
 
-    private void printArray(int[] nums) {
-        System.out.print("[");
-
-        for (int i=0; i<nums.length; i++) {
-            System.out.print(nums[i]);
-
-            if (i != nums.length - 1) {
-                System.out.print(", ");
-            }
-        }
-
-        System.out.println("]");
-    }
-
     public static void main(String[] args) {
         Problem1480 p = new Problem1480();
 
-        p.printArray(p.runningSum(new int[]{1, 2, 3, 4}));
-        p.printArray(p.runningSum(new int[]{1, 1, 1, 1, 1}));
-        p.printArray(p.runningSum(new int[]{3, 1, 2, 10, 1}));
+        LeetcodeUtil.printArray(p.runningSum(new int[]{1, 2, 3, 4}));
+        LeetcodeUtil.printArray(p.runningSum(new int[]{1, 1, 1, 1, 1}));
+        LeetcodeUtil.printArray(p.runningSum(new int[]{3, 1, 2, 10, 1}));
     }
 
 }

@@ -1,4 +1,4 @@
-package Algorithm.Leetcode.within1000;
+package Algorithm.Leetcode.within1200;
 
 import java.util.ArrayList;
 import java.util.List;

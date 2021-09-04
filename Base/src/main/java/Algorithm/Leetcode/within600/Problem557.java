@@ -12,12 +12,12 @@ package Algorithm.Leetcode.within600;
  * 输出："s'teL ekat edoCteeL tsetnoc"
  *  
  * 提示：
- * 在字符串中，每个单词由单个空格分隔，并且字符串中不会有任何额外的空格。
+ * 在字符串中，每个单词由<b>单个</b>空格分隔，并且字符串中<b>不会有任何额外</b>的空格。
  *
  */
 public class Problem557 {
 
-    public String reverseWords(String s) {
+    public String reverseWords_1(String s) {
         char blank = ' ';
         StringBuilder sb = new StringBuilder();
         int length = s.length();
@@ -35,15 +35,42 @@ public class Problem557 {
         return sb.toString();
     }
 
+    public String reverseWords(String s) {
+        char blank = ' ';
+        char exchage;
+        char[] chars = s.toCharArray();
+
+        int left = 0, right = 0;
+        for (int i = 0; i < chars.length; i++) {
+            if ((chars[i] == blank && i != 0) || i == chars.length - 1) {
+                right = (i == chars.length - 1) ? i : i - 1;
+                while (left < right) {
+                    exchage = chars[left];
+                    chars[left] = chars[right];
+                    chars[right] = exchage;
+
+                    left++;
+                    right--;
+                }
+
+                if (i < chars.length - 1) {
+                    left = i + 1;
+                }
+            }
+        }
+
+        return new String(chars);
+    }
+
     public static void main(String[] args) {
         Problem557 p = new Problem557();
         System.out.println("'" + p.reverseWords("") + "'");
         System.out.println("'" + p.reverseWords(" ") + "'");
         System.out.println("'" + p.reverseWords("qwer") + "'");
         System.out.println("'" + p.reverseWords("qwer asdf") + "'");
-        System.out.println("'" + p.reverseWords("qwer asdf zxcv ") + "'");
-        System.out.println("'" + p.reverseWords(" qwer asdf zxcv qaz ") + "'");
-        System.out.println("'" + p.reverseWords(" qwer edc  asd qaz ") + "'");
+        System.out.println("'" + p.reverseWords("qwer asdf zxcv") + "'");
+        System.out.println("'" + p.reverseWords("qwer asdf zxcv qaz") + "'");
+        System.out.println("'" + p.reverseWords("qwer edc asd qaz") + "'");
         System.out.println("'" + p.reverseWords("Let's take LeetCode contest") + "'");
     }
 }

@@ -1,5 +1,7 @@
 package Algorithm.Leetcode.within800;
 
+import Algorithm.Leetcode.LeetcodeUtil;
+
 /**
  * Created by user-hfc on 2021/8/31.
  *
@@ -54,25 +56,11 @@ public class Problem977 {
         return dst;
     }
 
-    private void printArray(int[] nums) {
-        System.out.print("[");
-
-        for (int i=0; i<nums.length; i++) {
-            System.out.print(nums[i]);
-
-            if (i != nums.length - 1) {
-                System.out.print(", ");
-            }
-        }
-
-        System.out.println("]");
-    }
-
     public static void main(String[] args) {
         Problem977 p = new Problem977();
 
-        p.printArray(p.sortedSquares(new int[] {-4,-1,0,3,10}));    // [0,1,9,16,100]
-        p.printArray(p.sortedSquares(new int[] {-7,-3,2,3,11}));    // [4,9,9,49,121]
+        LeetcodeUtil.printArray(p.sortedSquares(new int[] {-4,-1,0,3,10}));    // [0,1,9,16,100]
+        LeetcodeUtil.printArray(p.sortedSquares(new int[] {-7,-3,2,3,11}));    // [4,9,9,49,121]
     }
 
 }
