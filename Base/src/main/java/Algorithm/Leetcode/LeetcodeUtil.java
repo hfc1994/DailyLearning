@@ -33,6 +33,21 @@ public class LeetcodeUtil {
         System.out.println("]");
     }
 
+    public static void print2DArray(int[][] arrays) {
+        System.out.print("[");
+        for (int i = 0; i < arrays.length; i++) {
+            System.out.print("[");
+            for (int j = 0; j < arrays[i].length; j++) {
+                System.out.print(arrays[i][j]);
+                if (j != arrays[i].length - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.print("]");
+        }
+        System.out.println("]");
+    }
+
     public static ListNode buildListNode(int[] nums) {
         ListNode head = new ListNode(nums[0]);
         ListNode cur = head;

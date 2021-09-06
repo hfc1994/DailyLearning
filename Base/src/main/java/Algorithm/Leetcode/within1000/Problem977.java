@@ -1,4 +1,4 @@
-package Algorithm.Leetcode.within800;
+package Algorithm.Leetcode.within1000;
 
 import Algorithm.Leetcode.LeetcodeUtil;
 
