@@ -1,5 +1,7 @@
 package Algorithm.Leetcode.pkg600;
 
+import Algorithm.Leetcode.TreeNode;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,26 +66,18 @@ public class Problem637 {
         return rets;
     }
 
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode(int x) { val = x; }
-    }
-
     public static void main(String[] args) {
         Problem637 p = new Problem637();
 
-        TreeNode root = p.new TreeNode(3);
+        TreeNode root = new TreeNode(3);
         TreeNode cur = root;
-        TreeNode left = p.new TreeNode(9);
-        TreeNode right = p.new TreeNode(20);
+        TreeNode left = new TreeNode(9);
+        TreeNode right = new TreeNode(20);
         cur.left = left;
         cur.right = right;
         cur = cur.right;
-        left = p.new TreeNode(15);
-        right = p.new TreeNode(7);
+        left = new TreeNode(15);
+        right = new TreeNode(7);
         cur.left = left;
         cur.right = right;
 
@@ -91,7 +85,7 @@ public class Problem637 {
         p.averageOfLevels(root).forEach(ret -> System.out.print(ret + ","));
         System.out.println("]");
 
-        root = p.new TreeNode(3);
+        root = new TreeNode(3);
 
         System.out.print("[");
         p.averageOfLevels(root).forEach(ret -> System.out.print(ret + ","));
