@@ -19,4 +19,18 @@ public class ListNode {
         this.next = next;
     }
 
+    public static ListNode buildList(int[] list) {
+        if (list == null || list.length == 0) return null;
+
+        ListNode cur = new ListNode(list[0]);
+        ListNode head = cur;
+
+        for (int i = 1; i < list.length; i++) {
+            cur.next = new ListNode(list[i]);
+            cur = cur.next;
+        }
+
+        return head;
+    }
+
 }

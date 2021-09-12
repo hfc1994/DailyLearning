@@ -29,10 +29,15 @@ package Algorithm.Leetcode.pkg200;
  * 1 <= bad <= n <= 2^31 - 1
  *
  */
-public class Problem278 extends VersionControl {
+public class Problem278 {
 
     /* The isBadVersion API is defined in the parent class VersionControl.
       boolean isBadVersion(int version); */
+    boolean isBadVersion(int version) {
+//        if (version <= 3) return false;
+        if (version <= 1702766719) return false;
+        else return true;
+    }
 
     public int firstBadVersion_1(int n) {
         int begin = 1, end = n, mid;
@@ -78,12 +83,4 @@ public class Problem278 extends VersionControl {
         System.out.println(p.firstBadVersion(2126753390));
     }
 
-}
-
-class VersionControl {
-    boolean isBadVersion(int version) {
-//        if (version <= 3) return false;
-        if (version <= 1702766719) return false;
-        else return true;
-    }
 }

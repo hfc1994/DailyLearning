@@ -1,5 +1,7 @@
 package Algorithm.Leetcode;
 
+import java.util.List;
+
 /**
  * Created by user-hfc on 2021/9/1.
  */
@@ -45,6 +47,32 @@ public class LeetcodeUtil {
             }
             System.out.print("]");
         }
+        System.out.println("]");
+    }
+
+    public static void printList(List<?> ts) {
+        System.out.print("[");
+        for (int i = 0; i < ts.size(); i++) {
+            System.out.print(ts.get(i));
+            if (i != ts.size() -1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("]");
+    }
+
+    public static void print2DList(List<List<Integer>> tss) {
+        System.out.println("[");
+        tss.forEach(ts -> {
+            System.out.print("[");
+            for (int i = 0; i < ts.size(); i++) {
+                System.out.print(ts.get(i));
+                if (i != ts.size() -1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println("]");
+        });
         System.out.println("]");
     }
 
