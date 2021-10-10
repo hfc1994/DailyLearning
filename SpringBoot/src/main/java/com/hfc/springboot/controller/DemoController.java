@@ -1,5 +1,6 @@
 package com.hfc.springboot.controller;
 
+import com.hfc.springboot.annotation.JwtToken;
 import com.hfc.springboot.event.MockInvokeEvent;
 import com.hfc.springboot.utils.ApplicationContextHolder;
 import com.hfc.springboot.utils.EventPublishHolder;
@@ -85,6 +86,22 @@ public class DemoController {
         // 测试全局异常捕捉器
         int ret = 2/0;
         return "TestException";
+    }
+
+    @GetMapping("/token")
+    public String testJwtToken(@JwtToken String token) {
+        System.out.println("token = " + token);
+        return token;
+    }
+
+    /**
+     * 测试 @ExceptionHandler(NullPointerException.class)
+     * 和 @ExceptionHandler(RuntimeException.class)
+     */
+    @GetMapping("/nullpointer")
+    public void testNullPointer() {
+        String str = null;
+        System.out.println(str.length());
     }
 
 }

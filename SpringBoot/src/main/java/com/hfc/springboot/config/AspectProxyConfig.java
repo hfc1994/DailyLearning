@@ -7,7 +7,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 /**
  * Created by hfc on 2020/7/1.
  */
-@EnableAspectJAutoProxy
+// @EnableAspectJAutoProxy // 放入口的Application上
 @Configuration
 public class AspectProxyConfig {
 
