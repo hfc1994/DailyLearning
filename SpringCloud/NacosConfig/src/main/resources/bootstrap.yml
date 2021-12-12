@@ -16,6 +16,10 @@ spring:
         # dataId是SpringCloud或SpringCloud.properties的配置都会被读取，两者都存在时以SpringCloud.properties为准（测试是如此）
         file-extension: json
         refresh-enabled: true
+        # 用于共享的配置文件
+        shared-configs:
+        - { data-id: shared.properties, group: hfc, refresh: true }
+        # 常规配置文件，用于扩展的，优先级大于shared-configs，在shared-configs之后加载，也就是会覆盖shared-configs
         extension-configs:
         # 额外的配置监听
         - { data-id: person.json, group: hfc, refresh: true }
