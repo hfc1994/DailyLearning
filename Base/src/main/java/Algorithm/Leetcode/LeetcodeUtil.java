@@ -50,6 +50,17 @@ public class LeetcodeUtil {
         System.out.println("]");
     }
 
+    public static boolean equalsOfArray(int[] ori, int[] cp) {
+        if (ori.length != cp.length) return false;
+
+        for (int i = 0; i < ori.length; i++) {
+            if (ori[i] != cp[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void printList(List<?> ts) {
         System.out.print("[");
         for (int i = 0; i < ts.size(); i++) {
@@ -74,6 +85,17 @@ public class LeetcodeUtil {
             System.out.println("]");
         });
         System.out.println("]");
+    }
+
+    public static boolean equalsOfList(List<Integer> ori, List<Integer> cp) {
+        if (ori.size() != cp.size()) return false;
+
+        for (int i = 0; i < ori.size(); i++) {
+            if (!ori.get(i).equals(cp.get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static ListNode buildListNode(int[] nums) {
