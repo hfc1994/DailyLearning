@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by user-hfc on 2021/9/1.
  */
-public class LeetcodeUtil {
+public class LeetcodeUtil<T> {
 
     public static void printArray(int[] nums) {
         System.out.print("[");
@@ -61,6 +61,17 @@ public class LeetcodeUtil {
         return true;
     }
 
+    public static boolean equalsOfArray(Object[] ori, Object[] cp) {
+        if (ori.length != cp.length) return false;
+
+        for (int i = 0; i < ori.length; i++) {
+            if (!ori[i].equals(cp[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void printList(List<?> ts) {
         System.out.print("[");
         for (int i = 0; i < ts.size(); i++) {
@@ -87,7 +98,7 @@ public class LeetcodeUtil {
         System.out.println("]");
     }
 
-    public static boolean equalsOfList(List<Integer> ori, List<Integer> cp) {
+    public static <T> boolean equalsOfList(List<T> ori, List<T> cp) {
         if (ori.size() != cp.size()) return false;
 
         for (int i = 0; i < ori.size(); i++) {
