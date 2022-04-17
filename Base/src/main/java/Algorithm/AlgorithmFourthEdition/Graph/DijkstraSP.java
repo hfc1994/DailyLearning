@@ -1,6 +1,5 @@
 package Algorithm.AlgorithmFourthEdition.Graph;
 
-import Algorithm.AlgorithmFourthEdition.BagQueueAndStack.Stack;
 import Algorithm.AlgorithmFourthEdition.PriorityQueue.IndexMinPQ;
 import edu.princeton.cs.algs4.In;
 
