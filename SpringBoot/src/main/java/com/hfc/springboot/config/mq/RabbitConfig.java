@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Created by hfc on 2020/11/2.
  */
-@ConditionalOnProperty(value = "${mq.feature.open}")
+@ConditionalOnProperty(value = "mq.feature.open")
 @Configuration
 public class RabbitConfig {
 

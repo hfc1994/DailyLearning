@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by hfc on 2020/11/2.
  */
-@ConditionalOnProperty(value = "${mq.feature.open}")
+@ConditionalOnProperty(value = "mq.feature.open")
 @Component
 public class RabbitReceiver {
 
