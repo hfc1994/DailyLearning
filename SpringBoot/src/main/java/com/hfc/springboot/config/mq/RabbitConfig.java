@@ -80,7 +80,7 @@ public class RabbitConfig {
         factory.setConcurrentConsumers(1);
         factory.setMaxConcurrentConsumers(1);
         factory.setPrefetchCount(1);
-        factory.setTxSize(1);
+//        factory.setTxSize(1); 更新 SpringBoot 版本后没了
         factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
         return factory;
     }

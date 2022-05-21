@@ -11,18 +11,20 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.1.RELEASE</version>
+        <version>2.6.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <java.version>1.8</java.version>
-        <commons-pool2.version>2.6.2</commons-pool2.version>
+        <junit.version>4.13.2</junit.version>
+        <!-- lettuce 需要-->
+        <commons-pool2.version>2.11.1</commons-pool2.version>
         <jedis.version>2.9.0</jedis.version>
         <mail.version>1.4.7</mail.version>
-        <druid-spring.version>1.1.18</druid-spring.version>
-        <mysql.version>8.0.16</mysql.version>
-        <mybatis-spring.version>2.1.4</mybatis-spring.version>
+        <druid-spring.version>1.2.9</druid-spring.version>
+        <mysql.version>8.0.29</mysql.version>
+        <mybatis-spring.version>2.2.2</mybatis-spring.version>
         <kafka-clients.version>3.1.0</kafka-clients.version>
     </properties>
 
@@ -35,6 +37,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 

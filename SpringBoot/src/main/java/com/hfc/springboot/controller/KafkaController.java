@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/kafka")
 public class KafkaController {
 
-    @Autowired
+    @Autowired(required = false)
     private KafkaSender kafkaSender;
 
     @GetMapping("/send/{msg}")

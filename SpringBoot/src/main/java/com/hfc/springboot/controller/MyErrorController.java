@@ -31,11 +31,12 @@ public class MyErrorController implements ErrorController {
 
     /**
      * 在较新的 springboot 版本中，该函数已经被标记为过时了
+     * todo 测试新版本是否可用
      */
-    @Override
-    public String getErrorPath() {
-        return error_path;
-    }
+//    @Override
+//    public String getErrorPath() {
+//        return error_path;
+//    }
 
     /**
      * 在新版中可以添加这么两个方法，一个处理 JSON 的错误接口，一个处理 html 的页面错误请求
