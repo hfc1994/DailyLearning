@@ -11,7 +11,7 @@ public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     public String bootstrapServers;
-    @Value("${kafka.topic}")
+    @Value("${spring.kafka.template.default-topic}")
     public String topic;
 
     @Value("${kafka.producer.feature.on}")
@@ -22,22 +22,20 @@ public class KafkaConfig {
     public int producerRetries;
     @Value("${spring.kafka.producer.batch-size}")
     public int producerBatchSize;
-    @Value("${kafka.linger.ms}")
+    @Value("${spring.kafka.producer.properties.linger.ms}")
     public int producerLingerMs;
     @Value("${spring.kafka.producer.buffer-memory}")
     public long producerBufferMemory;
 
     @Value("${kafka.consumer.feature.on}")
     public boolean consumerOn;
-    @Value("${kafka.consumer.group-id}")
+    @Value("${spring.kafka.consumer.group-id}")
     public String consumerGroup;
-    @Value("${kafka.session.timeout.ms}")
-    public int consumerTimeout;
     @Value("${spring.kafka.consumer.enable-auto-commit}")
     public boolean consumerAutoCommit;
-    @Value("${auto.commit.interval.ms}")
+    @Value("${spring.kafka.consumer.auto-commit-interval}")
     public int consumerCommitInterval;
-    @Value("${auto.offset.reset}")
+    @Value("${spring.kafka.consumer.auto-offset-reset}")
     public String consumerOffsetReset;
 
 }
