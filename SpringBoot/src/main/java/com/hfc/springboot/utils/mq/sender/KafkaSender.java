@@ -1,9 +1,7 @@
 package com.hfc.springboot.utils.mq.sender;
 
 import com.hfc.springboot.config.KafkaConfig;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +35,14 @@ public class KafkaSender {
 
     public void send(String msg) {
         try {
-            this.producer.send(new ProducerRecord<>(kafkaConfig.topic,"msg", msg));
+//            this.producer.send(new ProducerRecord<>(kafkaConfig.topic,"msg", msg));
+            this.producer.send(new ProducerRecord<>(kafkaConfig.topic, "msg", msg), (recordMetadata, e) -> {
+                if (e != null) {
+                    System.out.println("some exception occur, msg: " + e.getMessage());
+                } else {
+                    System.out.printf("kafka send callback, topic: %s, offset: %d%n", recordMetadata.topic(), recordMetadata.offset());
+                }
+            });
             logger.info("send a msg");
         } catch (Exception e) {
             logger.error("exception occured");

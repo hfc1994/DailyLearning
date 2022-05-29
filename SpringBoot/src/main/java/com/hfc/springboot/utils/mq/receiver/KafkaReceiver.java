@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -53,6 +54,20 @@ public class KafkaReceiver {
             }
         });
         logger.info("kafkaReceiver finish init");
+    }
+
+    /**
+     * 不同的 groupId 可以与 consumer 实例一起接收信息
+     */
+    @KafkaListener(topics = "${spring.kafka.template.default-topic}",
+            groupId = "${spring.kafka.consumer.group-id}-2")
+    public void doConsumer(ConsumerRecord<String, String> record) {
+        if (record == null) {
+            return;
+        }
+
+        System.out.printf("record from KafkaListener, offset = %d, key = %s, value = %s%n",
+                record.offset(), record.key(), record.value());
     }
 
     public void closeConsumer() {

@@ -17,14 +17,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ArithmeticException.class)
     public String globalArithmeticException(ArithmeticException e) {
         System.out.println("*** SomeArithmeticException ***");
-        System.out.println(e.getMessage());
+        e.printStackTrace();
         System.out.println("******");
         return "SomeArithmeticException: " + e.getMessage();
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public String globalNullPointerException() {
+    public String globalNullPointerException(RuntimeException e) {
         System.out.println("*** SomeNullPointerException ***");
+        e.printStackTrace();
+        System.out.println("******");
         return "SomeNullPointerException";
     }
 
@@ -36,7 +38,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public String globalRuntimeException(RuntimeException e) {
         System.out.println("*** SomeRuntimeException ***");
-        System.out.println(e.getMessage());
+        e.printStackTrace();
         System.out.println("******");
         return "SomeRuntimeException: " + e.getMessage();
     }
