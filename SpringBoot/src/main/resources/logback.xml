@@ -1,0 +1,61 @@
+<!-- 配置相关参考：https://www.cnblogs.com/gavincoder/p/10091757.html -->
+
+<!-- scan 表示当配置文件发生改变时， 将会被重新加载，默认值为 true-->
+<!-- scanPeriod 表示监控配置文件是否被修改的时间间隔，默认单位时毫秒，默认间隔是 1 分钟 -->
+<!-- debug 的值为 true 时，将会打印出 logback 内部日志信息，实时查看 logback 内部运行状态，默认是 false -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false" >
+    <property name="log_home" value="logs/" />
+
+    <!-- %msg 表示的是实际的日志信息，末尾的 %n 是换行 -->
+    <property name="log_pattern"
+              value="%date{yyyy-MM-dd HH:mm:ss.SSS} [%logger{25}:%line] [%thread] %level - %msg%n" />
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${log_pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="kafka" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_home}/kafka.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log_home}/kafka.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <maxFileSize>10MB</maxFileSize>
+            <totalSizeCap>100MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log_pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_home}/springboot.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- %i 表示分卷时文件会带上序号；.gz 表示文件分卷会被压缩，使用 gz 算法，因此实际也能使用 .zip -->
+            <fileNamePattern>${log_home}/springboot.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxHistory>20</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log_pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- org.apache.kafka 包下面的日志输出都会被定向到 kafka 这个 appender 配置的文件中 -->
+    <logger name="org.apache.kafka" level="info" additivity="false">
+        <appender-ref ref="kafka" />
+    </logger>
+
+    <!-- additivity 表示是否要向上级 logger 传递打印信息，默认是 true -->
+    <logger name="file" level="info" additivity="false">
+        <appender-ref ref="file" />
+    </logger>
+
+    <!-- 根级 <logger /> 元素，是所有 <logger /> 的上级 -->
+    <root level="info">
+        <appender-ref ref="file" />
+        <appender-ref ref="console" />
+    </root>
+</configuration>
