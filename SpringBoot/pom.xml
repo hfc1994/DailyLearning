@@ -17,6 +17,10 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+
         <junit.version>4.13.2</junit.version>
         <!-- lettuce 需要-->
         <commons-pool2.version>2.11.1</commons-pool2.version>
@@ -26,6 +30,9 @@
         <mysql.version>8.0.29</mysql.version>
         <mybatis-spring.version>2.2.2</mybatis-spring.version>
         <spring-kafka.version>2.8.6</spring-kafka.version>
+        <!-- 打包相关 -->
+        <maven.dependency.version>3.1.1</maven.dependency.version>
+        <maven.antrun.version>1.8</maven.antrun.version>
     </properties>
 
     <dependencies>
@@ -123,20 +130,129 @@
 
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
     <repositories>
         <repository>
             <id>aliyun</id>
             <url>https://maven.aliyun.com/nexus/content/groups/public/</url>
         </repository>
     </repositories>
+
+    <build>
+        <resources>
+            <resource>
+                <targetPath>${project.build.directory}/classes/config</targetPath>
+                <directory>src/main/resources</directory>
+                <!-- 是否需要 <properties /> 里面的参数来替换配置文件中的占位符 -->
+                <filtering>false</filtering>
+                <includes>
+                    <include>mapper/*.*</include>
+                    <include>application.properties</include>
+                    <include>logback.xml</include>
+                </includes>
+                <excludes>
+                    <exclude>application_sample.yml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <classesDirectory>${project.build.directory}/classes/</classesDirectory>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.hfc.springboot.Application</mainClass>
+                            <useUniqueVersions>false</useUniqueVersions>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>.</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <excludes>
+                        <!-- 配置文件不打包进 jar -->
+                        <exclude>/config/**/*.*</exclude>
+                    </excludes>
+                    <outputDirectory>${project.build.directory}/${project.name}</outputDirectory>
+                </configuration>
+            </plugin>
+            <!-- 拷贝配置文件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-config</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.name}/config</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/classes/config</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 拷贝依赖 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven.dependency.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <type>jar</type>
+                            <includeTypes>jar</includeTypes>
+                            <outputDirectory>${project.build.directory}/${project.name}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 准备目录结构 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven.antrun.version}</version>
+                <executions>
+                    <execution>
+                        <id>mkdir-logs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="target/${project.name}/logs/" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
