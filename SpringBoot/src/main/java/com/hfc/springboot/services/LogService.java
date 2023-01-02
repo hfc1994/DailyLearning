@@ -28,15 +28,18 @@ public class LogService {
 //            LOGGER.error("something error: " + e.getMessage(), e);
         }
 
-        int times = 20;
-        for (int i=0; i<times; i++) {
-            LOGGER.debug("this is time of " + i);
-            try {
-                TimeUnit.SECONDS.sleep(5);
-            } catch (InterruptedException e) {
-                LOGGER.error(e.getMessage(), e);
+        Thread t = new Thread(() -> {
+            // 测试动态读取配置的效果
+            int times = 20;
+            for (int i=0; i<times; i++) {
+                LOGGER.debug("this is time of " + i);
+                try {
+                    TimeUnit.SECONDS.sleep(5);
+                } catch (InterruptedException e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
             }
-        }
+        });
+        t.start();
     }
-
 }

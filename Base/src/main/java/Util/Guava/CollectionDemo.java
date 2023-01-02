@@ -1,10 +1,8 @@
 package Util.Guava;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by hfc on 2022/12/4.
@@ -28,6 +26,22 @@ public class CollectionDemo {
         // 对称差集
         System.out.println(Sets.symmetricDifference(setA, setB));
 
+        Map<String, String> mapA = new HashMap<>();
+        mapA.put("A", "1");
+        mapA.put("B", "2");
+        mapA.put("C", "3");
+        Map<String, String> mapB = new HashMap<>();
+        mapB.put("B", "20");
+        mapB.put("C", "3");
+        mapB.put("D", "4");
+
+        // 创建一个视图
+        MapDifference<String, String> diffMap = Maps.difference(mapA, mapB);
+        System.out.println(diffMap.areEqual()); // false
+        System.out.println(diffMap.entriesDiffering()); // {B=(2, 20)}
+        System.out.println(diffMap.entriesOnlyOnLeft());    // {A=1}
+        System.out.println(diffMap.entriesOnlyOnRight());   // {D=4}
+        System.out.println(diffMap.entriesInCommon());  // {C=3}
     }
 
 }
