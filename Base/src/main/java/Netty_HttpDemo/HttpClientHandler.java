@@ -8,13 +8,12 @@ import io.netty.handler.codec.http.*;
 import java.net.URI;
 
 /**
- * Created by hW3838 on 2018/4/10.
+ * Created by hfc on 2018/4/10.
  */
-public class HttpClientHandler extends ChannelInboundHandlerAdapter
-{
+public class HttpClientHandler extends ChannelInboundHandlerAdapter {
+
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception
-    {
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("---active----");
 
         URI uri = new URI("/");
@@ -37,19 +36,18 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter
 //        buf.writeBytes(message.getBytes());
 //        ctx.writeAndFlush(buf);
 
-        if (req.refCnt() > 0)
+        if (req.refCnt() > 0) {
             req.release();
+        }
 
         System.out.println("---send-over---");
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
-    {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         System.out.println("---read----");
 
-        if (msg instanceof FullHttpResponse)
-        {
+        if (msg instanceof FullHttpResponse) {
             System.out.println("FullHttpResponse");
 
             FullHttpResponse res = (FullHttpResponse) msg;
@@ -58,18 +56,15 @@ public class HttpClientHandler extends ChannelInboundHandlerAdapter
             String content = new String(b, "utf-8");
 
             System.out.println("---" + content);
-        }
-        else
-        {
+        } else {
             System.out.println("---nothing---");
         }
         System.out.println("----over-----");
     }
 
     @Override
-    public void exceptionCaught (ChannelHandlerContext ctx, Throwable cause) throws Exception
-    {
+    public void exceptionCaught (ChannelHandlerContext ctx, Throwable cause) throws Exception {
         System.out.println("something wrong : " + cause.getMessage());
-        ctx.close();
+        ctx.channel().close();
     }
 }

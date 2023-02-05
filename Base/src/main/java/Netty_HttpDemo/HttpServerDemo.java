@@ -11,30 +11,32 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 /**
- * Created by hW3838 on 2018/4/10.
+ * Created by hfc on 2018/4/10.
  */
-public class HttpServerDemo
-{
+public class HttpServerDemo {
+
     public static int iPort = 20000;
 
-    public static void main(String... args)
-    {
+    public static void main(String... args) {
+        // bossGroup 只处理连接请求，workerGroup 处理业务
         EventLoopGroup bossGroup = new NioEventLoopGroup(4);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         ServerBootstrap boot = new ServerBootstrap();
         boot.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
-                .option(ChannelOption.SO_BACKLOG, 1024)
+                // option() 方法用于给服务端的 ServerSocketChannel 添加配置
+                .option(ChannelOption.SO_BACKLOG, 1024) // 设置等待连接的队列的容量
                 .option(ChannelOption.SO_RCVBUF, 64 * 1024)
                 //.option(ChannelOption.SO_SNDBUF, 64 * 1024)
                 .option(ChannelOption.WRITE_BUFFER_WATER_MARK, WriteBufferWaterMark.DEFAULT)
-                .childOption(ChannelOption.SO_KEEPALIVE, true)
-                .childHandler(new ChannelInitializer<SocketChannel>()
-                {
+                // childOption() 方法用于给服务端 ServerSocketChannel 接收到的 SocketChannel 添加配置
+                .childOption(ChannelOption.SO_KEEPALIVE, true)  // 设置连接保活
+                // handler() 方法用于给 bossGroup 设置业务处理器
+                // childHandler() 方法用于给 wokerGroup 设置业务处理器
+                .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    protected void initChannel(SocketChannel ch) throws Exception
-                    {
+                    protected void initChannel(SocketChannel ch) throws Exception {
                         ch.pipeline().addLast("http-req-decoder", new HttpRequestDecoder());
                         ch.pipeline().addLast("http-aggregator", new HttpObjectAggregator(65536));
                         ch.pipeline().addLast("http-res-encoder", new HttpResponseEncoder());
@@ -43,16 +45,16 @@ public class HttpServerDemo
                     }
                 });
 
-        try
-        {
+        try {
             ChannelFuture f = boot.bind(iPort).sync();
             System.out.println("启动完成");
             f.channel().closeFuture().sync();
             System.out.println("服务结束");
-        }
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
         }
     }
 }
