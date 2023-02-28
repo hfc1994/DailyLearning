@@ -19,7 +19,8 @@ public class HttpServerDemo {
 
     public static void main(String... args) {
         // bossGroup 只处理连接请求，workerGroup 处理业务
-        EventLoopGroup bossGroup = new NioEventLoopGroup(4);
+        // 当前代码只监听一个端口的 accept 事件，也就是只有一个 selector，那么 bossGroup 只需要一个线程即可
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         ServerBootstrap boot = new ServerBootstrap();

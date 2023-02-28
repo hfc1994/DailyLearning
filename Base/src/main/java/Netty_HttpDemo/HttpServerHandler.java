@@ -17,6 +17,10 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    public void channelRegistered(ChannelHandlerContext ctx) {
+        System.out.println("---registered----");
+    }
+
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         System.out.println("---active----");
@@ -85,7 +89,7 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        System.out.println("somthing wrong : " + cause.getMessage());
+        System.out.println("something wrong : " + cause.getMessage());
         ctx.channel().close();
     }
 
