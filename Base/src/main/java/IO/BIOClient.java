@@ -23,9 +23,8 @@ public class BIOClient {
             try {
                 socket = new Socket(SERVER_IP, SERVER_PORT);
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                writer = new PrintWriter(socket.getOutputStream());
+                writer = new PrintWriter(socket.getOutputStream(), true);
                 writer.println("how are you");
-                writer.flush();
                 String recv = reader.readLine();
                 System.out.println("recv: " + recv);
             } catch (IOException e) {

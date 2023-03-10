@@ -53,7 +53,7 @@ public class BIOServer {
             PrintWriter writer = null;
             try {
                 reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-                writer = new PrintWriter(this.socket.getOutputStream());
+                writer = new PrintWriter(this.socket.getOutputStream(), true);
 
                 String content = reader.readLine();
                 if (content == null) {
@@ -62,7 +62,6 @@ public class BIOServer {
 
                 System.out.println("recv: " + content);
                 writer.println("say again");
-                writer.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
