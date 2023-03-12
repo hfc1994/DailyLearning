@@ -2,12 +2,10 @@ package IO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
 
@@ -21,12 +19,16 @@ public class NIOServer {
     public static final String IP = "127.0.0.1";
     public static final int PORT = 10010;
 
+    private static ByteBuffer readBuf = ByteBuffer.allocate(1024);
+    private static ByteBuffer writeBuf = ByteBuffer.allocate(1024);
+
     public static void main(String[] args) {
         Selector selector = null;
         ServerSocketChannel serverChannel = null;
         try {
             serverChannel = ServerSocketChannel.open();
             serverChannel.configureBlocking(false);
+            // backlog 处于等待中的最大连接数量
             serverChannel.bind(new InetSocketAddress(PORT), 1024);
             selector = Selector.open();
             serverChannel.register(selector, SelectionKey.OP_ACCEPT);
@@ -35,8 +37,7 @@ public class NIOServer {
             doBiz(selector);
         } catch (IOException e) {
             e.printStackTrace();
-            doClean(selector, serverChannel);
-            return;
+            doClean(selector, serverChannel, null);
         }
 
     }
@@ -79,25 +80,28 @@ public class NIOServer {
         } else if (key.isReadable()) {
             // 读取数据
             SocketChannel sc = (SocketChannel) key.channel();
-            ByteBuffer readBuf = ByteBuffer.allocate(1024);
 
             /*
              * 由于我们已经将SocketChannel设置为异步非阻塞模式，因此这里的read()是非阻塞的
              * 使用返回值进行判断，有三种可能的结果
              * 返回值大于0：读取到字节，对字节进行编解码
-             * 返回值等于0：没有读取到字节，属于正常场景，忽略（TODO 也可能是读取完了）
-             * 返回值等于-1：链路已经关闭，需要关闭SocketChannel，释放资源（TODO -1 貌似只是 the channel has reached end-of-stream ）
+             * 返回值等于0：没有读取到字节，或者已经读取完了，属于正常场景，忽略
+             * 返回值等于-1：链路已经关闭，需要关闭SocketChannel，释放资源
+             * TODO -1 貌似只是 the channel has reached end-of-stream（ReadableByteChannel）
              */
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             try {
+                int inputOffset = 0;
                 while (true) {
+                    readBuf.clear();
                     int cnt = sc.read(readBuf);
                     if (cnt > 0) {
                         // 用于后续对缓冲区的读操作
                         readBuf.flip();
                         byte[] bytes = new byte[cnt];
                         readBuf.get(bytes);
-                        baos.write(bytes, 0, cnt);
+                        baos.write(bytes, inputOffset, cnt);
+                        inputOffset += cnt;
                     } else if (cnt < 0) {
                         // 对端链路关闭
                         key.channel();
@@ -111,39 +115,35 @@ public class NIOServer {
                     }
                 }
 
-                if (baos != null) {
+                if (baos != null && baos.size() > 0) {
                     System.out.println("server recv: " + baos.toString());
                     doWrite(sc, "recv message, over");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                if (baos != null) {
-                    try {
-                        baos.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (sc != null) {
-                    try {
-                        sc.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                doClean(null, sc, baos);
             }
         }
     }
 
-    private static void doClean(Selector selector, ServerSocketChannel serverChannel) {
-        if (serverChannel != null) {
+    private static void doWrite(SocketChannel channel, String content) throws IOException {
+        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+        writeBuf.clear();
+        writeBuf.put(bytes);
+        writeBuf.flip();
+        channel.write(writeBuf);
+    }
+
+    private static void doClean(Selector selector, SelectableChannel channel, OutputStream stream) {
+        if (channel != null) {
             try {
-                serverChannel.close();
+                channel.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
+
         if (selector != null) {
             try {
                 selector.close();
@@ -151,13 +151,15 @@ public class NIOServer {
                 ex.printStackTrace();
             }
         }
+
+        if (stream != null) {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
-    private static void doWrite(SocketChannel channel, String content) throws IOException {
-        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
-        ByteBuffer writeBuf = ByteBuffer.allocate(1024);
-        writeBuf.put(bytes);
-        writeBuf.flip();
-        channel.write(writeBuf);
-    }
 }

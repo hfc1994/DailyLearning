@@ -11,14 +11,21 @@ import java.util.Set;
 
 /**
  * Created by hfc on 2023/3/6.
+ *
+ * TODO 需要了解下Channel、Selector 和 Buffer 三个元素的各种方法的含义
+ * TODO SelectionKey 每个类型的含义
  */
 public class NIOClient {
 
+    private static ByteBuffer readBuf = ByteBuffer.allocate(1024);
+    private static ByteBuffer writeBuf = ByteBuffer.allocate(1024);;
+
     public static void main(String[] args) throws IOException {
-        Selector selector = Selector.open();
         SocketChannel channel = SocketChannel.open();
         channel.configureBlocking(false);
 
+        Selector selector = Selector.open();
+        // true表示连接已经建立；false表示channel处于非阻塞模式且连接操作正在进行中
         if (channel.connect(new InetSocketAddress(NIOServer.IP, NIOServer.PORT))) {
             channel.register(selector, SelectionKey.OP_READ);
             doWrite(channel);
@@ -30,13 +37,13 @@ public class NIOClient {
             selector.select(1000);
             Set<SelectionKey> keys = selector.selectedKeys();
             for (SelectionKey key : keys) {
-                handleInput(key, selector);
+                handleSelectionKey(key, selector);
             }
             keys.clear();
         }
     }
 
-    private static void handleInput(SelectionKey key, Selector selector) throws IOException {
+    private static void handleSelectionKey(SelectionKey key, Selector selector) throws IOException {
         if (!key.isValid()) {
             return;
         }
@@ -50,7 +57,7 @@ public class NIOClient {
                 System.exit(-1);    // 连接失败，进程退出
             }
         } else if (key.isReadable()) {
-            ByteBuffer readBuf = ByteBuffer.allocate(1024);
+            readBuf.clear();
             int cnt = channel.read(readBuf);
             if (cnt > 0) {
                 readBuf.flip();
@@ -71,7 +78,7 @@ public class NIOClient {
     private static void doWrite(SocketChannel channel) throws IOException {
         String cont = "say hi from client";
         byte[] bytes = cont.getBytes(StandardCharsets.UTF_8);
-        ByteBuffer writeBuf = ByteBuffer.allocate(bytes.length);
+        writeBuf.clear();
         writeBuf.put(bytes);
         writeBuf.flip();
         channel.write(writeBuf);
