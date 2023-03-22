@@ -89,18 +89,32 @@ public class BufferDemo {
         System.out.println(new String(buffer.array())); // zhahah
         System.out.println();
 
-        System.out.println("--- before flip: " + buffer);
-        System.out.println("remaining: " + buffer.remaining());
-        System.out.println("arrayOffset: " + buffer.arrayOffset());
+        // remaining() 就是 limit - position
+        System.out.println("--- before flip: " + buffer);   // [pos=6 lim=32 cap=32]
+        System.out.println("remaining: " + buffer.remaining()); // 6
         buffer.flip();
-        System.out.println("--- after flip: " + buffer);
-        System.out.println("remaining: " + buffer.remaining());
-        System.out.println("arrayOffset: " + buffer.arrayOffset());
+        System.out.println("--- after flip: " + buffer);    // [pos=0 lim=6 cap=32]
+        System.out.println("remaining: " + buffer.remaining()); // 0
 
-        buffer = ByteBuffer.allocate(32);
-        buffer.put(2, (byte) 'd');
-        System.out.println(buffer.hasArray());
-        System.out.println(buffer.arrayOffset());
+        // 堆内存缓冲区
+        ByteBuffer heapBuffer = ByteBuffer.allocate(16);
+        // 直接内存缓冲区
+        // -XX:MaxDirectMemorySize=100MB
+        ByteBuffer directBuffer = ByteBuffer.allocateDirect(16);
+
+        System.out.println();
+        byte[] bytes = "hello".getBytes(StandardCharsets.UTF_8);
+        // 对已有的字节数组进行包裹
+        buffer = ByteBuffer.wrap(bytes);
+        System.out.println(buffer); // [pos=0 lim=5 cap=5]
+        System.out.println(new String(buffer.array())); // hello
+
+        buffer = ByteBuffer.wrap(bytes, 1,3);
+        System.out.println(buffer); // [pos=1 lim=4 cap=5]
+        System.out.println(new String(buffer.array())); // hello
+        dst = new byte[3];
+        buffer.get(dst);
+        System.out.println(new String(dst));
     }
 
 }

@@ -42,6 +42,7 @@ public class HttpServerDemo {
                         ch.pipeline().addLast("http-aggregator", new HttpObjectAggregator(65536));
                         ch.pipeline().addLast("http-res-encoder", new HttpResponseEncoder());
                         ch.pipeline().addLast("http-chunked", new ChunkedWriteHandler());
+                        ch.pipeline().addLast("http-statistic", new HttpStatisticHandler());
                         ch.pipeline().addLast("http-handler", new HttpServerHandler());
                     }
                 });
