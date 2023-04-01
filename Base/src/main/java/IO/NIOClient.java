@@ -11,9 +11,6 @@ import java.util.Set;
 
 /**
  * Created by hfc on 2023/3/6.
- *
- * TODO 需要了解下Channel、Selector 和 Buffer 三个元素的各种方法的含义
- * TODO SelectionKey 每个类型的含义
  */
 public class NIOClient {
 

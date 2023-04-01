@@ -87,7 +87,7 @@ public class NIOServer {
              * 返回值大于0：读取到字节，对字节进行编解码
              * 返回值等于0：没有读取到字节，或者已经读取完了，属于正常场景，忽略
              * 返回值等于-1：链路已经关闭，需要关闭SocketChannel，释放资源
-             * TODO -1 貌似只是 the channel has reached end-of-stream（ReadableByteChannel）
+             *              -1 表示 the channel has reached end-of-stream（ReadableByteChannel），也就是已经关闭
              */
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             try {
@@ -117,12 +117,23 @@ public class NIOServer {
 
                 if (baos != null && baos.size() > 0) {
                     System.out.println("server recv: " + baos.toString());
-                    doWrite(sc, "recv message, over");
+                    // 简单场景确实可以在 OP_READ 事件里面直接 write 数据回客户端
+                    // 但是有概率在写缓冲区满时无法写入数据，因此使用 OP_WRITE 事件才是最正确的
+                    // https://blog.csdn.net/huyuyang6688/article/details/126106949
+//                    doWrite(sc, "recv message, over");
+                    sc.register(selector, SelectionKey.OP_WRITE);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
                 doClean(null, sc, baos);
+            }
+        } else if (key.isWritable()) {
+            SocketChannel sc = (SocketChannel) key.channel();
+            try {
+                doWrite(sc, "writable status, over");
+                sc.register(selector, SelectionKey.OP_READ);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
