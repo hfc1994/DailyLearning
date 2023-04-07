@@ -7,28 +7,19 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by hfc on 2018/4/10.
  */
 public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    public void channelRegistered(ChannelHandlerContext ctx) {
-        System.out.println("---registered----");
-    }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        System.out.println("---active----");
-    }
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("---read----");
         System.out.println("---remote address---" + ctx.channel().remoteAddress());
 
         if (msg instanceof FullHttpRequest) {
@@ -46,15 +37,14 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
                 } else if ("/author".equalsIgnoreCase(uri)) {
                     response.writeBytes("hfc".getBytes());
                 } else if ("/time".equalsIgnoreCase(uri)) {
-                    long sysTime = System.currentTimeMillis();
-                    Date d = new Date(sysTime);
-                    String strDate =format.format(d);
+                    LocalDateTime ldt = LocalDateTime.now();
+                    String strDate = formatter.format(ldt);
                     response.writeBytes(strDate.getBytes());
                 }
             } else {
                 if ("/".equals(uri)) {
                     req.content().readBytes(b);
-                    String jsonStr = new String(b, "utf-8");
+                    String jsonStr = new String(b, StandardCharsets.UTF_8);
 
                     JSONObject json = JSON.parseObject(jsonStr);
 
@@ -85,12 +75,6 @@ public class HttpServerHandler extends ChannelInboundHandlerAdapter {
 
         }
         System.out.println("----over-----");
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        System.out.println("something wrong : " + cause.getMessage());
-        ctx.channel().close();
     }
 
 }

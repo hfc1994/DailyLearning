@@ -19,8 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by hfc on 2023/3/14.
- *
- * todo 需要多了解下新的文件API
  */
 public class ChannelDemo {
 

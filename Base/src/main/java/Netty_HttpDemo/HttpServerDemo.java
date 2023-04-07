@@ -9,6 +9,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 /**
  * Created by hfc on 2018/4/10.
@@ -38,6 +39,7 @@ public class HttpServerDemo {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
+                        ch.pipeline().addLast("idle-state", new IdleStateHandler(60, 60, 60));
                         ch.pipeline().addLast("http-req-decoder", new HttpRequestDecoder());
                         ch.pipeline().addLast("http-aggregator", new HttpObjectAggregator(65536));
                         ch.pipeline().addLast("http-res-encoder", new HttpResponseEncoder());

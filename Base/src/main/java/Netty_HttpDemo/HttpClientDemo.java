@@ -1,14 +1,20 @@
 package Netty_HttpDemo;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestEncoder;
 import io.netty.handler.codec.http.HttpResponseDecoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by hfc on 2018/4/10.
@@ -43,6 +49,26 @@ public class HttpClientDemo {
         try {
             ChannelFuture f = boot.connect("127.0.0.1", HttpServerDemo.iPort).sync();
             System.out.println("连接成功");
+
+            Thread t = new Thread(() -> {
+                for (int i=0; i<10; i++) {
+                    System.out.println("send msg");
+
+                    try {
+                        URI uri = new URI("/");
+                        ByteBuf buf = HttpRequestUtil.buildDefaultMsg(f.channel());
+                        FullHttpRequest req = HttpRequestUtil.buildRequest(uri, buf);
+                        f.channel().writeAndFlush(req);
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+
             f.channel().closeFuture().sync();
             System.out.println("连接断开");
         } catch (InterruptedException e) {
