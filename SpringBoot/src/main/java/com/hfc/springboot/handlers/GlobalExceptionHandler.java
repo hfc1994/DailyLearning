@@ -2,6 +2,7 @@ package com.hfc.springboot.handlers;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
  * Created by hfc on 2020/12/23.
@@ -41,5 +42,18 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         System.out.println("******");
         return "SomeRuntimeException: " + e.getMessage();
+    }
+
+    /**
+     * 发生请求没有匹配到控制器的情况下，即404时触发，前提是配置了如下参数
+     * spring.mvc.throw-exception-if-no-handler-found=true
+     * spring.web.resources.add-mappings=false
+     *
+     * 同时存在实现了ErrorController的子控制器的情况下，优先触发该全局异常处理器
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public String globalNoHandlerFoundException(NoHandlerFoundException e) {
+        System.out.println("*** NoHandlerFoundException ***");
+        return "NoHandlerFoundException: " + e.getMessage();
     }
 }
