@@ -12,12 +12,12 @@ import java.util.HashMap;
 /**
  * Created by hfc on 2020/12/23.
  *
- * SpringBoot默认的错误处理类是BasicErrorController
- * 当我们自己实现了ErrorController接口，那么就会使用我们自己的实现类
+ * SpringBoot 默认的错误处理类是 BasicErrorController
+ * 当我们自己实现了 ErrorController 接口，那么就会使用我们自己的实现类
  * 当系统出现异常并且没有被正确处理时就会触发这个控制器
- * 如果有ControllerAdvice或是RestControllerAdvice定义并捕获部分未知异常，那么优先使用advice里面的handler
+ * 如果有 ControllerAdvice 或是 RestControllerAdvice 定义并捕获部分未知异常，那么优先使用 advice 里面的 handler
  *
- * 像是403或是404的错误只会被这里处理
+ * 像是 403 或是 404 的错误只会被这里处理
  */
 @RestController
 public class MyErrorController implements ErrorController {
@@ -30,14 +30,14 @@ public class MyErrorController implements ErrorController {
     }
 
     /**
-     * 在配置文件中添加一个配置server.error.path=/errorNew，使其指向当前的Controller
+     * 在配置文件中添加一个配置 server.error.path=/errorNew，使其指向当前的 Controller
      */
     @RequestMapping(path = "/errorNew")
     public String errorPathNew() {
         return "it's something wrong happening from New";
     }
 
-    /**
+    /*
      * 在较新的 springboot 版本中，该函数已经被标记为过时了
      */
 //    @Override

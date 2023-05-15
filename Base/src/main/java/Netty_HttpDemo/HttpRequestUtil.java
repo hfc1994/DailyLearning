@@ -14,6 +14,7 @@ public class HttpRequestUtil {
 
     public static ByteBuf buildDefaultMsg(Channel ch) throws URISyntaxException {
         String message = "{\"result\":\"0\",\"response\":\"success\"}";
+        // 可以通过 bootstrap.childOption(ChannelOption.ALLOCATOR, ByteBufAllocator.DEFAULT) 来设置具体的 ByteBuf 创建实现
         ByteBuf buf = ch.alloc().buffer();
         buf.writeBytes(message.getBytes());
 
