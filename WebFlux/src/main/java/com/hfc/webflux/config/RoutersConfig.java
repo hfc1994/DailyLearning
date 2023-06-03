@@ -1,5 +1,6 @@
 package com.hfc.webflux.config;
 
+import com.hfc.webflux.handler.PersonReactiveHandler;
 import com.hfc.webflux.handler.UserReactiveHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,12 +21,21 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 public class RoutersConfig {
 
     @Bean
-    RouterFunction<ServerResponse> routes(UserReactiveHandler handler) {
-        return RouterFunctions.route(GET("/allUser"), handler::getAllUser)
-                .andRoute(POST("/user")
+    RouterFunction<ServerResponse> userRoutes(UserReactiveHandler handler) {
+        return RouterFunctions.route(GET("/v1/rx/user/all"),
+                        handler::getAllUser)
+                .andRoute(POST("/v1/rx/user")
                         .and(accept(MediaType.APPLICATION_JSON)), handler::createUser)
-                .andRoute(DELETE("/user/{name}")
+                .andRoute(DELETE("/v1/rx/user/{name}")
                         .and(accept(MediaType.APPLICATION_JSON)), handler::deleteUserByName);
+    }
+
+    @Bean
+    RouterFunction<ServerResponse> personRoutes(PersonReactiveHandler handler) {
+        return RouterFunctions.route(GET("/v1/rx/person/{id}")
+                                .and(accept(MediaType.APPLICATION_JSON)), handler::getPersonById)
+                .andRoute(GET("/v1/rx/person/{id}/exist")
+                        .and(accept(MediaType.APPLICATION_JSON)), handler::existedPersonByid);
     }
 
 }

@@ -16,10 +16,9 @@ import reactor.core.scheduler.Schedulers;
  * Mono：返回 0 或 1 个元素，即单个对象
  * Flux：返回 N 个元素，即 List 列表对象
  *
- * TODO mysql 也需要特别的驱动
  */
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/test")
 public class HelloController {
 
     @GetMapping("/hello")

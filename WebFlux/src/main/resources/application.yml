@@ -1,2 +1,16 @@
 server:
   port: 10086
+
+spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/douban
+    username: root
+    password: 123456
+    pool:
+      enabled: true
+      initial-size: 10
+      max-size: 20
+      max-idle-time: 10m
+      max-acquire-time: 30s
+      max-create-connection-time: 30s
+      validation-query: select 1
