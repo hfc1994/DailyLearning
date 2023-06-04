@@ -13,7 +13,9 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.3</version>
+        <!-- SpringBoot3 不支持 JDK8，只支持 JDK17 -->
+        <!-- TODO 安装 JDK 17，升级 SpringBoot3 -->
+        <version>2.7.12</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -23,8 +25,11 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
 
-        <!-- SpringBoot 版本是2022年中的，jasync用太新的版本会有兼容问题 -->
-        <jasync.mysql.version>2.0.8</jasync.mysql.version>
+        <!-- SpringBoot         r2dbc-mysql -->
+        <!-- 3.0.*	            io.asyncer:r2dbc-mysql:1.0.2 -->
+        <!-- 2.7.*	            io.asyncer:r2dbc-mysql:0.9.3 -->
+        <!-- 2.6.* and below	dev.miku:r2dbc-mysql:0.8.2 -->
+        <r2dbc.mysql.version>0.9.3</r2dbc.mysql.version>
         <lombok.version>1.18.26</lombok.version>
     </properties>
 
@@ -44,9 +49,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.jasync-sql</groupId>
-            <artifactId>jasync-r2dbc-mysql</artifactId>
-            <version>${jasync.mysql.version}</version>
+            <groupId>io.asyncer</groupId>
+            <artifactId>r2dbc-mysql</artifactId>
+            <version>${r2dbc.mysql.version}</version>
         </dependency>
 
         <dependency>

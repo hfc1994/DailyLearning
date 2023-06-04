@@ -1,9 +1,10 @@
 server:
   port: 10086
 
+# SpringMVC 使用 JDBC 连接数据库，WebFlux 使用 R2DBC 连接数据库
 spring:
   r2dbc:
-    url: r2dbc:mysql://localhost:3306/douban
+    url: r2dbc:mysql://localhost:3306/douban?useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true&allowMultiQueries=true&serverTimezone=GMT%2B8
     username: root
     password: 123456
     pool:
