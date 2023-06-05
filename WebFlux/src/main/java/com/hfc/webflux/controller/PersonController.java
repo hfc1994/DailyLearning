@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -29,6 +30,16 @@ public class PersonController {
     @GetMapping("/person/{id}/exist")
     public Mono<Boolean> existPersonById(@PathVariable(name = "id") long id) {
         return this.personRepository.existsById(id);
+    }
+
+    @GetMapping("/person/all")
+    public Flux<Person> getAllPerson() {
+        return this.personRepository.getAllPerson();
+    }
+
+    @GetMapping("/person/name/{name}")
+    public Mono<Person> getPersonByName(@PathVariable(name = "name") String name) {
+        return this.personRepository.getPersonByName(name);
     }
 
 }
