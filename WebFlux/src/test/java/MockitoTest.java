@@ -20,6 +20,7 @@ import java.util.Map;
  * 2）stub：打桩，为mock对象的方法指定返回值或指定行为
  * 3）verify：行为验证，验证指定方法调用情况等
  *
+ * 参考文章：https://juejin.cn/post/7202666869965520952#heading-11
  */
 public class MockitoTest {
 
@@ -28,13 +29,18 @@ public class MockitoTest {
     @Mock
     private List basicList;
 
-    // 若该注解修饰的对象有成员变量，@Mock 注解的成员变量会被自动注入
+    // 若该注解修饰的对象有成员变量，@Mock 注解的成员变量会被自动注入（对 @Spy 也有效）
     @InjectMocks
     private List complexList;
+
+    // 效果类似 @Mock
+    @Spy
+    private Map basicMap;
 
     @SuppressWarnings("unchecked")
     @Test
     public void returnTest() {
+        // mock 对抽象类无效
         final List mockList = Mockito.mock(List.class);
 
         // 未打桩前，mock 对象的函数调用返回类型的默认值
@@ -54,7 +60,7 @@ public class MockitoTest {
         Mockito.doThrow(new RuntimeException("index out of bound")).when(mockList).get(123);
 //         System.out.println(mockList.get(123));
 
-        // 无返回方法打桩？？？TODO
+        // 对 void 方法设置为不做任何事，比如对 .clear() 这种无返回值的方法进行打桩后，对其调用不会发生反应
         Mockito.doNothing().when(mockList).clear();
         mockList.clear();
 
@@ -112,6 +118,10 @@ public class MockitoTest {
         Mockito.verify(mockList, Mockito.timeout(100)).clear();
         // 验证方法指定时间内最少调用 1 次
         Mockito.verify(mockList, Mockito.timeout(100).atLeastOnce()).size();
+
+        // 自定义失败信息
+//        Mockito.verify(mockList, description("没调用isEmpty()")).isEmpty();
+//        Mockito.verify(mockList, timeout(200).times(2).description("频率没达到")).add(anyString());
     }
 
     @Test
@@ -198,10 +208,12 @@ public class MockitoTest {
         verifyNoInteractions(list3);
     }
 
-    // 通过监控（spy）对象，当使用 spy 对象时，真实的对象也会被调用，除非它的函数被打桩（stub）了
-    // 使用监控对象就是部分 mock
-    // Mockito 并不会为真实对象代理函数调用，实际上它会拷贝真实对象。因此如果保留了真实对象并且与之交互，
-    // 不能从真实对象中得到正确的结果。
+    /**
+     * 通过监控（spy）对象，当使用 spy 对象时，真实的对象也会被调用，除非它的函数被打桩（stub）了
+     * 使用监控对象就是部分 mock
+     * Mockito 并不会为真实对象代理函数调用，实际上它会拷贝真实对象。因此如果保留了真实对象并且与之交互，
+     * 不能从真实对象中得到正确的结果。
+     */
     @Test
     public void spyTest() {
         // stub 部分 mock，mock需要实现类而不能是抽象类或者接口
@@ -223,11 +235,84 @@ public class MockitoTest {
         System.out.println(spyList.get(0)); // 33，打桩了，否则返回 1
         System.out.println(spyList.get(1)); // 2，调用了真实方法
 
-        // TODO: 2023/6/15 为什么
-        // spy 默认调用的是真实方法，第二种写法不等价于第一种
+        /**
+         * doReturn() 和 thenReturn() 都是用于打桩的方法，但是他们之间有一些区别
+         * · doReturn() 方法不会调用真实的方法，而是直接返回指定的值
+         * · thenReturn() 方法会调用真实的方法，并返回指定的值
+         * 这两种方法在大多数情况瞎都可以相互替换，但是在使用了 Spy 对象,而不是 mock 对象的情况下，他们之间是有区别的。
+         * 也就是说 doReturn().when() 是无副作用的；when().thenReturn() 是有副作用的
+         * 一般是在无法使用 when() 的时候才会使用 doReturn()，推荐优先使用 when()，因为它是类型安全的，而且可读性更高
+         *
+         * spy 默认调用的是真实方法，第二种写法不等价于第一种
+         */
         doReturn("233").when(spyList).get(20);
 //        when(spyList.get(20)).thenReturn("244");    // 会出现 IndexOutOfBoundsException 异常，不推荐这种写法
-        System.out.println(spyList.get(20));
+        System.out.println(spyList.get(20));    // 233
+
+        // spy 对象只是真实对象的复制，真实对象的改变不会影响 spy 对象
+        List list1 = new ArrayList();
+        spyList = spy(list1);
+        spyList.add(0, "000");
+        System.out.println(spyList.get(0)); // 000
+        list1.add(0, "111");
+        System.out.println(list1.get(0));   // 111
+        System.out.println(spyList.get(0)); // 000
+
+        // 对某个方法打桩（stub）之后，可以通过 reset(spyList) 的方式取消打桩
+        list1 = new ArrayList();
+        spyList = spy(list1);
+        doReturn(100).when(spyList).size();
+        System.out.println(spyList.size()); // 100
+        reset(spyList);
+        System.out.println(spyList.size()); // 0
+    }
+
+    @Test
+    public void argumentCaptorTest() {
+        List list = mock(List.class);
+        List list1 = mock(List.class);
+        list.add("zhangsan");
+        list1.add("lisi");
+        list1.add("wangwu");
+        // 获取方法参数
+        // 可以通过注解的方式创建 ArgumentCaptor
+        // @Captor
+        // ArgumentCaptor<String> captor;
+        ArgumentCaptor<String> captor1 = ArgumentCaptor.forClass(String.class);
+        verify(list).add(captor1.capture());
+        System.out.println(captor1.getValue());    // zhangsan
+
+        // 多次调用获取最后一次
+        ArgumentCaptor<String> captor2 = ArgumentCaptor.forClass(String.class);
+        verify(list1, times(2)).add(captor2.capture());   // 验证只调用了 2 次
+        System.out.println(captor2.getValue());   // wangwu
+
+        // 获取所有调用参数
+        System.out.println(captor2.getAllValues());   // [lisi, wangwu]
+    }
+
+    // 可以指定一个策略用来创建 mock 对象的返回值
+    // 相当于给对象的所有接口统一进行了打桩
+    @Test
+    public void defaultReturnTest() {
+        ArrayList mockList = mock(ArrayList.class);
+        System.out.println(mockList.get(0));
+
+        mock(ArrayList.class, Answers.RETURNS_DEFAULTS);
+        mock(ArrayList.class, Answers.RETURNS_SMART_NULLS);
+        mock(ArrayList.class, Answers.RETURNS_MOCKS);
+        mock(ArrayList.class, Answers.RETURNS_DEEP_STUBS);
+        mock(ArrayList.class, Answers.CALLS_REAL_METHODS);
+        mock(ArrayList.class, Answers.RETURNS_SELF);    // buidler 模式时比较有用
+
+        Answer<String> defaultAnswer = new Answer<String>() {
+            @Override
+            public String answer(InvocationOnMock invocation) throws Throwable {
+                return "default_result";
+            }
+        };
+        mockList = mock(ArrayList.class, defaultAnswer);
+        System.out.println(mockList.get(0));
     }
 
 }
