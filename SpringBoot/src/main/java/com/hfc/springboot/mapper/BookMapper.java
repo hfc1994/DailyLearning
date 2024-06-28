@@ -11,4 +11,6 @@ public interface BookMapper {
 
     Book queryById(Integer id);
 
+    Book queryByTitle(String title);
+
 }

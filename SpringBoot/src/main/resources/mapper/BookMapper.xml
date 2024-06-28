@@ -24,4 +24,10 @@
         where id = ${id}
     </select>
 
+    <select id="queryByTitle" resultMap="BaseResultMap">
+        select <include refid="Base_Column" />
+        from book
+        where title = #{title}
+    </select>
+
 </mapper>

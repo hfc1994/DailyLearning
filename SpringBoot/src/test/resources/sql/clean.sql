@@ -1,0 +1,1 @@
+delete from book where title = '小学语文' and url is null;
