@@ -4,10 +4,8 @@ import com.hfc.springboot.entity.Book;
 import com.hfc.springboot.entity.ItemList;
 import com.hfc.springboot.mapper.BookMapper;
 import com.hfc.springboot.mapper.ItemListMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.hfc.springboot.model.BookDTO;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -32,5 +30,23 @@ public class MyBatisController {
     @GetMapping("/book/{id}")
     public Book getBookById(@PathVariable Integer id) {
         return bookMapper.queryById(id);
+    }
+
+    @GetMapping("/book")
+    public Book queryBook(@RequestParam(name = "id") Integer id) {
+        return bookMapper.queryById(id);
+    }
+
+    @PostMapping("/book")
+    public Book queryBook(@RequestBody BookDTO bookDTO) {
+        if (bookDTO.getId() == null && bookDTO.getTitle() == null) {
+            throw new RuntimeException("illegal param");
+        }
+
+        if (bookDTO.getId() == null) {
+            return bookMapper.queryByTitle(bookDTO.getTitle());
+        } else {
+            return bookMapper.queryById(bookDTO.getId());
+        }
     }
 }

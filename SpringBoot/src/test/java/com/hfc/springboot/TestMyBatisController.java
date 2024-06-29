@@ -1,5 +1,8 @@
 package com.hfc.springboot;
 
+import com.hfc.springboot.model.BookDTO;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +41,77 @@ public class TestMyBatisController {
         System.out.println("with interceptor: " + (actions.andReturn().getInterceptors() == null));
     }
 
+    @Test
+    public void shouldReturnNotFound() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/mybatis/book/detail/100000"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void testGetMethodWithParam() throws Exception {
+        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.get("/mybatis/book")
+                .param("id", "100000"));
+        actions.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.scores").value(8.1));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/mybatis/book")
+                        .param("title", "Wolfheart"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(new StringMatcher("Required request parameter 'id' for method")));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/mybatis/book")
+                        .param("id", "100000")
+                        .param("title", "Wolfheart"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.scores").value(8.1));
+    }
+
+    @Test
+    public void testPostMethod() throws Exception {
+        ResultActions actions = mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book"));
+        actions.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(new StringMatcher("Required request body is missing")));
+
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setId(100000);
+        mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book", bookDTO))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.scores").value(8.1));
+
+        bookDTO = new BookDTO();
+        bookDTO.setTitle("Wolfheart");
+        mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book", bookDTO))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.oid").value(53763));
+
+        bookDTO.setId(100000);
+        mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book", bookDTO))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.scores").value(8.1));
+    }
+
+    private static class StringMatcher implements Matcher<String> {
+
+        private final String targetValue;
+
+        public StringMatcher(String value) {
+            this.targetValue = value;
+        }
+
+        @Override
+        public boolean matches(Object o) {
+            if (!(o instanceof String)) {
+                return false;
+            }
+            String str = (String) o;
+            return str.contains(targetValue);
+        }
+
+        @Override
+        public void describeMismatch(Object o, Description description) {}
+
+        @Override
+        public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
+
+        @Override
+        public void describeTo(Description description) {}
+    }
 }
