@@ -4,7 +4,7 @@
 <!-- scanPeriod 表示监控配置文件是否被修改的时间间隔，默认单位时毫秒，默认间隔是 1 分钟 -->
 <!-- debug 的值为 true 时，将会打印出 logback 内部日志信息，实时查看 logback 内部运行状态，默认是 false -->
 <configuration scan="true" scanPeriod="60 seconds" debug="false" >
-    <property name="log_home" value="logs/" />
+    <property name="log_home" value="../../logs/" />
 
     <!-- %msg 表示的是实际的日志信息，末尾的 %n 是换行 -->
     <property name="log_pattern"

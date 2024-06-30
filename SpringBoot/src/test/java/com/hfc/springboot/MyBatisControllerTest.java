@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+// 集成测试，真实调用接口
 // 这个注解表示使用 SpringRunner 来运行测试类，它集成了 JUnit 和 Spring TestContext 框架，
 // 可以在测试中方便地加载 Spring 应用上下文
 @RunWith(SpringRunner.class)
