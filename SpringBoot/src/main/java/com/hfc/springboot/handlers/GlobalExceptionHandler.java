@@ -1,5 +1,7 @@
 package com.hfc.springboot.handlers;
 
+import com.hfc.springboot.model.CommonResult;
+import com.hfc.springboot.model.ExceptionEnum;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.boot.context.properties.bind.BindException;
@@ -26,23 +28,27 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private CommonResult<String> baseExceptionResponse(String msg) {
+        return CommonResult.error(ExceptionEnum.RUNTIME_EXCEPTION.getCode(), msg);
+    }
+
     /**
      * 方法里可用的参数可以查看 ExceptionHandler 的注释
      */
     @ExceptionHandler(ArithmeticException.class)
-    public String globalArithmeticException(ArithmeticException e) {
+    public CommonResult<String> globalArithmeticException(ArithmeticException e) {
         System.out.println("*** SomeArithmeticException ***");
         e.printStackTrace();
         System.out.println("******");
-        return "SomeArithmeticException: " + e.getMessage();
+        return this.baseExceptionResponse("SomeArithmeticException: " + e.getMessage());
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public String globalNullPointerException(RuntimeException e) {
+    public CommonResult<String> globalNullPointerException(RuntimeException e) {
         System.out.println("*** SomeNullPointerException ***");
         e.printStackTrace();
         System.out.println("******");
-        return "SomeNullPointerException";
+        return this.baseExceptionResponse("SomeNullPointerException");
     }
 
     /**
@@ -51,11 +57,11 @@ public class GlobalExceptionHandler {
      * 没有 @ExceptionHandler(NullPointerException.class) 时才会调用 globalRuntimeException(RuntimeException e)
      */
     @ExceptionHandler(RuntimeException.class)
-    public String globalRuntimeException(RuntimeException e) {
+    public CommonResult<String> globalRuntimeException(RuntimeException e) {
         System.out.println("*** SomeRuntimeException ***");
         e.printStackTrace();
         System.out.println("******");
-        return "SomeRuntimeException: " + e.getMessage();
+        return this.baseExceptionResponse("SomeRuntimeException: " + e.getMessage());
     }
 
     /**
@@ -66,9 +72,9 @@ public class GlobalExceptionHandler {
      * 同时存在实现了 ErrorController 的子控制器的情况下，优先触发该全局异常处理器
      */
     @ExceptionHandler(NoHandlerFoundException.class)
-    public String globalNoHandlerFoundException(NoHandlerFoundException e) {
+    public CommonResult<String> globalNoHandlerFoundException(NoHandlerFoundException e) {
         System.out.println("*** NoHandlerFoundException ***");
-        return "NoHandlerFoundException: " + e.getMessage();
+        return this.baseExceptionResponse("NoHandlerFoundException: " + e.getMessage());
     }
 
     /**
@@ -91,8 +97,8 @@ public class GlobalExceptionHandler {
             MissingServletRequestPartException.class,
             AsyncRequestTimeoutException.class
     })
-    public String othersException(Exception e) {
-        return e.getMessage();
+    public CommonResult<String> othersException(Exception e) {
+        return this.baseExceptionResponse(e.getMessage());
     }
 
 }

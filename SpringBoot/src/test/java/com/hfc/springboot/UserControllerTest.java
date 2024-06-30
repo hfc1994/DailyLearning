@@ -21,13 +21,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
  */
 
 // 单元测试，不会真实调用接口
+// SpringRunner 是 SpringJUnit4ClassRunner 的简写版本，两者等价
 @RunWith(SpringRunner.class)
+// 不会初始化整个 Spring 环境，仅仅只会初始化 UserController 等相关的 Bean
 @WebMvcTest(controllers = UserController.class)
 public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
+    // Mock 后不会执行真正的后端逻辑，而是走 Mock 的逻辑
+    // 这里实际注入的是一个使用 Mockito 创建的 UserService Mock 代理对象
     @MockBean
     private UserService userService;
 
