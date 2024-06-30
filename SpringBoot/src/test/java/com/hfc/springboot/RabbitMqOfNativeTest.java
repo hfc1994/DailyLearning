@@ -6,7 +6,6 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -21,7 +20,7 @@ import java.util.concurrent.TimeoutException;
 @RunWith(SpringRunner.class)
 // 就可以不启动现有的Spring容器，容器里的mq相关会影响以下的测试
 // @SpringBootTest
-public class TestRabbotMqOfNative {
+public class RabbitMqOfNativeTest {
 
     private static String HOST;
     private static int PORT;
@@ -42,7 +41,7 @@ public class TestRabbotMqOfNative {
     @Before
     public void doConnect() throws IOException, TimeoutException {
         Properties p = new Properties();
-        p.load(TestRabbitMqOfSpring.class.getClassLoader().getResourceAsStream("../classes/application.properties"));
+        p.load(RabbitMqOfSpringTest.class.getClassLoader().getResourceAsStream("../classes/application.properties"));
         HOST = p.getProperty("spring.rabbitmq.host");
         PORT = Integer.parseInt(p.getProperty("spring.rabbitmq.port"));
         USERNAME = p.getProperty("spring.rabbitmq.username");

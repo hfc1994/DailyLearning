@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestCheckPoint {
+public class CheckPointTest {
 
     @Autowired
     private CheckPointService cpService;

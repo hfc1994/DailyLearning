@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestDBDao {
+public class DBDaoTest {
 
     @Resource
     private BookMapper bookMapper;

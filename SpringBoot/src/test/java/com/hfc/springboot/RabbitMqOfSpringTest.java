@@ -8,7 +8,6 @@ import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ChannelListener;
 import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.amqp.rabbit.connection.ConnectionListener;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -27,7 +26,7 @@ import java.util.concurrent.TimeoutException;
 @RunWith(SpringRunner.class)
 // 就可以不启动现有的Spring容器，容器里的mq相关会影响以下的测试
 // @SpringBootTest
-public class TestRabbitMqOfSpring {
+public class RabbitMqOfSpringTest {
 
     private static String HOST;
     private static int PORT;
@@ -48,7 +47,7 @@ public class TestRabbitMqOfSpring {
     @BeforeClass
     public static void doInitAndConnect() throws IOException {
         Properties p = new Properties();
-        p.load(TestRabbitMqOfSpring.class.getClassLoader().getResourceAsStream("../classes/application.properties"));
+        p.load(RabbitMqOfSpringTest.class.getClassLoader().getResourceAsStream("../classes/application.properties"));
         HOST = p.getProperty("spring.rabbitmq.host");
         PORT = Integer.parseInt(p.getProperty("spring.rabbitmq.port"));
         USERNAME = p.getProperty("spring.rabbitmq.username");

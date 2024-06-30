@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 // TODO: 2020/7/1 RunWith的作用
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestRedis {
+public class RedisTest {
 
     @Autowired
     private AspectsRedisServices aspectsRedisServices;

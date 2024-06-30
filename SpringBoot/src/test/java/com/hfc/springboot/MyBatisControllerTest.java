@@ -1,8 +1,9 @@
 package com.hfc.springboot;
 
+import com.alibaba.fastjson.JSON;
 import com.hfc.springboot.model.BookDTO;
+import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest(classes = Application.class)
 // 这个注解自动配置 MockMvc，用于模拟 HTTP 请求和响应，而无需启动整个服务器
 @AutoConfigureMockMvc
-public class TestMyBatisController {
+public class MyBatisControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -73,22 +74,33 @@ public class TestMyBatisController {
                 .andExpect(MockMvcResultMatchers.content()
                         .string(new StringMatcher("Required request body is missing")));
 
+        actions = mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book"));
+        actions.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(new StringMatcher("Required request body is missing")));
+
         BookDTO bookDTO = new BookDTO();
         bookDTO.setId(100000);
-        mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book", bookDTO))
+        mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JSON.toJSONString(bookDTO)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.scores").value(8.1));
 
         bookDTO = new BookDTO();
         bookDTO.setTitle("Wolfheart");
-        mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book", bookDTO))
+        mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(JSON.toJSONString(bookDTO)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.oid").value(53763));
 
         bookDTO.setId(100000);
-        mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book", bookDTO))
+        mockMvc.perform(MockMvcRequestBuilders.post("/mybatis/book")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(JSON.toJSONString(bookDTO)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.scores").value(8.1));
     }
 
-    private static class StringMatcher implements Matcher<String> {
+    private static class StringMatcher extends BaseMatcher<String> {
 
         private final String targetValue;
 
@@ -106,12 +118,8 @@ public class TestMyBatisController {
         }
 
         @Override
-        public void describeMismatch(Object o, Description description) {}
-
-        @Override
-        public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
-
-        @Override
-        public void describeTo(Description description) {}
+        public void describeTo(Description description) {
+            description.appendText(targetValue);
+        }
     }
 }

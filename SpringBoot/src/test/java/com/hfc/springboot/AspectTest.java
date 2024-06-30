@@ -16,7 +16,7 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestAspect {
+public class AspectTest {
 
     @Autowired
     private AspectsRedisServices redisServices;
