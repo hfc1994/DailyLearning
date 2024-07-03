@@ -101,4 +101,10 @@ public class GlobalExceptionHandler {
         return this.baseExceptionResponse(e.getMessage());
     }
 
+    // 兜底策略
+    @ExceptionHandler(value = Exception.class)
+    public CommonResult<String> commonException(Exception e) {
+        return this.baseExceptionResponse(e.getMessage());
+    }
+
 }

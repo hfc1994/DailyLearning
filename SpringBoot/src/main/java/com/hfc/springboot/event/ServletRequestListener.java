@@ -15,13 +15,9 @@ public class ServletRequestListener
 
     @Override
     public void onApplicationEvent(ServletRequestHandledEvent event) {
-        System.out.println("--- request event ---");
-        System.out.println(event.getRequestUrl());
-        System.out.println(event.getClientAddress());
-        System.out.println(event.getMethod());
-        System.out.println(event.getServletName());
-        System.out.println(event.getStatusCode());
-        System.out.println("---   event end   ---");
-        System.out.println();
+        String msg = String.format("--- request event [url: %s, clint ip: %s, method: %s, servlet: %s, status code: %d]",
+                event.getRequestUrl(), event.getClientAddress(),
+                event.getMethod(), event.getServletName(), event.getStatusCode());
+        System.out.println(msg);
     }
 }
