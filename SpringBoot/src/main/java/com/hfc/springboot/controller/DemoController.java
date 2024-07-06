@@ -52,7 +52,7 @@ public class DemoController {
     @RequestMapping("/holder")
     public void testHolder() {
         ApplicationContext ac = ach.getAc();
-        System.out.println(ac);
+        System.out.println("ApplicationContext: " + ac);
     }
 
     @GetMapping("/ds")
@@ -81,11 +81,16 @@ public class DemoController {
         conn.close();
     }
 
-    @GetMapping("exception")
+    @GetMapping("/exception")
     public String testException() {
         // 测试全局异常捕捉器
         int ret = 2/0;
         return "TestException";
+    }
+
+    @GetMapping("/boolean")
+    public boolean testBoolean() {
+        return Boolean.TRUE;
     }
 
     @GetMapping("/token")

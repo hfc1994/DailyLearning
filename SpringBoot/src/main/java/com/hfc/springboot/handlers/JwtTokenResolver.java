@@ -26,15 +26,15 @@ public class JwtTokenResolver implements HandlerMethodArgumentResolver {
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) throws Exception {
         String token;
-        token = (String) webRequest.getAttribute("JwtToken", RequestAttributes.SCOPE_REQUEST);
+        token = (String) webRequest.getAttribute("jwt-token", RequestAttributes.SCOPE_REQUEST);
 
         if (token == null) {
-            token = webRequest.getHeader("JwtToken");
+            token = webRequest.getHeader("jwt-token");
         }
 
         if (token == null) {
             // ?token=xxxxxx
-            token = webRequest.getParameter("token");
+            token = webRequest.getParameter("jwt-token");
         }
 
         if (token == null) {

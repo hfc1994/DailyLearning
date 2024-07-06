@@ -12,6 +12,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
  * Created by hfc on 2024/6/30.
+ *
+ * ResponseBodyAdvice 接口是在 Controller 执行 return 之后，在 response 返回给客户端之前，
+ * 执行的对 response 的一些处理
+ *
+ * 请求  --->   HttpInputMessage  --->                         --->
+ *                                       HttpMessageConverter        Spring MVC
+ * 响应  <---   HttpOutMessage    <---                         <---
  */
 @RestControllerAdvice
 public class GlobalResponseBodyHandler implements ResponseBodyAdvice<Object> {
@@ -23,6 +30,7 @@ public class GlobalResponseBodyHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        // controller 返回 void 的时候会走这个逻辑
         if (body == null) {
             return CommonResult.error(ExceptionEnum.NO_DATA_FOUND);
         }
