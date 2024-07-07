@@ -2,8 +2,8 @@ package com.hfc.springboot;
 
 import com.hfc.springboot.controller.UserController;
 import com.hfc.springboot.entity.User;
+import com.hfc.springboot.model.ExceptionEnum;
 import com.hfc.springboot.services.UserService;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -51,13 +51,16 @@ public class UserControllerTest {
 
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/user/id/" + USER_ID));
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("lisi"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.age").value(20));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.name").value("lisi"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.data.age").value(20));
 
         resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/user/id/12345"));
         resultActions.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string(""))
-                .andExpect(MockMvcResultMatchers.content().string(Matchers.emptyOrNullString()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(ExceptionEnum.NO_DATA_FOUND.getCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ExceptionEnum.NO_DATA_FOUND.getMessage()));
+                // 增加了统一响应体的处理
+//                .andExpect(MockMvcResultMatchers.content().string(""))
+//                .andExpect(MockMvcResultMatchers.content().string(Matchers.emptyOrNullString()));
     }
 
 }

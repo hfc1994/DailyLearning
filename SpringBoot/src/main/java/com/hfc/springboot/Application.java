@@ -13,7 +13,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @EnableAspectJAutoProxy
 // 不添加MapperScan也能正常查询，添加后会影响到@WebMvcTest注解扫描到Mapper
 // @MapperScan(basePackages = "com.hfc.springboot.mapper")
-@ServletComponentScan(basePackages = "com.hfc.springboot.filters")
+
+// 可用于 @WebServlet、@WebFilter、@WebListener 的扫描
+@ServletComponentScan(basePackages = {"com.hfc.springboot.filters", "com.hfc.springboot.event"})
 @SpringBootApplication
 public class Application {
 

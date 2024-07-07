@@ -5,6 +5,7 @@ import com.hfc.springboot.entity.ItemList;
 import com.hfc.springboot.mapper.BookMapper;
 import com.hfc.springboot.mapper.ItemListMapper;
 import com.hfc.springboot.model.BookDTO;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,7 +28,11 @@ public class MyBatisController {
         return itemListMapper.queryById(id);
     }
 
-    @GetMapping("/book/{id}")
+    @GetMapping(value = "/book/{id}",
+            // 针对 Content-Type 请求头，请求头里必须有如下其一的类型
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            // 针对 Accept 请求头，按照 Accept 的类型返回数据
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Book getBookById(@PathVariable Integer id) {
         return bookMapper.queryById(id);
     }

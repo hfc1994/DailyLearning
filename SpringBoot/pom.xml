@@ -32,7 +32,6 @@
         <spring-kafka.version>2.9.13</spring-kafka.version>
         <lombok.version>1.18.34</lombok.version>
         <fastjson.version>1.2.83</fastjson.version>
-        <mockito-core.version>4.11.0</mockito-core.version>
 
         <!-- 打包相关 -->
         <maven.dependency.version>3.1.1</maven.dependency.version>
@@ -141,11 +140,27 @@
             <version>${fastjson.version}</version>
         </dependency>
 
+        <!-- SprintBoot 里面已存在 -->
+<!--        <dependency>-->
+<!--            <groupId>org.mockito</groupId>-->
+<!--            <artifactId>mockito-core</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito-core.version}</version>
-            <scope>test</scope>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+        </dependency>
+
+        <!-- 并没有采用热部署的方式，而是一直较快的重启方式 -->
+        <!-- SprintBoot 通过使用两个类加载器来提供重启技术 -->
+        <!-- 1、不改变的类（例如第三方 jar）被加载进 base 类加载器 -->
+        <!-- 2、经常处于开发状态的类被加载到 restart 类加载器 -->
+        <!-- 应用重启时，restart 类加载器将被丢弃，并重新创建一个新的 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
 
     </dependencies>

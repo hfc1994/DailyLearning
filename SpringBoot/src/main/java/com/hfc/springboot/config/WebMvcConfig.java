@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.*;
 
@@ -45,6 +47,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 避免 controller 返回 String 类型时出现“xxx.CommonResult cannot be cast to java.lang.String 错误”
         converters.removeIf(cvt -> cvt instanceof StringHttpMessageConverter);
+
+        // xml 消息转换器，可用于把 http 响应转成 xml 格式
+        // 无需手动实例化，添加了 jackson-dataformat-xml 依赖后，SpringBoot 已经自动添加实例到消息转换器
+//        Jackson2ObjectMapperBuilder xmlBuilder = Jackson2ObjectMapperBuilder.xml();
+//        xmlBuilder.indentOutput(true);
+//        converters.add(new MappingJackson2HttpMessageConverter(xmlBuilder.build()));
     }
 
 //    // 页面跳转

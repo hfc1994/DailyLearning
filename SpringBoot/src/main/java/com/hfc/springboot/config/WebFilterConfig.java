@@ -17,7 +17,7 @@ import javax.servlet.Filter;
 public class WebFilterConfig {
 
     @Bean
-    public FilterRegistrationBean regFilter1() {
+    public FilterRegistrationBean<Filter> regFilter1() {
         TestFilter3 filter3 = new TestFilter3();
 
         FilterRegistrationBean<Filter> filterBean = new FilterRegistrationBean<>();
@@ -31,7 +31,7 @@ public class WebFilterConfig {
     }
 
     @Bean
-    public FilterRegistrationBean regFilter2() {
+    public FilterRegistrationBean<Filter> regFilter2() {
         TestFilter4 filter4 = new TestFilter4();
 
         FilterRegistrationBean<Filter> filterBean = new FilterRegistrationBean<>();

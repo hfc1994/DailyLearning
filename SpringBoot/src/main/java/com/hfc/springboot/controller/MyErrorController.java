@@ -25,8 +25,8 @@ public class MyErrorController implements ErrorController {
     private final static String error_path = "/error";
 
     @RequestMapping(path = error_path)
-    public String errorPath() {
-        return "it's something wrong happening";
+    public String errorPath(HttpServletRequest request, HttpServletResponse response) {
+        return "it's something wrong happening, code: " + response.getStatus() + ", uri: " + request.getContextPath();
     }
 
     /**

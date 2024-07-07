@@ -11,7 +11,7 @@ import java.io.IOException;
  *
  * WebFilter注解是Servlet3.0的规范，并没有指定执行的顺序，其执行顺序依赖于Filter的<b>类名</b>
  */
-@WebFilter
+@WebFilter(urlPatterns = "/test/*")
 public class TestFilter2 implements Filter {
 
     @Override
@@ -22,17 +22,13 @@ public class TestFilter2 implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        if (req.getRequestURI().contains("/test")) {
-            HttpServletResponse resp = (HttpServletResponse) response;
+        HttpServletResponse resp = (HttpServletResponse) response;
 
-            System.out.println("--- TestFilter2 before ---");
-            System.out.println(req.getRequestURI());
-            chain.doFilter(req, resp);
-            System.out.println("--- TestFilter2 after ---");
-            System.out.println(resp.getStatus());
-        } else {
-            chain.doFilter(req, response);
-        }
+        System.out.println("--- TestFilter2 before ---");
+        System.out.println(req.getRequestURI());
+        chain.doFilter(req, resp);
+        System.out.println("--- TestFilter2 after ---");
+        System.out.println(resp.getStatus());
     }
 
     @Override
