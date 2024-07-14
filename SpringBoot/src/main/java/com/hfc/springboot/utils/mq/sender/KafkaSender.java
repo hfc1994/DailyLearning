@@ -1,15 +1,14 @@
 package com.hfc.springboot.utils.mq.sender;
 
 import com.hfc.springboot.config.KafkaConfig;
+import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.producer.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by hfc on 2022/5/8.
@@ -18,7 +17,7 @@ import javax.annotation.PostConstruct;
 @Component
 public class KafkaSender {
 
-    private static final Logger logger = LogManager.getLogger(KafkaSender.class);
+    private static final Logger logger = LoggerFactory.getLogger(KafkaSender.class);
 
     @Autowired
     private KafkaProperties kafkaProperties;

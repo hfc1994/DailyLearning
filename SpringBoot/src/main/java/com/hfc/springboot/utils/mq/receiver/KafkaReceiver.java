@@ -2,19 +2,19 @@ package com.hfc.springboot.utils.mq.receiver;
 
 import com.hfc.springboot.config.KafkaConfig;
 import com.hfc.springboot.utils.Executor;
+import jakarta.annotation.PostConstruct;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.time.Duration;
 import java.util.Collections;
 
@@ -25,7 +25,7 @@ import java.util.Collections;
 @Component
 public class KafkaReceiver {
 
-    private static final Logger logger = LogManager.getLogger(KafkaReceiver.class);
+    private static final Logger logger = LoggerFactory.getLogger(KafkaReceiver.class);
 
     @Autowired
     private KafkaProperties kafkaProperties;

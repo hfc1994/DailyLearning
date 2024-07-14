@@ -5,10 +5,9 @@ import com.hfc.springboot.entity.ItemList;
 import com.hfc.springboot.mapper.BookMapper;
 import com.hfc.springboot.mapper.ItemListMapper;
 import com.hfc.springboot.model.BookDTO;
+import jakarta.annotation.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
 
 /**
  * Created by hfc on 2021/4/19.
