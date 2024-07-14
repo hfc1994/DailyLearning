@@ -22,8 +22,12 @@ public class MyBatisController {
     @Resource
     private BookMapper bookMapper;
 
+    // SpringBoot 3 之后删减了部分特性，导致编译完代码会无法获取原始变量名的信息，
+    // 因此 @PathVariable 里需要带上参数名，否则会导致找不到参数而失败
+    // 另一个解决方法是在编译参数里（比如 maven-compiler-plugin）增加 -parameters 的参数,
+    // 让 jvm 编译时保留参数名
     @GetMapping("/itemlist/{id}")
-    public ItemList getItemListById(@PathVariable Integer id) {
+    public ItemList getItemListById(@PathVariable("id") Integer id) {
         return itemListMapper.queryById(id);
     }
 
@@ -32,7 +36,7 @@ public class MyBatisController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             // 针对 Accept 请求头，按照 Accept 的类型返回数据
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public Book getBookById(@PathVariable Integer id) {
+    public Book getBookById(@PathVariable("id") Integer id) {
         return bookMapper.queryById(id);
     }
 

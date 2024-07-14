@@ -67,7 +67,8 @@ public class RabbitMqOfSpringTest {
         connFactory.setPassword(PASSWORD);
         connFactory.setVirtualHost(VIRTUALHOST);
         // 生产者发送后需要MQ确认收到，以此来确保消息成功发送到交换器
-        connFactory.setPublisherConfirms(true);
+        // TODO: 2024/7/15 待确认
+//        connFactory.setPublisherConfirms(true);
 
         // 用于监听通道的创建和销毁
         connFactory.addChannelListener(new ChannelListener() {

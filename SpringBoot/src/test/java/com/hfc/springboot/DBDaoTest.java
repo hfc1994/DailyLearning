@@ -2,13 +2,12 @@ package com.hfc.springboot;
 
 import com.hfc.springboot.entity.Book;
 import com.hfc.springboot.mapper.BookMapper;
+import jakarta.annotation.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.annotation.Resource;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
