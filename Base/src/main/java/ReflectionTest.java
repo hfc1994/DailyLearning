@@ -23,12 +23,12 @@ public class ReflectionTest
             if (modifiers.length() > 0)
                 System.out.print(modifiers + " ");
 
-            System.out.print("class " + name);
+            System.out.println("class " + name);
 
             if (supercl != null && supercl != Object.class)
-                System.out.print(" extends " + supercl.getName());
+                System.out.println(" extends " + supercl.getName());
 
-            System.out.print("\\n{\\n");
+            System.out.println("{");
             printConstructors(cl);
             System.out.println();
             printMethods(cl);
@@ -54,7 +54,7 @@ public class ReflectionTest
             String modifiers = Modifier.toString(f.getModifiers());
             if (modifiers.length() > 0)
                 System.out.print(modifiers + " ");
-            System.out.print(Type.getName() + " " + name + ";");
+            System.out.println(Type.getName() + " " + name + ";");
         }
     }
 
@@ -66,7 +66,7 @@ public class ReflectionTest
             Class retType = m.getReturnType();
             String name = m.getName();
 
-            System.out.print("   ");
+            System.out.print("  ");
             String modifiers = Modifier.toString(m.getModifiers());
             if (modifiers.length() > 0)
                 System.out.print(modifiers + " ");
@@ -79,7 +79,7 @@ public class ReflectionTest
                     System.out.print(", ");
                 System.out.print(paramType[j].getName());
             }
-            System.out.print(");");
+            System.out.println(");");
         }
     }
 
@@ -101,7 +101,7 @@ public class ReflectionTest
                     System.out.print(", ");
                 System.out.print(paramType[j].getName());
             }
-            System.out.print(");");
+            System.out.println(");");
         }
     }
 }

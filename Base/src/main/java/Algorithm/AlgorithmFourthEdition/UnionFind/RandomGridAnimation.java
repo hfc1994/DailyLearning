@@ -13,6 +13,13 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by hfc on 2020/3/1.
+ *
+ * Comment on 2024/7/14
+ * Java 11 开始已经不再内置 JavaFX，因此需要自行引入依赖：https://openjfx.io/
+ * 先安装 javafx sdk，配置 pom.xml 里 javafx 相关的依赖
+ * 运行前需要在 VM options 里面添加配置
+ * --module-path "xxx\javafx-sdk-21.0.3\lib"            ---------- 指定 JavaFX 的模块路径，这里是指定 SDK 的路径
+ * --add-modules javafx.controls,javafx.base,javafx.graphics    -- 指定使用到的模块
  */
 public class RandomGridAnimation extends Application {
 

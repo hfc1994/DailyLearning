@@ -10,7 +10,7 @@
     <name>Base</name>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
@@ -25,6 +25,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.34</lombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <openjfx.version>21.0.3</openjfx.version>
     </properties>
 
     <dependencies>
@@ -33,6 +34,32 @@
             <groupId>edu.princeton.cs</groupId>
             <artifactId>algs4</artifactId>
             <version>1.0.4</version>
+        </dependency>
+
+        <!-- 直接添加 javafx sdk 路径里的库文件，方便运行前 VM options 里添加 module-path 参数 -->
+        <!-- TODO 2024/7/14 或许有更好的解决方法 -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>${openjfx.version}</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../javafx-sdk-21.0.3/lib/javafx.base.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${openjfx.version}</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../javafx-sdk-21.0.3/lib/javafx.controls.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>${openjfx.version}</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/../javafx-sdk-21.0.3/lib/javafx.graphics.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -142,6 +169,10 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <compilerArgs>
+                        <arg>--add-modules=jdk.naming.rmi</arg>
+                        <arg>--add-exports=jdk.naming.rmi/com.sun.jndi.rmi.registry=ALL-UNNAMED</arg>
+                    </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
                             <!-- 引入 lombok-processor -->

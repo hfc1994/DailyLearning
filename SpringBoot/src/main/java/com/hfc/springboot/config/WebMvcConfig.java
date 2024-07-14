@@ -1,9 +1,13 @@
 package com.hfc.springboot.config;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.hfc.springboot.handlers.JwtTokenResolver;
 import com.hfc.springboot.interceptors.TestInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -11,6 +15,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.*;
 
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -48,11 +54,25 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // 避免 controller 返回 String 类型时出现“xxx.CommonResult cannot be cast to java.lang.String 错误”
         converters.removeIf(cvt -> cvt instanceof StringHttpMessageConverter);
 
-        // xml 消息转换器，可用于把 http 响应转成 xml 格式
-        // 无需手动实例化，添加了 jackson-dataformat-xml 依赖后，SpringBoot 已经自动添加实例到消息转换器
+//        // xml 消息转换器，可用于把 http 响应转成 xml 格式
+//        // 无需手动实例化，添加了 jackson-dataformat-xml 依赖后，SpringBoot 已经自动添加实例到消息转换器
 //        Jackson2ObjectMapperBuilder xmlBuilder = Jackson2ObjectMapperBuilder.xml();
 //        xmlBuilder.indentOutput(true);
 //        converters.add(new MappingJackson2HttpMessageConverter(xmlBuilder.build()));
+
+//        // 创建 FastJsonHttpMessageConverter 对象
+//        FastJsonHttpMessageConverter fastJsonConverter = new FastJsonHttpMessageConverter();
+//        // 自定义 FastJson 配置
+//        FastJsonConfig config = new FastJsonConfig();
+//        config.setCharset(Charset.defaultCharset()); // 设置字符集
+//        config.setSerializerFeatures(SerializerFeature.DisableCircularReferenceDetect); // 剔除循环引用
+//        fastJsonConverter.setFastJsonConfig(config);
+//        // 设置支持的 MediaType
+//        fastJsonConverter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON,
+//                MediaType.APPLICATION_XML));
+//        // 添加到 converters 中
+//        // 注意，添加到最开头，放在 MappingJackson2XmlHttpMessageConverter 前面
+//        converters.add(0, fastJsonConverter);
     }
 
 //    // 页面跳转
