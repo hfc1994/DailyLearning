@@ -67,8 +67,10 @@ public class RabbitMqOfSpringTest {
         connFactory.setPassword(PASSWORD);
         connFactory.setVirtualHost(VIRTUALHOST);
         // 生产者发送后需要MQ确认收到，以此来确保消息成功发送到交换器
-        // TODO: 2024/7/15 待确认
-//        connFactory.setPublisherConfirms(true);
+        // NONE 表示禁用发布确认模式，是默认值
+        // CORRELATED 是发布消息成果后到交换器后会触发回调方法
+        // SIMPLE 会调用 waitForConfirms() 或 waitForConfirmsOrDie() 来等待消息确认并触发回调方法
+        connFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
 
         // 用于监听通道的创建和销毁
         connFactory.addChannelListener(new ChannelListener() {

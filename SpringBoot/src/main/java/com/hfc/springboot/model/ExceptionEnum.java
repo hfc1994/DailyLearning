@@ -11,6 +11,7 @@ public enum ExceptionEnum {
     COMMON_EXCEPTION(1, "common exception"),
     NO_DATA_FOUND(2, "no data found"),
     RUNTIME_EXCEPTION(3, "runtime exception"),
+    INVALID_ARGUMENT_EXCEPTION(4, "invalid argument exception"),
     ;
 
     @Getter

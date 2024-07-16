@@ -2,11 +2,14 @@ package com.hfc.springboot.handlers;
 
 import com.hfc.springboot.model.CommonResult;
 import com.hfc.springboot.model.ExceptionEnum;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.boot.context.properties.bind.BindException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import java.util.List;
 
 /**
  * Created by hfc on 2020/12/23.
@@ -89,8 +94,6 @@ public class GlobalExceptionHandler {
             TypeMismatchException.class,                        // 参数类型匹配失败
             HttpMessageNotReadableException.class,
             HttpMessageNotWritableException.class,
-            BindException.class,                                // 参数绑定异常
-            MethodArgumentNotValidException.class,              // 参数校验异常
             HttpMediaTypeNotAcceptableException.class,
             ServletRequestBindingException.class,
             ConversionNotSupportedException.class,
@@ -99,6 +102,41 @@ public class GlobalExceptionHandler {
     })
     public CommonResult<String> othersException(Exception e) {
         return this.baseExceptionResponse(e.getMessage());
+    }
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    public CommonResult<String> constraintException(ConstraintViolationException e) {
+        return CommonResult.error(ExceptionEnum.INVALID_ARGUMENT_EXCEPTION.getCode(), e.getMessage());
+    }
+
+    // 参数绑定异常
+    @ExceptionHandler(value = BindException.class)
+    public CommonResult<String> argumentBinderException(BindException e) {
+        return CommonResult.error(ExceptionEnum.INVALID_ARGUMENT_EXCEPTION.getCode(), e.getMessage());
+    }
+
+    // 参数校验异常
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public CommonResult<String> methodArgumentException(MethodArgumentNotValidException e) {
+        StringBuilder builder = this.extractError(e.getAllErrors());
+        return CommonResult.error(ExceptionEnum.INVALID_ARGUMENT_EXCEPTION.getCode(),
+                builder.isEmpty() ? e.getMessage() : builder.toString());
+    }
+
+    private StringBuilder extractError(List<ObjectError> objectErrors) {
+        StringBuilder builder = new StringBuilder();
+        for (ObjectError e : objectErrors) {
+            if (e == null) {
+                continue;
+            }
+
+            String str = e.getDefaultMessage();
+            if (StringUtils.hasText(str)) {
+                builder.append(str).append(";");
+            }
+        }
+
+        return builder;
     }
 
     // 兜底策略
