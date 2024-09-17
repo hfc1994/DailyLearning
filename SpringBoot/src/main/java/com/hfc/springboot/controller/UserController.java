@@ -3,6 +3,7 @@ package com.hfc.springboot.controller;
 import com.hfc.springboot.entity.User;
 import com.hfc.springboot.model.UserDTO;
 import com.hfc.springboot.model.UserUpdateGenderDTO;
+import com.hfc.springboot.model.UserUpdateStatusDTO;
 import com.hfc.springboot.services.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -49,6 +50,18 @@ public class UserController {
     @PostMapping("/update/gender")
     public Object updateUserGender(@RequestBody @Valid UserUpdateGenderDTO userGenderDTO) {
         return userGenderDTO;
+    }
+
+    @PostMapping("/update/status/true")
+    public int updateUserStatusTrue(@RequestBody @Validated(UserUpdateStatusDTO.Group01.class) UserUpdateStatusDTO statusDTO) {
+        System.out.println("status: " + statusDTO.getStatus());
+        return 1;
+    }
+
+    @PostMapping("/update/status/false")
+    public int updateUserStatusFalse(@RequestBody @Validated(UserUpdateStatusDTO.Group02.class) UserUpdateStatusDTO statusDTO) {
+        System.out.println("status: " + statusDTO.getStatus());
+        return 1;
     }
 
 }
