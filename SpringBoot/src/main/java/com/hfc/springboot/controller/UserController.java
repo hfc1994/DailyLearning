@@ -2,6 +2,7 @@ package com.hfc.springboot.controller;
 
 import com.hfc.springboot.entity.User;
 import com.hfc.springboot.model.UserDTO;
+import com.hfc.springboot.model.UserUpdateGenderDTO;
 import com.hfc.springboot.services.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -43,6 +44,11 @@ public class UserController {
                 .id(112233L)
                 .name(userDTO.getUsername())
                 .build();
+    }
+
+    @PostMapping("/update/gender")
+    public Object updateUserGender(@RequestBody @Valid UserUpdateGenderDTO userGenderDTO) {
+        return userGenderDTO;
     }
 
 }
