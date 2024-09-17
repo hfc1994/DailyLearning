@@ -252,6 +252,15 @@
                     <exclude>application_sample.yml</exclude>
                 </excludes>
             </resource>
+            <resource>
+                <targetPath>${project.build.directory}/classes</targetPath>
+                <directory>src/main/resources</directory>
+                <!-- 是否需要 <properties /> 里面的参数来替换配置文件中的占位符 -->
+                <filtering>false</filtering>
+                <includes>
+                    <include>i18n/*.*</include>
+                </includes>
+            </resource>
         </resources>
 
         <plugins>
@@ -285,6 +294,7 @@
                     <excludes>
                         <!-- 配置文件不打包进 jar -->
                         <exclude>/config/**/*.*</exclude>
+                        <exclude>/i18n/**/*.*</exclude>
                     </excludes>
                     <outputDirectory>${project.build.directory}/${project.name}</outputDirectory>
                 </configuration>
@@ -305,6 +315,21 @@
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}/classes/config</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-i18n-config</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/${project.name}/i18n</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/classes/i18n</directory>
                                 </resource>
                             </resources>
                         </configuration>

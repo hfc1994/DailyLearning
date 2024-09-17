@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class UserUpdateGenderDTO {
 
-    @NotNull(message = "用户编号不能为空")
+    @NotNull(message = "{UserUpdateGender.id.NotNull}")
     private Integer id;
 
     @NotNull(message = "性别不能为空")

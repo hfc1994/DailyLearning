@@ -3,7 +3,10 @@ package com.hfc.springboot;
 import com.hfc.springboot.controller.UserController;
 import com.hfc.springboot.entity.User;
 import com.hfc.springboot.model.ExceptionEnum;
+import com.hfc.springboot.model.UserUpdateGenderDTO;
 import com.hfc.springboot.services.UserService;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -15,6 +18,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Set;
 
 /**
  * Created by hfc on 2024/6/30.
@@ -61,6 +66,23 @@ public class UserControllerTest {
                 // 增加了统一响应体的处理
 //                .andExpect(MockMvcResultMatchers.content().string(""))
 //                .andExpect(MockMvcResultMatchers.content().string(Matchers.emptyOrNullString()));
+    }
+
+    @Autowired
+    private Validator validator;
+
+    @Test
+    public void testValidator() {
+        System.out.println(validator);
+
+        UserUpdateGenderDTO genderDTO = new UserUpdateGenderDTO();
+        // 校验
+        Set<ConstraintViolation<UserUpdateGenderDTO>> result = validator.validate(genderDTO);
+
+        // 打印校验结果
+        for (ConstraintViolation<UserUpdateGenderDTO> violation : result) {
+            System.out.println(violation.getPropertyPath() + ":" + violation.getMessage());
+        }
     }
 
 }
